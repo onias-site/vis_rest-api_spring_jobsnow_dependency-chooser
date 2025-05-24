@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+                    
+    
+    
+    
+    <wb-module deploy-name="jn-dependency-chooser-sync-spring">
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/target/m2e-wtp/web-resources"/>
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/" source-path="/src/main/webapp" tag="defaultRootSource"/>
+                                        
+        
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
+                                
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
+                                
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+                                
+        
+        
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+                                        
+        
+        
+        
+        <dependent-module archiveName="ccp-mensageria-sender-gcp-pubsub-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/ccp-mensageria-sender-gcp-pubsub/ccp-mensageria-sender-gcp-pubsub">
+                                                            
+            
+            
+            
+            <dependency-type>uses</dependency-type>
+                                                        
+        
+        
+        
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_cache_gcp-memcache/ccp_cache_gcp-memcache">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_db-crud_elasticsearch/ccp_db-crud_elasticsearch">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_db-utils_elasticsearch/ccp_db-utils_elasticsearch">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_file-bucket_gcp/ccp_file-bucket_gcp">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_http_apache-mime/ccp_http_apache-mime">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_json_gson/ccp_json_gson">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_main-authentication_gcp-oauth/ccp_main-authentication_gcp-oauth">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_password_mindrot/ccp_password_mindrot">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/vis_business_jobsnow/vis_business_jobsnow">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+                                        
+        
+        
+        
+        <property name="context-root" value="jn-dependency-chooser-sync-spring"/>
+                                        
+        
+        
+        
+        <property name="java-output-path" value="/vis-dependency-chooser-sync-endpoints-spring/target/classes"/>
+                                    
+    
+    
+    
+    </wb-module>
+                
+
+
+
+</project-modules>
