@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.ccp.decorators.CcpStringDecorator;
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.http.CcpHttpMethods;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
@@ -24,11 +23,12 @@ import com.ccp.implementations.password.mindrot.CcpMindrotPasswordHandler;
 import com.ccp.implementations.text.extractor.apache.tika.CcpApacheTikaTextExtractor;
 import com.ccp.local.testings.implementations.CcpLocalInstances;
 import com.ccp.local.testings.implementations.cache.CcpLocalCacheInstances;
+import com.ccp.rest.api.spring.exceptions.handler.CcpSyncExceptionHandler;
+import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
+import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
+import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
+import com.ccp.rest.api.utils.CcpRestApiUtils;
 import com.ccp.vis.controller.ControllerVisResume;
-import com.ccp.web.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
-import com.ccp.web.servlet.filters.CcpValidEmailFilter;
-import com.ccp.web.servlet.filters.CcpValidJsonFilter;
-import com.ccp.web.spring.exceptions.handler.CcpSyncExceptionHandler;
 import com.jn.business.commons.JnBusinessNotifyError;
 import com.jn.business.login.JnBusinessValidateSession;
 import com.jn.mensageria.JnMensageriaSender;
@@ -45,12 +45,12 @@ import com.vis.commons.json.validations.VisJsonValidationResume;
 public class ApplicationStarterVisSyncSpring {
 	
 	public static void main(String[] args) {
-		boolean localEnviroment = new CcpStringDecorator("c:\\rh").file().exists();
+		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnviroment ? CcpLocalInstances.mensageriaSender.getLocalImplementation() : new CcpGcpPubSubMensageriaSender(),
-				localEnviroment ? CcpLocalCacheInstances.map.getLocalImplementation() : new CcpGcpMemCache(),
-				localEnviroment ? CcpLocalInstances.bucket.getLocalImplementation() : new CcpGcpFileBucket(),
+				localEnvironment ? CcpLocalInstances.mensageriaSender.getLocalImplementation() : new CcpGcpPubSubMensageriaSender(),
+				localEnvironment ? CcpLocalCacheInstances.map.getLocalImplementation() : new CcpGcpMemCache(),
+				localEnvironment ? CcpLocalInstances.bucket.getLocalImplementation() : new CcpGcpFileBucket(),
 				new CcpApacheTikaTextExtractor(),
 				new CcpElasticSearchDbRequest(),
 				new CcpMindrotPasswordHandler()
