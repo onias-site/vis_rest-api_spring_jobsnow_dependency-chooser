@@ -1,4 +1,4 @@
-package com.ccp.vis.controller;
+package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
-import com.vis.commons.entities.VisEntityGroupResumesByPosition;
-import com.vis.commons.services.VisServicePostion;
+import com.vis.entities.VisEntityGroupResumesByPosition;
+import com.vis.services.VisServicePostion;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "recruiters/{email}/positions/{title}")
-public class ControllerVisPosition {
+public class VisRestApiPosition {
 
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	public Map<String, Object> save(@RequestBody String sessionValues){

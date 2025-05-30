@@ -1,4 +1,4 @@
-package com.ccp.vis.controller;
+package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
 import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
-import com.jn.mensageria.JnMensageriaSender;
+import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.utils.JnDeleteKeysFromCache;
-import com.vis.commons.entities.VisEntityResume;
-import com.vis.commons.utils.VisCommonsUtils;
+import com.vis.entities.VisEntityResume;
+import com.vis.utils.VisUtils;
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/resume/{email}")
-public class ControllerVisResume{
+public class VisRestApiResume{
 	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH}, path = "/language/{language}")
 	public Map<String, Object> save(
@@ -30,7 +30,7 @@ public class ControllerVisResume{
 			@PathVariable("email") String email,
 			@RequestBody Map<String, Object> sessionValues) {
 
-		Map<String, Object> result = new JnMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.save).apply(sessionValues);
+		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.save).apply(sessionValues);
 
 		return  result;
 	}
@@ -38,7 +38,7 @@ public class ControllerVisResume{
 	@DeleteMapping("/language/{language}")
 	public Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues){
 		
-		Map<String, Object> result = new JnMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.delete).apply(sessionValues);
+		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.delete).apply(sessionValues);
 
 		return  result;
 	}
@@ -46,7 +46,7 @@ public class ControllerVisResume{
 	@DeleteMapping("/status")
 	public Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues){
 		
-		Map<String, Object> result = new JnMensageriaSender(VisEntityResume.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(sessionValues);
+		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(sessionValues);
 
 		return  result;
 	}
@@ -68,7 +68,7 @@ public class ControllerVisResume{
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put("viewMode", viewMode);
 		
-		CcpJsonRepresentation resume = VisCommonsUtils.getResumeFromBucket(json);
+		CcpJsonRepresentation resume = VisUtils.getResumeFromBucket(json);
 
 		return resume.content;
 		

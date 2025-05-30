@@ -1,4 +1,4 @@
-package com.ccp.vis;
+package com.vis.rest.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,21 +28,21 @@ import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTask
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.ccp.vis.controller.ControllerVisResume;
 import com.jn.business.commons.JnBusinessNotifyError;
 import com.jn.business.login.JnBusinessValidateSession;
-import com.jn.mensageria.JnMensageriaSender;
-import com.vis.commons.json.validations.VisJsonValidationResume;
+import com.jn.mensageria.JnFunctionMensageriaSender;
+import com.vis.json.validations.VisJsonFieldValidationResume;
+import com.vis.rest.api.endpoints.VisRestApiResume;
 
 
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {
-		ControllerVisResume.class, 
+		VisRestApiResume.class, 
 		CcpSyncExceptionHandler.class,
 })
 @SpringBootApplication
-public class ApplicationStarterVisSyncSpring {
+public class VisRestApiSpringStarter {
 	
 	public static void main(String[] args) {
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
@@ -60,8 +60,8 @@ public class ApplicationStarterVisSyncSpring {
 				,new CcpApacheMimeHttp() 
 		);
 
-		CcpSyncExceptionHandler.genericExceptionHandler = new JnMensageriaSender(JnBusinessNotifyError.INSTANCE);
-		SpringApplication.run(ApplicationStarterVisSyncSpring.class, args);
+		CcpSyncExceptionHandler.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.INSTANCE);
+		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
@@ -75,7 +75,7 @@ public class ApplicationStarterVisSyncSpring {
 	@Bean
 	public FilterRegistrationBean<CcpValidJsonFilter> validateResumeJsonFilter() {
 		FilterRegistrationBean<CcpValidJsonFilter> filtro = new FilterRegistrationBean<>();
-		CcpValidJsonFilter filter = new CcpValidJsonFilter(VisJsonValidationResume.class, CcpHttpMethods.PATCH, CcpHttpMethods.POST);
+		CcpValidJsonFilter filter = new CcpValidJsonFilter(VisJsonFieldValidationResume.class, CcpHttpMethods.PATCH, CcpHttpMethods.POST);
 		filtro.setFilter(filter);
 		filtro.addUrlPatterns("/resume/*");
 		return filtro;

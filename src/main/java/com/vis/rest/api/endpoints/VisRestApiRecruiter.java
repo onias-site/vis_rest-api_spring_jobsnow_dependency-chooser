@@ -1,4 +1,4 @@
-package com.ccp.vis.controller;
+package com.vis.rest.api.endpoints;
 
 import java.util.List;
 import java.util.Map;
@@ -15,16 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
 import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
-import com.jn.mensageria.JnMensageriaSender;
+import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.utils.JnDeleteKeysFromCache;
-import com.vis.commons.business.recruiter.VisAsyncBusinessRecruiterReceivingResumes;
-import com.vis.commons.entities.VisEntityGroupPositionsByRecruiter;
-import com.vis.commons.entities.VisEntityGroupResumesPerceptionsByRecruiter;
-import com.vis.commons.entities.VisEntityResumePerception;
+import com.vis.business.recruiter.VisAsyncBusinessRecruiterReceivingResumes;
+import com.vis.entities.VisEntityGroupPositionsByRecruiter;
+import com.vis.entities.VisEntityGroupResumesPerceptionsByRecruiter;
+import com.vis.entities.VisEntityResumePerception;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "recruiter/{email}")
-public class ControllerVisRecruiter {
+public class VisRestApiRecruiter {
 
 	
 	//FIXME CURRICULOS POR E-MAIL PARA RECRUTADORES
@@ -40,7 +40,7 @@ public class ControllerVisRecruiter {
 				.put("emails", emails)
 				;
 		
-		CcpJsonRepresentation result = new JnMensageriaSender(VisAsyncBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
+		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisAsyncBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
 	
 		return result.content;
 	}
@@ -86,7 +86,7 @@ public class ControllerVisRecruiter {
 				.put("resumeId", resumeId)
 				;
 		
-		CcpJsonRepresentation result = new JnMensageriaSender(VisEntityResumePerception.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(json);
+		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(json);
 	
 		return result.content;
 	}
@@ -100,7 +100,7 @@ public class ControllerVisRecruiter {
 				.put("resumeId", resumeId)
 				;
 		//DOUBT SAVE DA TWIN
-		CcpJsonRepresentation result = new JnMensageriaSender(VisEntityResumePerception.ENTITY, CcpEntityCrudOperationType.save).apply(json);
+		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpEntityCrudOperationType.save).apply(json);
 	
 		return result.content;
 	}
