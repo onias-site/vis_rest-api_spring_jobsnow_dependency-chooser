@@ -23,7 +23,7 @@ import com.ccp.implementations.password.mindrot.CcpMindrotPasswordHandler;
 import com.ccp.implementations.text.extractor.apache.tika.CcpApacheTikaTextExtractor;
 import com.ccp.local.testings.implementations.CcpLocalInstances;
 import com.ccp.local.testings.implementations.cache.CcpLocalCacheInstances;
-import com.ccp.rest.api.spring.exceptions.handler.CcpSyncExceptionHandler;
+import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpring;
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
@@ -39,7 +39,7 @@ import com.vis.rest.api.endpoints.VisRestApiResume;
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {
 		VisRestApiResume.class, 
-		CcpSyncExceptionHandler.class,
+		CcpRestApiExceptionHandlerSpring.class,
 })
 @SpringBootApplication
 public class VisRestApiSpringStarter {
@@ -60,7 +60,7 @@ public class VisRestApiSpringStarter {
 				,new CcpApacheMimeHttp() 
 		);
 
-		CcpSyncExceptionHandler.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.INSTANCE);
+		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.INSTANCE);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	@Bean

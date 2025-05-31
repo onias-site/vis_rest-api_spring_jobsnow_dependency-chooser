@@ -17,7 +17,7 @@ import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
 import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
 import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.utils.JnDeleteKeysFromCache;
-import com.vis.business.recruiter.VisAsyncBusinessRecruiterReceivingResumes;
+import com.vis.business.recruiter.VisBusinessRecruiterReceivingResumes;
 import com.vis.entities.VisEntityGroupPositionsByRecruiter;
 import com.vis.entities.VisEntityGroupResumesPerceptionsByRecruiter;
 import com.vis.entities.VisEntityResumePerception;
@@ -40,7 +40,7 @@ public class VisRestApiRecruiter {
 				.put("emails", emails)
 				;
 		
-		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisAsyncBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
+		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
 	
 		return result.content;
 	}
