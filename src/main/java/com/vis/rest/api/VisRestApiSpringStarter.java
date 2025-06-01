@@ -45,6 +45,8 @@ import com.vis.rest.api.endpoints.VisRestApiResume;
 public class VisRestApiSpringStarter {
 	
 	public static void main(String[] args) {
+		CcpDependencyInjection.loadAllDependencies(new CcpGsonJsonHandler());
+		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
 		CcpDependencyInjection.loadAllDependencies
 		(
@@ -56,7 +58,6 @@ public class VisRestApiSpringStarter {
 				new CcpMindrotPasswordHandler()
 				,new CcpGcpMainAuthentication()
 				,new CcpElasticSearchCrud()
-				,new CcpGsonJsonHandler()
 				,new CcpApacheMimeHttp() 
 		);
 
