@@ -50,9 +50,9 @@ public class VisRestApiSpringStarter {
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnvironment ? CcpLocalInstances.mensageriaSender.getLocalImplementation() : new CcpGcpPubSubMensageriaSender(),
-				localEnvironment ? CcpLocalCacheInstances.map.getLocalImplementation() : new CcpGcpMemCache(),
-				localEnvironment ? CcpLocalInstances.bucket.getLocalImplementation() : new CcpGcpFileBucket(),
+				localEnvironment ? CcpLocalInstances.mensageriaSender : new CcpGcpPubSubMensageriaSender(),
+				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
+				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
 				new CcpApacheTikaTextExtractor(),
 				new CcpElasticSearchDbRequest(),
 				new CcpMindrotPasswordHandler()
