@@ -29,7 +29,7 @@ import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
 import com.jn.business.commons.JnBusinessNotifyError;
-import com.jn.business.login.JnBusinessValidateSession;
+import com.jn.business.login.JnBusinessSessionValidate;
 import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.vis.json.validations.VisJsonFieldValidationResume;
 import com.vis.rest.api.endpoints.VisRestApiResume;
@@ -94,7 +94,7 @@ public class VisRestApiSpringStarter {
 	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> validateSessionFilter() {
 		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filtro = new FilterRegistrationBean<>();
-		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessValidateSession.INSTANCE);
+		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessSessionValidate.INSTANCE);
 		filtro.setFilter(filter);
 		filtro.addUrlPatterns("/resume/*", "/position/*");
 		return filtro;
