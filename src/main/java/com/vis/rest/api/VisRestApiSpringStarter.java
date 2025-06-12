@@ -9,9 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.ccp.decorators.CcpHashDecorator;
+import com.ccp.decorators.CcpStringDecorator;
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.http.CcpHttpMethods;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
+import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
 import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
@@ -28,6 +31,7 @@ import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTask
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
+import com.ccp.utils.CcpHashAlgorithm;
 import com.jn.business.commons.JnBusinessNotifyError;
 import com.jn.business.login.JnBusinessSessionValidate;
 import com.jn.mensageria.JnFunctionMensageriaSender;
@@ -57,6 +61,7 @@ public class VisRestApiSpringStarter {
 				new CcpElasticSearchDbRequest(),
 				new CcpMindrotPasswordHandler()
 				,new CcpGcpMainAuthentication()
+				,new CcpElasticSerchDbBulk()
 				,new CcpElasticSearchCrud()
 				,new CcpApacheMimeHttp() 
 		);
@@ -70,6 +75,10 @@ public class VisRestApiSpringStarter {
 		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/");
 		filtro.setFilter(emailSyntaxFilter);
 		filtro.addUrlPatterns("/resume/*", "/position/*");
+		
+		CcpHashDecorator hash = new CcpStringDecorator("").email().hash();
+		String asString = hash.asString(CcpHashAlgorithm.SHA256);
+		
 		return filtro;
 	}
 	
