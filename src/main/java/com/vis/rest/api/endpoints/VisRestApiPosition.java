@@ -14,8 +14,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
+import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.vis.entities.VisEntityGroupResumesByPosition;
 import com.vis.services.VisServicePostion;
+
+enum VisRestApiPositionConstants  implements CcpJsonFieldName{
+	title, viewMode, resumeId
+	
+}
 @CrossOrigin
 @RestController
 @RequestMapping(value = "recruiters/{email}/positions/{title}")
@@ -56,9 +62,9 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisEntityGroupResumesByPosition.Fields.from.name(), fromIndex)
-				.put(VisEntityGroupResumesByPosition.Fields.listSize.name(), listSize)
-				.put(VisEntityGroupResumesByPosition.Fields.title.name(), title)
+				.put(VisEntityGroupResumesByPosition.Fields.from, fromIndex)
+				.put(VisEntityGroupResumesByPosition.Fields.listSize, listSize)
+				.put(VisEntityGroupResumesByPosition.Fields.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.getResumeList(json).content;
@@ -75,9 +81,9 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put("resumeId", resumeId)
-				.put("viewMode", viewMode)
-				.put("title", title)
+				.put(VisRestApiPositionConstants.resumeId, resumeId)
+				.put(VisRestApiPositionConstants.viewMode, viewMode)
+				.put(VisRestApiPositionConstants.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.getResumeContent(json).content;
@@ -92,7 +98,7 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put("title", title)
+				.put(VisRestApiPositionConstants.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.getImportantSkillsFromText(json).content;
@@ -107,7 +113,7 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put("title", title)
+				.put(VisRestApiPositionConstants.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.suggestNewSkills(json).content;

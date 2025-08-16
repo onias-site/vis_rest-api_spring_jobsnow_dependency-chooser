@@ -12,12 +12,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
+import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
 import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
 import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.utils.JnDeleteKeysFromCache;
 import com.vis.entities.VisEntityResume;
 import com.vis.utils.VisUtils;
+
+enum VisRestApiResumeConstants  implements CcpJsonFieldName{
+	viewMode
+	
+}
 
 @CrossOrigin
 @RestController
@@ -66,7 +72,7 @@ public class VisRestApiResume{
 			@PathVariable("viewMode") String viewMode, 
 			@RequestBody Map<String, Object> sessionValues){
 		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put("viewMode", viewMode);
+		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(VisRestApiResumeConstants.viewMode, viewMode);
 		
 		CcpJsonRepresentation resume = VisUtils.getResumeFromBucket(json);
 
