@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.ccp.decorators.CcpHashDecorator;
 import com.ccp.decorators.CcpStringDecorator;
 import com.ccp.dependency.injection.CcpDependencyInjection;
-import com.ccp.http.CcpHttpMethods;
+import com.ccp.especifications.http.CcpHttpMethods;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;

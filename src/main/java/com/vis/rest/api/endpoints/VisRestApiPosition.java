@@ -18,14 +18,13 @@ import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.vis.entities.VisEntityGroupResumesByPosition;
 import com.vis.services.VisServicePostion;
 
-enum VisRestApiPositionConstants  implements CcpJsonFieldName{
-	title, viewMode, resumeId
-	
-}
 @CrossOrigin
 @RestController
 @RequestMapping(value = "recruiters/{email}/positions/{title}")
 public class VisRestApiPosition {
+	enum JsonFieldNames implements CcpJsonFieldName{
+		title, viewMode, resumeId
+	}
 
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	public Map<String, Object> save(@RequestBody String sessionValues){
@@ -81,9 +80,9 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiPositionConstants.resumeId, resumeId)
-				.put(VisRestApiPositionConstants.viewMode, viewMode)
-				.put(VisRestApiPositionConstants.title, title)
+				.put(JsonFieldNames.resumeId, resumeId)
+				.put(JsonFieldNames.viewMode, viewMode)
+				.put(JsonFieldNames.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.getResumeContent(json).content;
@@ -98,7 +97,7 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiPositionConstants.title, title)
+				.put(JsonFieldNames.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.getImportantSkillsFromText(json).content;
@@ -113,7 +112,7 @@ public class VisRestApiPosition {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiPositionConstants.title, title)
+				.put(JsonFieldNames.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePostion.INSTANCE.suggestNewSkills(json).content;

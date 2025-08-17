@@ -20,10 +20,6 @@ import com.jn.utils.JnDeleteKeysFromCache;
 import com.vis.entities.VisEntityResume;
 import com.vis.utils.VisUtils;
 
-enum VisRestApiResumeConstants  implements CcpJsonFieldName{
-	viewMode
-	
-}
 
 @CrossOrigin
 @RestController
@@ -72,7 +68,7 @@ public class VisRestApiResume{
 			@PathVariable("viewMode") String viewMode, 
 			@RequestBody Map<String, Object> sessionValues){
 		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(VisRestApiResumeConstants.viewMode, viewMode);
+		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(JsonFieldNames.viewMode, viewMode);
 		
 		CcpJsonRepresentation resume = VisUtils.getResumeFromBucket(json);
 
@@ -83,5 +79,8 @@ public class VisRestApiResume{
 	@GetMapping("/oi")
 	public String oi() {
 		return "oi";
+	}
+	enum JsonFieldNames implements CcpJsonFieldName{
+		viewMode
 	}
 }

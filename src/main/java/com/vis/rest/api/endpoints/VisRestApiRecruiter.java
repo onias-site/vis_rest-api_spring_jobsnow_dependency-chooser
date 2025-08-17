@@ -24,15 +24,14 @@ import com.vis.entities.VisEntityGroupPositionsByRecruiter;
 import com.vis.entities.VisEntityGroupResumesPerceptionsByRecruiter;
 import com.vis.entities.VisEntityResumePerception;
 
-enum VisRestApiRecruiterConstants  implements CcpJsonFieldName{
-	resumeIds, emails, opinionType, positionStatus, resumeId
-	
-}
 
 @CrossOrigin
 @RestController
 @RequestMapping(value = "recruiter/{email}")
 public class VisRestApiRecruiter {
+	enum JsonFieldNames implements CcpJsonFieldName{
+		resumeIds, emails, opinionType, positionStatus, resumeId
+	}
 
 	
 	//FIXME CURRICULOS POR E-MAIL PARA RECRUTADORES
@@ -44,8 +43,8 @@ public class VisRestApiRecruiter {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiRecruiterConstants.resumeIds, resumeIds)
-				.put(VisRestApiRecruiterConstants.emails, emails)
+				.put(JsonFieldNames.resumeIds, resumeIds)
+				.put(JsonFieldNames.emails, emails)
 				;
 		
 		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
@@ -60,7 +59,7 @@ public class VisRestApiRecruiter {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiRecruiterConstants.opinionType, opinionType)
+				.put(JsonFieldNames.opinionType, opinionType)
 				;
 		
 		CcpJsonRepresentation result = VisEntityGroupResumesPerceptionsByRecruiter.ENTITY.getData(json, JnDeleteKeysFromCache.INSTANCE);
@@ -76,7 +75,7 @@ public class VisRestApiRecruiter {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiRecruiterConstants.positionStatus, positionStatus)
+				.put(JsonFieldNames.positionStatus, positionStatus)
 				;
 		
 		CcpJsonRepresentation result = VisEntityGroupPositionsByRecruiter.ENTITY.getData(json, JnDeleteKeysFromCache.INSTANCE);
@@ -91,7 +90,7 @@ public class VisRestApiRecruiter {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiRecruiterConstants.resumeId, resumeId)
+				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		
 		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(json);
@@ -105,7 +104,7 @@ public class VisRestApiRecruiter {
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisRestApiRecruiterConstants.resumeId, resumeId)
+				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		//DOUBT SAVE DA TWIN
 		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpEntityCrudOperationType.save).apply(json);
