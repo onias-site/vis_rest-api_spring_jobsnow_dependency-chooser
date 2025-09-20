@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.ccp.decorators.CcpHashDecorator;
 import com.ccp.decorators.CcpStringDecorator;
 import com.ccp.dependency.injection.CcpDependencyInjection;
-import com.ccp.especifications.http.CcpHttpMethods;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
@@ -35,7 +34,6 @@ import com.ccp.utils.CcpHashAlgorithm;
 import com.jn.business.commons.JnBusinessNotifyError;
 import com.jn.business.login.JnBusinessSessionValidate;
 import com.jn.mensageria.JnFunctionMensageriaSender;
-import com.vis.json.validations.VisJsonFieldValidationResume;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
 
@@ -85,8 +83,8 @@ public class VisRestApiSpringStarter {
 	@Bean
 	public FilterRegistrationBean<CcpValidJsonFilter> validateResumeJsonFilter() {
 		FilterRegistrationBean<CcpValidJsonFilter> filtro = new FilterRegistrationBean<>();
-		CcpValidJsonFilter filter = new CcpValidJsonFilter(VisJsonFieldValidationResume.class, CcpHttpMethods.PATCH, CcpHttpMethods.POST);
-		filtro.setFilter(filter);
+//		CcpValidJsonFilter filter = new CcpValidJsonFilter(VisJsonFieldValidationResume.class, CcpHttpMethods.PATCH, CcpHttpMethods.POST);
+//		filtro.setFilter(filter);
 		filtro.addUrlPatterns("/resume/*");
 		return filtro;
 	}
