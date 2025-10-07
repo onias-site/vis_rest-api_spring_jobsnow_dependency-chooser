@@ -23,7 +23,7 @@ import com.vis.utils.VisUtils;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/resume/{email}")
+@RequestMapping("/resume/{email}")
 public class VisRestApiResume{
 	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH}, path = "/language/{language}")

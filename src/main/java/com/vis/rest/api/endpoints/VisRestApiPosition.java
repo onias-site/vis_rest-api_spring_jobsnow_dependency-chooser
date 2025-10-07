@@ -20,7 +20,7 @@ import com.vis.services.VisServicePostion;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "recruiters/{email}/positions/{title}")
+@RequestMapping("recruiters/{email}/positions/{title}")
 public class VisRestApiPosition {
 	enum JsonFieldNames implements CcpJsonFieldName{
 		title, viewMode, resumeId

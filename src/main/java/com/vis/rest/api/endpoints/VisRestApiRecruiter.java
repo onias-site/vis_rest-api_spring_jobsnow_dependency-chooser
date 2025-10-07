@@ -27,7 +27,7 @@ import com.vis.entities.VisEntityResumePerception;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "recruiter/{email}")
+@RequestMapping("recruiter/{email}")
 public class VisRestApiRecruiter {
 	enum JsonFieldNames implements CcpJsonFieldName{
 		resumeIds, emails, opinionType, positionStatus, resumeId
