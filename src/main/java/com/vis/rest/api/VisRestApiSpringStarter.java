@@ -9,8 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import com.ccp.decorators.CcpHashDecorator;
-import com.ccp.decorators.CcpStringDecorator;
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
@@ -28,9 +26,7 @@ import com.ccp.local.testings.implementations.cache.CcpLocalCacheInstances;
 import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpring;
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
-import com.ccp.rest.api.spring.servlet.filters.CcpValidJsonFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.ccp.utils.CcpHashAlgorithm;
 import com.jn.business.commons.JnBusinessNotifyError;
 import com.jn.business.login.JnBusinessSessionValidate;
 import com.jn.mensageria.JnFunctionMensageriaSender;
@@ -74,21 +70,8 @@ public class VisRestApiSpringStarter {
 		filtro.setFilter(emailSyntaxFilter);
 		filtro.addUrlPatterns("/resume/*", "/position/*");
 		
-		CcpHashDecorator hash = new CcpStringDecorator("").email().hash();
-		String asString = hash.asString(CcpHashAlgorithm.SHA256);
-		
 		return filtro;
 	}
-	
-	@Bean
-	public FilterRegistrationBean<CcpValidJsonFilter> validateResumeJsonFilter() {
-		FilterRegistrationBean<CcpValidJsonFilter> filtro = new FilterRegistrationBean<>();
-//		CcpValidJsonFilter filter = new CcpValidJsonFilter(VisJsonFieldValidationResume.class, CcpHttpMethods.PATCH, CcpHttpMethods.POST);
-//		filtro.setFilter(filter);
-		filtro.addUrlPatterns("/resume/*");
-		return filtro;
-	}
-
 	
 	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> putSessionValuesFilter() {
