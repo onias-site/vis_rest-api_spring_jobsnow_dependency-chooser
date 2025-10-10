@@ -1,6 +1,6 @@
 package com.vis.rest.api.swagger;
 
-public interface VisSwaggerRecruiter {
+public interface VisOpenApiResume {
 
 
 }

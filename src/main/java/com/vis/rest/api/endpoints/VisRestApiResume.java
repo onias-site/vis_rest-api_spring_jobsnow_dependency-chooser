@@ -13,12 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
-import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
-import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
-import com.jn.mensageria.JnFunctionMensageriaSender;
-import com.jn.utils.JnDeleteKeysFromCache;
-import com.vis.entities.VisEntityResume;
-import com.vis.utils.VisUtils;
+import com.vis.services.VisServiceResume;
 
 
 @CrossOrigin
@@ -32,25 +27,25 @@ public class VisRestApiResume{
 			@PathVariable("email") String email,
 			@RequestBody Map<String, Object> sessionValues) {
 
-		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.save).apply(sessionValues);
+		Map<String, Object> result = VisServiceResume.Save.execute(sessionValues);
 
-		return  result;
+		return result;
 	}
 	
 	@DeleteMapping("/language/{language}")
 	public Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues){
 		
-		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpEntityCrudOperationType.delete).apply(sessionValues);
+		Map<String, Object> result = VisServiceResume.Delete.execute(sessionValues);
 
-		return  result;
+		return result;
 	}
 
 	@DeleteMapping("/status")
 	public Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues){
 		
-		Map<String, Object> result = new JnFunctionMensageriaSender(VisEntityResume.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(sessionValues);
+		Map<String, Object> result = VisServiceResume.ChangeStatus.execute(sessionValues);
 
-		return  result;
+		return result;
 	}
 
 	@GetMapping
@@ -58,9 +53,9 @@ public class VisRestApiResume{
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
 		
-		Map<String, Object> changeStatus = VisEntityResume.ENTITY.getData(json, JnDeleteKeysFromCache.INSTANCE).content;
-	
-		return changeStatus;
+		Map<String, Object> result = VisServiceResume.GetData.execute(json.content);
+
+		return result;
 	}
 
 	@GetMapping("/viewMode/{viewMode}")
@@ -70,10 +65,9 @@ public class VisRestApiResume{
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(JsonFieldNames.viewMode, viewMode);
 		
-		CcpJsonRepresentation resume = VisUtils.getResumeFromBucket(json);
+		Map<String, Object> result = VisServiceResume.GetFile.execute(json.content);
 
-		return resume.content;
-		
+		return result;
 	}
 
 	@GetMapping("/oi")

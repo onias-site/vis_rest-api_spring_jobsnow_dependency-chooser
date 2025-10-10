@@ -1,7 +1,6 @@
 package com.vis.rest.api.endpoints;
 
 import java.util.List;
-
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,14 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
-import com.ccp.especifications.db.utils.CcpEntityCrudOperationType;
-import com.ccp.especifications.mensageria.receiver.CcpBulkHandlers;
-import com.jn.mensageria.JnFunctionMensageriaSender;
-import com.jn.utils.JnDeleteKeysFromCache;
-import com.vis.business.recruiter.VisBusinessRecruiterReceivingResumes;
-import com.vis.entities.VisEntityGroupPositionsByRecruiter;
-import com.vis.entities.VisEntityGroupResumesPerceptionsByRecruiter;
-import com.vis.entities.VisEntityResumePerception;
+import com.vis.services.VisServiceRecruiter;
 
 
 @CrossOrigin
@@ -47,9 +39,8 @@ public class VisRestApiRecruiter {
 				.put(JsonFieldNames.emails, emails)
 				;
 		
-		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisBusinessRecruiterReceivingResumes.INSTANCE).apply(json);
-	
-		return result.content;
+		Map<String, Object> execute = VisServiceRecruiter.SendResumesToEmail.execute(json.content);
+		return execute;
 	}
 
 	@GetMapping("/resumes/seen/{opinionType}")
@@ -62,9 +53,8 @@ public class VisRestApiRecruiter {
 				.put(JsonFieldNames.opinionType, opinionType)
 				;
 		
-		CcpJsonRepresentation result = VisEntityGroupResumesPerceptionsByRecruiter.ENTITY.getData(json, JnDeleteKeysFromCache.INSTANCE);
-	
-		return result.content;
+		Map<String, Object> execute = VisServiceRecruiter.GetAlreadySeenResumes.execute(json.content);
+		return execute;
 	}
 
 	//FIXME CACHE LOCAL NO COMPUTE ENGINE
@@ -78,9 +68,8 @@ public class VisRestApiRecruiter {
 				.put(JsonFieldNames.positionStatus, positionStatus)
 				;
 		
-		CcpJsonRepresentation result = VisEntityGroupPositionsByRecruiter.ENTITY.getData(json, JnDeleteKeysFromCache.INSTANCE);
-	
-		return result.content;
+		Map<String, Object> execute = VisServiceRecruiter.GetPositionsFromThisRecruiter.execute(json.content);
+		return execute;
 	}
 	
 	@PostMapping("/resumes/{resumeId}")
@@ -93,9 +82,8 @@ public class VisRestApiRecruiter {
 				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		
-		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpBulkHandlers.transferToReverseEntity).apply(json);
-	
-		return result.content;
+		Map<String, Object> execute = VisServiceRecruiter.ChangeOpinionAboutThisResume.execute(json.content);
+		return execute;
 	}
 	@PostMapping("/resumes/{resumeId}/opinion")
 	public Map<String, Object> saveOpinionAboutThisResume(
@@ -107,9 +95,8 @@ public class VisRestApiRecruiter {
 				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		//DOUBT SAVE DA TWIN
-		CcpJsonRepresentation result = new JnFunctionMensageriaSender(VisEntityResumePerception.ENTITY, CcpEntityCrudOperationType.save).apply(json);
-	
-		return result.content;
+		Map<String, Object> execute = VisServiceRecruiter.SaveOpinionAboutThisResume.execute(json.content);
+		return execute;
 	}
 
 }

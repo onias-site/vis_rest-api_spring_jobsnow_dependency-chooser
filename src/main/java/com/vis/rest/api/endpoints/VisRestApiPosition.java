@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.vis.entities.VisEntityGroupResumesByPosition;
-import com.vis.services.VisServicePostion;
+import com.vis.services.VisServicePosition;
 
 @CrossOrigin
 @RestController
@@ -29,7 +29,7 @@ public class VisRestApiPosition {
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	public Map<String, Object> save(@RequestBody String sessionValues){
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
-		Map<String, Object> result = VisServicePostion.INSTANCE.save(json).content;
+		Map<String, Object> result = VisServicePosition.Save.execute(json.content);
 		return result;
 	}
 	
@@ -38,7 +38,7 @@ public class VisRestApiPosition {
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.changeStatus(json).content;
+		Map<String, Object> result = VisServicePosition.ChangeStatus.execute(json.content);
 	
 		return result;
 	}
@@ -48,7 +48,7 @@ public class VisRestApiPosition {
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.getData(json).content;
+		Map<String, Object> result = VisServicePosition.GetData.execute(json.content);
 	
 		return result;
 	}
@@ -66,7 +66,7 @@ public class VisRestApiPosition {
 				.put(VisEntityGroupResumesByPosition.Fields.title, title)
 				;
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.getResumeList(json).content;
+		Map<String, Object> result = VisServicePosition.GetResumeList.execute(json.content);
 	
 		return result;
 	}
@@ -85,7 +85,7 @@ public class VisRestApiPosition {
 				.put(JsonFieldNames.title, title)
 				;
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.getResumeContent(json).content;
+		Map<String, Object> result = VisServicePosition.GetResumeContent.execute(json.content);
 	
 		return result;
 	}
@@ -100,7 +100,7 @@ public class VisRestApiPosition {
 				.put(JsonFieldNames.title, title)
 				;
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.getImportantSkillsFromText(json).content;
+		Map<String, Object> result = VisServicePosition.GetImportantSkillsFromText.execute(json.content);
 	
 		return result;
 	}
@@ -115,7 +115,7 @@ public class VisRestApiPosition {
 				.put(JsonFieldNames.title, title)
 				;
 		
-		Map<String, Object> result = VisServicePostion.INSTANCE.suggestNewSkills(json).content;
+		Map<String, Object> result = VisServicePosition.SuggestNewSkills.execute(json.content);
 	
 		return result;
 	}
