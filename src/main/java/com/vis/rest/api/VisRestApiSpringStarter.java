@@ -63,6 +63,7 @@ public class VisRestApiSpringStarter {
 		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.INSTANCE);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
+	
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
 		FilterRegistrationBean<CcpValidEmailFilter> filtro = new FilterRegistrationBean<>();
@@ -74,14 +75,6 @@ public class VisRestApiSpringStarter {
 	}
 	
 	@Bean
-	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> putSessionValuesFilter() {
-		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filtro = new FilterRegistrationBean<>();
-		filtro.setFilter(CcpPutSessionValuesAndExecuteTaskFilter.TASKLESS);
-		filtro.addUrlPatterns("/resume/*", "/position/*");
-		return filtro;
-	}
-
-	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> validateSessionFilter() {
 		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filtro = new FilterRegistrationBean<>();
 		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessSessionValidate.INSTANCE);
@@ -89,7 +82,4 @@ public class VisRestApiSpringStarter {
 		filtro.addUrlPatterns("/resume/*", "/position/*");
 		return filtro;
 	}
-/*
-*/
-
 }

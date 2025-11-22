@@ -21,10 +21,10 @@ import com.vis.services.VisServiceRecruiter;
 @RestController
 @RequestMapping("recruiter/{email}")
 public class VisRestApiRecruiter {
+	
 	enum JsonFieldNames implements CcpJsonFieldName{
 		resumeIds, emails, opinionType, positionStatus, resumeId
 	}
-
 	
 	//FIXME CURRICULOS POR E-MAIL PARA RECRUTADORES
 	@PostMapping("/resumes/sending/email")

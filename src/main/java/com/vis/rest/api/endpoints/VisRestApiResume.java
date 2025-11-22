@@ -23,9 +23,8 @@ public class VisRestApiResume{
 	
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH}, path = "/language/{language}")
 	public Map<String, Object> save(
-			@PathVariable("language") String language,
-			@PathVariable("email") String email,
-			@RequestBody Map<String, Object> sessionValues) {
+				@RequestBody Map<String, Object> sessionValues
+			) {
 
 		Map<String, Object> result = VisServiceResume.Save.execute(sessionValues);
 
