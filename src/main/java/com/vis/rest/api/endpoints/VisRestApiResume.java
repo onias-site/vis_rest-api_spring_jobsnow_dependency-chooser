@@ -13,13 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
+import com.vis.rest.api.swagger.VisOpenApiResume;
 import com.vis.services.VisServiceResume;
 
 
 @CrossOrigin
 @RestController
 @RequestMapping("/resume/{email}")
-public class VisRestApiResume{
+public class VisRestApiResume implements VisOpenApiResume{
 	
 	@PostMapping("/language/{language}")
 	public Map<String, Object> save(@RequestBody Map<String, Object> sessionValues) {
@@ -56,7 +57,7 @@ public class VisRestApiResume{
 	}
 
 	@GetMapping("/viewMode/{viewMode}")
-	public Map<String, Object> getFile(@PathVariable("viewMode") String viewMode, @RequestBody Map<String, Object> sessionValues){
+	public Map<String, Object> getFile(@RequestBody Map<String, Object> sessionValues, @PathVariable("viewMode") String viewMode){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(JsonFieldNames.viewMode, viewMode);
 		

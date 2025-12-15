@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.vis.entities.VisEntityGroupResumesByPosition;
+import com.vis.rest.api.swagger.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 
 @CrossOrigin
 @RestController
 @RequestMapping("recruiters/{email}/positions/{title}")
-public class VisRestApiPosition {
+public class VisRestApiPosition implements VisOpenApiPosition{
 	enum JsonFieldNames implements CcpJsonFieldName{
 		title, viewMode, resumeId
 	}
@@ -54,10 +55,10 @@ public class VisRestApiPosition {
 	}
 	@GetMapping("/resumes/fromIndex/{fromIndex}/listSize/{listSize}")
 	public Map<String, Object> getResumeList(
+			@RequestBody String sessionValues,
 			@PathVariable("fromIndex") String fromIndex,
 			@PathVariable("listSize") String listSize,
-			@PathVariable("title") String title,
-			@RequestBody String sessionValues
+			@PathVariable("title") String title
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -73,10 +74,10 @@ public class VisRestApiPosition {
 
 	@PostMapping("/resumes/{resumeId}/viewMode/{viewMode}")
 	public Map<String, Object> getResumeContent(
+			@RequestBody String sessionValues,
 			@PathVariable("resumeId") String resumeId,
 			@PathVariable("viewMode") String viewMode,
-			@PathVariable("title") String title,
-			@RequestBody String sessionValues
+			@PathVariable("title") String title
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -92,8 +93,8 @@ public class VisRestApiPosition {
 	
 	@PostMapping("/words")
 	public Map<String, Object> getImportantSkillsFromText(
-			@PathVariable("title") String title,
-			@RequestBody String sessionValues
+			@RequestBody String sessionValues,
+			@PathVariable("title") String title
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -107,8 +108,8 @@ public class VisRestApiPosition {
 	// LATER suggestNewSkills
 	@PatchMapping("/words")
 	public Map<String, Object> suggestNewSkills(
-			@PathVariable("title") String title,
-			@RequestBody String sessionValues
+			@RequestBody String sessionValues,
+			@PathVariable("title") String title
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)

@@ -14,13 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
+import com.vis.rest.api.swagger.VisOpenApiRecruiter;
 import com.vis.services.VisServiceRecruiter;
 
 
 @CrossOrigin
 @RestController
 @RequestMapping("recruiter/{email}")
-public class VisRestApiRecruiter {
+public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 	
 	enum JsonFieldNames implements CcpJsonFieldName{
 		resumeIds, emails, opinionType, positionStatus, resumeId
@@ -29,9 +30,9 @@ public class VisRestApiRecruiter {
 	//FIXME CURRICULOS POR E-MAIL PARA RECRUTADORES
 	@PostMapping("/resumes/sending/email")
 	public Map<String, Object> sendResumesToEmail(
-			@RequestParam("resumeIds") List<String> resumeIds,
+			@RequestBody String sessionValues,
 			@RequestParam("emails") List<String> emails,
-			@RequestBody String sessionValues
+			@RequestParam("resumeIds") List<String> resumeIds
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -45,8 +46,8 @@ public class VisRestApiRecruiter {
 
 	@GetMapping("/resumes/seen/{opinionType}")
 	public Map<String, Object> getAlreadySeenResumes(
+			@RequestBody String sessionValues,
 			@PathVariable("opinionType") String opinionType
-			,@RequestBody String sessionValues
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -60,8 +61,8 @@ public class VisRestApiRecruiter {
 	//FIXME CACHE LOCAL NO COMPUTE ENGINE
 	@GetMapping("/positions/{positionStatus}")
 	public Map<String, Object> getPositionsFromThisRecruiter(
+			@RequestBody String sessionValues,
 			@PathVariable("positionStatus") String positionStatus
-			,@RequestBody String sessionValues
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -74,8 +75,8 @@ public class VisRestApiRecruiter {
 	
 	@PostMapping("/resumes/{resumeId}")
 	public Map<String, Object> changeOpinionAboutThisResume(
-			@PathVariable("resumeId") String resumeId,
-			@RequestBody String sessionValues
+			@RequestBody String sessionValues,
+			@PathVariable("resumeId") String resumeId
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
@@ -87,8 +88,8 @@ public class VisRestApiRecruiter {
 	}
 	@PostMapping("/resumes/{resumeId}/opinion")
 	public Map<String, Object> saveOpinionAboutThisResume(
-			@PathVariable("resumeId") String resumeId,
-			@RequestBody String sessionValues
+			@RequestBody String sessionValues,
+			@PathVariable("resumeId") String resumeId
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
