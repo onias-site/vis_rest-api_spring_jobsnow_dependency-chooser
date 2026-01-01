@@ -71,25 +71,6 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 	
 		return result;
 	}
-
-	@PostMapping("/resumes/{resumeId}/viewMode/{viewMode}")
-	public Map<String, Object> getResumeContent(
-			@RequestBody String sessionValues,
-			@PathVariable("resumeId") String resumeId,
-			@PathVariable("viewMode") String viewMode,
-			@PathVariable("title") String title
-			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(JsonFieldNames.resumeId, resumeId)
-				.put(JsonFieldNames.viewMode, viewMode)
-				.put(JsonFieldNames.title, title)
-				;
-		
-		Map<String, Object> result = VisServicePosition.GetResumeContent.execute(json.content);
-	
-		return result;
-	}
 	
 	@PostMapping("/words")
 	public Map<String, Object> getImportantSkillsFromText(
