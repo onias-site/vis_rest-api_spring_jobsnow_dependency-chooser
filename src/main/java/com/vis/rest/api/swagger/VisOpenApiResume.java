@@ -12,6 +12,5 @@ public interface VisOpenApiResume {
 	
 	Map<String, Object> getData(Map<String, Object> sessionValues);
 	
-	Map<String, Object> getFile(Map<String, Object> sessionValues, String viewMode);
 
 }

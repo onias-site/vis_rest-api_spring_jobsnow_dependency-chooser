@@ -5,7 +5,6 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -45,6 +44,7 @@ public class VisRestApiResume implements VisOpenApiResume{
 
 		return result;
 	}
+	
 
 	@GetMapping
 	public Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues){
@@ -52,16 +52,6 @@ public class VisRestApiResume implements VisOpenApiResume{
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
 		
 		Map<String, Object> result = VisServiceResume.GetData.execute(json.content);
-
-		return result;
-	}
-
-	@GetMapping("/viewMode/{viewMode}")
-	public Map<String, Object> getFile(@RequestBody Map<String, Object> sessionValues, @PathVariable("viewMode") String viewMode){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues).put(JsonFieldNames.viewMode, viewMode);
-		
-		Map<String, Object> result = VisServiceResume.GetFile.execute(json.content);
 
 		return result;
 	}
