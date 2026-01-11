@@ -12,7 +12,7 @@ import com.vis.services.VisServiceSkills;
 
 @CrossOrigin
 @RestController
-@RequestMapping("skill")
+@RequestMapping("skills")
 public class VisRestApiSkill {
 	
 	@PostMapping("/fromText")
