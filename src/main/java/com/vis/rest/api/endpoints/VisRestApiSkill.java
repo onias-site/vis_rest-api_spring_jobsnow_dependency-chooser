@@ -22,9 +22,9 @@ public class VisRestApiSkill {
 		return result;
 	}
 
-	@PostMapping("/hierarchy")
+	@PostMapping("/hierarchy/readjustment")
 	public Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues){
-		Map<String, Object> result = VisServiceSkills.GetSkillsFromText.execute(sessionValues);
+		Map<String, Object> result = VisServiceSkills.FixSkillHierarchy.execute(sessionValues);
 		return result;
 	}
 
