@@ -58,7 +58,7 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 
-	//FIXME CACHE LOCAL NO COMPUTE ENGINE
+	//TODO CACHE LOCAL NO COMPUTE ENGINE
 	@GetMapping("/positions/{positionStatus}")
 	public Map<String, Object> getPositionsFromThisRecruiter(
 			@RequestBody String sessionValues,
@@ -95,7 +95,6 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
 				.put(JsonFieldNames.resumeId, resumeId)
 				;
-		//DOUBT SAVE DA TWIN
 		Map<String, Object> execute = VisServiceRecruiter.SaveOpinionAboutThisResume.execute(json.content);
 		return execute;
 	}

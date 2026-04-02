@@ -86,7 +86,6 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 	
 		return result;
 	}
-	// LATER suggestNewSkills
 	@PatchMapping("/words")
 	public Map<String, Object> suggestNewSkills(
 			@RequestBody String sessionValues,
