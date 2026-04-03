@@ -27,7 +27,6 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		resumeIds, emails, opinionType, positionStatus, resumeId
 	}
 	
-	//LATER CURRICULOS POR E-MAIL PARA RECRUTADORES
 	@PostMapping("/resumes/sending/email")
 	public Map<String, Object> sendResumesToEmail(
 			@RequestBody String sessionValues,
