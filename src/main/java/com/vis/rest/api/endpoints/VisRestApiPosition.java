@@ -16,9 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
 import com.vis.entities.VisEntityGroupResumesByPosition;
-import com.vis.rest.api.swagger.VisOpenApiPosition;
+import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 
+/**
+ * REST controller for job position management in the VIS module at path
+ * {@code /recruiters/{email}/positions/{title}}. Allows creating/updating positions, changing status,
+ * retrieving data, listing paginated resumes, and extracting/suggesting skills from position text.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("recruiters/{email}/positions/{title}")

@@ -14,10 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
-import com.vis.rest.api.swagger.VisOpenApiRecruiter;
+import com.vis.rest.open.api.VisOpenApiRecruiter;
 import com.vis.services.VisServiceRecruiter;
 
 
+/**
+ * REST controller for recruiter operations in the VIS module at path {@code /recruiter/{email}}.
+ * Manages sending resumes by email, querying seen resumes, listing positions,
+ * and saving/toggling opinions about resumes.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("recruiter/{email}")

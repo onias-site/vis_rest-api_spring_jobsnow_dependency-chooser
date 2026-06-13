@@ -9,9 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.constantes.CcpOtherConstants;
-import com.vis.rest.api.swagger.VisOpenApiCompany;
+import com.vis.rest.open.api.VisOpenApiCompany;
 import com.vis.services.VisServiceCompany;
 
+/**
+ * REST controller for company operations in the VIS module at path {@code /companies}.
+ * Exposes an autocomplete search for companies by name prefix (first three initials).
+ */
 //FIXME SCHEDULE PARA SALVAR EMPRESAS INDESEJADAS
 //
 @CrossOrigin

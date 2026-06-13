@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vis.rest.open.api.VisOpenApiSkill;
 import com.vis.services.VisServiceSkills;
 
+/**
+ * REST controller for skill operations at path {@code /skills}.
+ * Allows extracting skills from free text, suggesting hierarchy corrections,
+ * and requesting creation of new skills.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("skills")
-public class VisRestApiSkill {
+public class VisRestApiSkill implements VisOpenApiSkill {
 	
 	@PostMapping("/fromText")
 	public Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues){

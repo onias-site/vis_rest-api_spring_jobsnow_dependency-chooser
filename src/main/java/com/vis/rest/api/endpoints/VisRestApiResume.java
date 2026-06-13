@@ -12,10 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
-import com.vis.rest.api.swagger.VisOpenApiResume;
+import com.vis.rest.open.api.VisOpenApiResume;
 import com.vis.services.VisServiceResume;
 
 
+/**
+ * REST controller for resume operations in the VIS module at path {@code /resume/{email}}.
+ * Allows saving, deleting, changing status, and retrieving the candidate's resume data by language.
+ */
 @CrossOrigin
 @RestController
 @RequestMapping("/resume/{email}")

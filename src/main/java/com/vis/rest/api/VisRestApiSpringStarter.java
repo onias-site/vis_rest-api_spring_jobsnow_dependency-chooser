@@ -8,6 +8,11 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
 
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
@@ -33,10 +38,15 @@ import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
 
+/**
+ * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
+ * (incluindo {@code CcpApacheTikaTextExtractor}, exclusivo deste módulo), configura filtros de
+ * validação de e-mail e sessão para os paths {@code /resume/*} e {@code /position/*}.
+ */
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {
-		VisRestApiResume.class, 
+		VisRestApiResume.class,
 		CcpRestApiExceptionHandlerSpring.class,
 })
 @SpringBootApplication
@@ -64,6 +74,28 @@ public class VisRestApiSpringStarter {
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	
+	@Bean
+	public OpenAPI visOpenAPI() {
+		return new OpenAPI()
+				.info(new Info()
+						.title("JobsNow VIS API")
+						.description("REST API for the VIS module: resume management, positions, recruiters, companies and skills.")
+						.version("1.0"));
+	}
+
+	@Bean
+	public WebMvcConfigurer swaggerResourceHandler() {
+		return new WebMvcConfigurer() {
+			@Override
+			public void addResourceHandlers(ResourceHandlerRegistry registry) {
+				registry.addResourceHandler("/webjars/**")
+						.addResourceLocations("classpath:/META-INF/resources/webjars/");
+				registry.addResourceHandler("/swagger-ui/**")
+						.addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/");
+			}
+		};
+	}
+
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
 		FilterRegistrationBean<CcpValidEmailFilter> filtro = new FilterRegistrationBean<>();
