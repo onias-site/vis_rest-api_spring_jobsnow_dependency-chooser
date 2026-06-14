@@ -62,7 +62,7 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 
-	//TODO CACHE LOCAL NO COMPUTE ENGINE
+	//DOUBT CACHE LOCAL NO COMPUTE ENGINE
 	@GetMapping("/positions/{positionStatus}")
 	public Map<String, Object> getPositionsFromThisRecruiter(
 			@RequestBody String sessionValues,
