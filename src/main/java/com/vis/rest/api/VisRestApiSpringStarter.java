@@ -45,12 +45,12 @@ import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.PathParameter;
 
-
 /**
  * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
  * (incluindo {@code CcpApacheTikaTextExtractor}, exclusivo deste módulo), configura filtros de
  * validação de e-mail e sessão para os paths {@code /resume/*} e {@code /position/*}.
  */
+
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {
