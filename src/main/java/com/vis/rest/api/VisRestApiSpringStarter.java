@@ -35,7 +35,7 @@ import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpri
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.jn.business.messages.JnBusinessNotifyError;
+import com.jn.business.messages.JnMessages.JnBusinessNotifyError;
 import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.services.JnServiceLogin;
 import com.vis.rest.api.endpoints.VisRestApiResume;
@@ -78,7 +78,7 @@ public class VisRestApiSpringStarter {
 				,new CcpApacheMimeHttp() 
 		);
 
-		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.INSTANCE);
+		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.instance);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	

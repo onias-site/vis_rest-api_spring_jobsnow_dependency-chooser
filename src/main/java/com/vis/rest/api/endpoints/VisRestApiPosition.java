@@ -1,7 +1,6 @@
 package com.vis.rest.api.endpoints;
 
 import java.util.Map;
-
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +11,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.ccp.decorators.CcpJsonRepresentation;
 import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
-import com.vis.entities.VisEntityGroupResumesByPosition;
 import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
+import com.vis.json.fields.validation.VisJsonCommonsFields;
 
 /**
  * REST controller for job position management in the VIS module at path
@@ -67,9 +65,9 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 			){
 		
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisEntityGroupResumesByPosition.Fields.from, fromIndex)
-				.put(VisEntityGroupResumesByPosition.Fields.listSize, listSize)
-				.put(VisEntityGroupResumesByPosition.Fields.title, title)
+				.put(VisJsonCommonsFields.from, fromIndex)
+				.put(VisJsonCommonsFields.listSize, listSize)
+				.put(VisJsonCommonsFields.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePosition.GetResumeList.execute(json.content);
