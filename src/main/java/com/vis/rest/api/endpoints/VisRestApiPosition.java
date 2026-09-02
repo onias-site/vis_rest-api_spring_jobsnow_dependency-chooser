@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
-import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
+import com.ccp.decorators.CcpJsonFieldName;
 import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 import com.vis.json.fields.validation.VisJsonCommonsFields;
@@ -27,7 +27,7 @@ import com.vis.json.fields.validation.VisJsonCommonsFields;
 @RequestMapping("recruiters/{email}/positions/{title}")
 public class VisRestApiPosition implements VisOpenApiPosition{
 	enum JsonFieldNames implements CcpJsonFieldName{
-		title, viewMode, resumeId
+		viewMode, resumeId
 	}
 
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
@@ -63,10 +63,13 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 			@PathVariable("listSize") String listSize,
 			@PathVariable("title") String title
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(VisJsonCommonsFields.from, fromIndex)
-				.put(VisJsonCommonsFields.listSize, listSize)
+				CcpJsonRepresentation ccpJsonRepresentation = new CcpJsonRepresentation(sessionValues);
+				CcpJsonRepresentation put = ccpJsonRepresentation
+				.put(VisJsonCommonsFields.from, fromIndex);
+				CcpJsonRepresentation put2 = put
+				.put(VisJsonCommonsFields.listSize, listSize);
+
+				CcpJsonRepresentation json = put2
 				.put(VisJsonCommonsFields.title, title)
 				;
 		
@@ -80,9 +83,10 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 			@RequestBody String sessionValues,
 			@PathVariable("title") String title
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(JsonFieldNames.title, title)
+				CcpJsonRepresentation ccpJsonRepresentation2 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation2
+				.put(VisJsonCommonsFields.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePosition.GetImportantSkillsFromText.execute(json.content);
@@ -94,9 +98,10 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 			@RequestBody String sessionValues,
 			@PathVariable("title") String title
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(JsonFieldNames.title, title)
+				CcpJsonRepresentation ccpJsonRepresentation3 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation3
+				.put(VisJsonCommonsFields.title, title)
 				;
 		
 		Map<String, Object> result = VisServicePosition.SuggestNewSkills.execute(json.content);

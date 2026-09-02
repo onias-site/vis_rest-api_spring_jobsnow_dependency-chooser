@@ -26,9 +26,10 @@ public class VisRestApiCompany implements VisOpenApiCompany {
 	
 	@GetMapping("/search/autocomplete/{search}")
 	public Map<String, Object> searchCompaniesByTheirFirstThreeInitials(@PathVariable("search") String search){
-		
+		String toUpperCase = search.toUpperCase();
+	
 		var json = CcpOtherConstants.EMPTY_JSON
-					.put(VisServiceCompany.FieldsToSearchCompaniesByTheirFirstThreeInitials.search, search.toUpperCase())
+					.put(VisServiceCompany.FieldsToSearchCompaniesByTheirFirstThreeInitials.search, toUpperCase)
 				;
 		
 		var execute = VisServiceCompany.SearchCompaniesByTheirFirstThreeInitials.execute(json.content);

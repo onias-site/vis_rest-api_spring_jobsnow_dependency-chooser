@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
-import com.ccp.decorators.CcpJsonRepresentation.CcpJsonFieldName;
+import com.ccp.decorators.CcpJsonFieldName;
 import com.vis.rest.open.api.VisOpenApiRecruiter;
 import com.vis.services.VisServiceRecruiter;
 
@@ -38,9 +38,11 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 			@RequestParam("emails") List<String> emails,
 			@RequestParam("resumeIds") List<String> resumeIds
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
-				.put(JsonFieldNames.resumeIds, resumeIds)
+				CcpJsonRepresentation ccpJsonRepresentation = new CcpJsonRepresentation(sessionValues);
+				CcpJsonRepresentation put = ccpJsonRepresentation
+				.put(JsonFieldNames.resumeIds, resumeIds);
+
+				CcpJsonRepresentation json = put
 				.put(JsonFieldNames.emails, emails)
 				;
 		
@@ -53,8 +55,9 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 			@RequestBody String sessionValues,
 			@PathVariable("opinionType") String opinionType
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
+				CcpJsonRepresentation ccpJsonRepresentation2 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation2
 				.put(JsonFieldNames.opinionType, opinionType)
 				;
 		
@@ -68,8 +71,9 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 			@RequestBody String sessionValues,
 			@PathVariable("positionStatus") String positionStatus
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
+				CcpJsonRepresentation ccpJsonRepresentation3 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation3
 				.put(JsonFieldNames.positionStatus, positionStatus)
 				;
 		
@@ -82,8 +86,9 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 			@RequestBody String sessionValues,
 			@PathVariable("resumeId") String resumeId
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
+				CcpJsonRepresentation ccpJsonRepresentation4 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation4
 				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		
@@ -95,8 +100,9 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 			@RequestBody String sessionValues,
 			@PathVariable("resumeId") String resumeId
 			){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues)
+				CcpJsonRepresentation ccpJsonRepresentation5 = new CcpJsonRepresentation(sessionValues);
+
+				CcpJsonRepresentation json = ccpJsonRepresentation5
 				.put(JsonFieldNames.resumeId, resumeId)
 				;
 		Map<String, Object> execute = VisServiceRecruiter.SaveOpinionAboutThisResume.execute(json.content);

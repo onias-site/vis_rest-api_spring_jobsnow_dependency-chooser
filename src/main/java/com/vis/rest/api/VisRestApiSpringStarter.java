@@ -35,7 +35,7 @@ import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpri
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.jn.business.messages.JnMessages.JnBusinessNotifyError;
+import com.jn.business.messages.JnBusinessNotifyError;
 import com.jn.mensageria.JnFunctionMensageriaSender;
 import com.jn.services.JnServiceLogin;
 import com.vis.rest.api.endpoints.VisRestApiResume;
@@ -44,6 +44,9 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.PathParameter;
+import io.swagger.v3.oas.models.Paths;
+import java.util.stream.Stream;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 
 /**
  * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
@@ -61,21 +64,29 @@ import io.swagger.v3.oas.models.parameters.PathParameter;
 public class VisRestApiSpringStarter {
 	
 	public static void main(String[] args) {
-		CcpDependencyInjection.loadAllDependencies(new CcpGsonJsonHandler());
+		CcpGsonJsonHandler ccpGsonJsonHandler = new CcpGsonJsonHandler();
+		CcpDependencyInjection.loadAllDependencies(ccpGsonJsonHandler);
 		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
+		CcpApacheTikaTextExtractor ccpApacheTikaTextExtractor = new CcpApacheTikaTextExtractor();
+		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = new CcpElasticSearchDbRequest();
+		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = new CcpMindrotPasswordHandler();
+		CcpGcpMainAuthentication ccpGcpMainAuthentication = new CcpGcpMainAuthentication();
+		CcpElasticSerchDbBulk ccpElasticSerchDbBulk = new CcpElasticSerchDbBulk();
+		CcpElasticSearchCrud ccpElasticSearchCrud = new CcpElasticSearchCrud();
+		CcpApacheMimeHttp ccpApacheMimeHttp = new CcpApacheMimeHttp();
 		CcpDependencyInjection.loadAllDependencies
 		(
 				localEnvironment ? CcpLocalInstances.mensageriaSender : new CcpGcpPubSubMensageriaSender(),
 				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
-				new CcpApacheTikaTextExtractor(),
-				new CcpElasticSearchDbRequest(),
-				new CcpMindrotPasswordHandler()
-				,new CcpGcpMainAuthentication()
-				,new CcpElasticSerchDbBulk()
-				,new CcpElasticSearchCrud()
-				,new CcpApacheMimeHttp() 
+				ccpApacheTikaTextExtractor,
+				ccpElasticSearchDbRequest,
+				ccpMindrotPasswordHandler
+				,
+				ccpGcpMainAuthentication,
+				ccpElasticSerchDbBulk,
+				ccpElasticSearchCrud,ccpApacheMimeHttp 
 		);
 
 		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.instance);
@@ -85,22 +96,37 @@ public class VisRestApiSpringStarter {
 	@Bean
 	public GlobalOpenApiCustomizer missingPathParamsCustomizer() {
 		return openApi -> {
-			if (openApi.getPaths() == null) return;
+			Paths paths = openApi.getPaths();
+			boolean pathsIgual = paths == null;
+			if (pathsIgual) return;
 			Pattern p = Pattern.compile("\\{(\\w+)\\}");
-			openApi.getPaths().forEach((pathTemplate, pathItem) -> {
+			Paths paths2 = openApi.getPaths();
+			paths2.forEach((pathTemplate, pathItem) -> {
 				Set<String> templateVars = new HashSet<>();
 				Matcher m = p.matcher(pathTemplate);
-				while (m.find()) templateVars.add(m.group(1));
-				if (templateVars.isEmpty()) return;
-				pathItem.readOperations().forEach(op -> {
+				while (m.find()) {
+					String group = m.group(1);
+					templateVars.add(group);
+					}
+					boolean templateVarsEmpty = templateVars.isEmpty();
+					if (templateVarsEmpty) return;
+					var readOperations = pathItem.readOperations();
+					readOperations.forEach(op -> {
 					Set<String> declared = new HashSet<>();
-					if (op.getParameters() != null) {
-						op.getParameters().stream()
-							.filter(param -> "path".equals(param.getIn()))
+					var parameters = op.getParameters();
+					boolean parametersDiferente = parameters != null;
+					if (parametersDiferente) {
+						var parameters2 = op.getParameters();
+						var stream = parameters2.stream();
+						var filter2 = stream
+							.filter(param -> "path".equals(param.getIn()));
+							filter2
 							.forEach(param -> declared.add(param.getName()));
 					}
-					templateVars.stream()
-						.filter(v -> !declared.contains(v))
+					Stream<String> stream2 = templateVars.stream();
+					var filter3 = stream2
+						.filter(v -> !declared.contains(v));
+						filter3
 						.forEach(v -> op.addParametersItem(
 							new PathParameter().name(v).required(true).schema(new StringSchema())
 						));
@@ -111,24 +137,33 @@ public class VisRestApiSpringStarter {
 
 	@Bean
 	public OpenAPI visOpenAPI() {
-		return new OpenAPI()
-				.info(new Info()
-						.title("JobsNow VIS API")
-						.description("REST API for the VIS module: resume management, positions, recruiters, companies and skills.")
-						.version("1.0"));
+		OpenAPI openAPI = new OpenAPI();
+		Info info2 = new Info();
+		Info title = info2
+						.title("JobsNow VIS API");
+						Info description = title
+						.description("REST API for the VIS module: resume management, positions, recruiters, companies and skills.");
+						Info version = description
+						.version("1.0");
+						OpenAPI info = openAPI
+						.info(version);
+						return info;
 	}
 
 	@Bean
 	public WebMvcConfigurer swaggerResourceHandler() {
-		return new WebMvcConfigurer() {
+		var webMvcConfigurer = new WebMvcConfigurer() {
 			@Override
 			public void addResourceHandlers(ResourceHandlerRegistry registry) {
-				registry.addResourceHandler("/webjars/**")
+				ResourceHandlerRegistration addResourceHandler = registry.addResourceHandler("/webjars/**");
+				addResourceHandler
 						.addResourceLocations("classpath:/META-INF/resources/webjars/");
-				registry.addResourceHandler("/swagger-ui/**")
+						ResourceHandlerRegistration addResourceHandler2 = registry.addResourceHandler("/swagger-ui/**");
+						addResourceHandler2
 						.addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/");
 			}
 		};
+		return webMvcConfigurer;
 	}
 
 	@Bean
