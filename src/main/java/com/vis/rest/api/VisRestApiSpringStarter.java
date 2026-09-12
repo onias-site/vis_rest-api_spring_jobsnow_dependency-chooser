@@ -77,7 +77,7 @@ public class VisRestApiSpringStarter {
 		CcpApacheMimeHttp ccpApacheMimeHttp = new CcpApacheMimeHttp();
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnvironment ? CcpLocalInstances.mensageriaSender : new CcpGcpPubSubMensageriaSender(),
+				localEnvironment ? CcpLocalInstances.syncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
 				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
 				ccpApacheTikaTextExtractor,
