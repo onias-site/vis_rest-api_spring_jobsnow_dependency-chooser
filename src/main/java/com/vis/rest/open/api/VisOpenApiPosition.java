@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Positions", description = "Operations for managing job positions: CRUD, resume listing, and skill extraction.")
 public interface VisOpenApiPosition {
 
-	@Operation(
+	@Operation( 
 		summary = "Create or update a job position",
 		description = "When does it occur? When the recruiter creates a new job position or updates an existing one. "
 			+ "What does it do? Saves the position data. Both POST (create) and PATCH (update) are accepted."
