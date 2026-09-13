@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.boot.SpringApplication;
@@ -14,10 +15,12 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ccp.dependency.injection.CcpDependencyInjection;
+import com.ccp.especifications.db.utils.entity.CcpEntityOperationType;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
@@ -35,18 +38,15 @@ import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpri
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.jn.business.messages.JnBusinessNotifyError;
-import com.jn.mensageria.JnFunctionMensageriaSender;
+import com.jn.entities.JnEntityJobsnowError;
 import com.jn.services.JnServiceLogin;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.parameters.PathParameter;
-import io.swagger.v3.oas.models.Paths;
-import java.util.stream.Stream;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistration;
 
 /**
  * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
@@ -89,7 +89,7 @@ public class VisRestApiSpringStarter {
 				ccpElasticSearchCrud,ccpApacheMimeHttp 
 		);
 
-		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnFunctionMensageriaSender(JnBusinessNotifyError.instance);
+		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = JnEntityJobsnowError.ENTITY.getEntityMetaData().getOperationCallback(CcpEntityOperationType.save);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	
