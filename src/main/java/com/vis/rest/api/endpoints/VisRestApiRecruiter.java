@@ -18,6 +18,9 @@ import com.vis.rest.open.api.VisOpenApiRecruiter;
 import com.vis.services.VisServiceRecruiter;
 
 
+import com.ccp.json.fields.validation.CcpJsonCommonsFields;
+import com.vis.json.fields.validation.VisJsonCommonsFields;
+
 /**
  * REST controller for recruiter operations in the VIS module at path {@code /recruiter/{email}}.
  * Manages sending resumes by email, querying seen resumes, listing positions,
@@ -29,7 +32,7 @@ import com.vis.services.VisServiceRecruiter;
 public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 	
 	enum JsonFieldNames implements CcpJsonFieldName{
-		resumeIds, emails, opinionType, positionStatus, resumeId
+		resumeIds, opinionType, positionStatus
 	}
 	
 	@PostMapping("/resumes/sending/email")
@@ -43,7 +46,7 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 				.put(JsonFieldNames.resumeIds, resumeIds);
 
 				CcpJsonRepresentation json = put
-				.put(JsonFieldNames.emails, emails)
+				.put(CcpJsonCommonsFields.emails, emails)
 				;
 		
 		Map<String, Object> execute = VisServiceRecruiter.SendResumesToEmail.execute(json.content);
@@ -88,7 +91,7 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 				CcpJsonRepresentation ccpJsonRepresentation4 = new CcpJsonRepresentation(sessionValues);
 
 				CcpJsonRepresentation json = ccpJsonRepresentation4
-				.put(JsonFieldNames.resumeId, resumeId)
+				.put(VisJsonCommonsFields.resumeId, resumeId)
 				;
 		
 		Map<String, Object> execute = VisServiceRecruiter.ChangeOpinionAboutThisResume.execute(json.content);
@@ -102,7 +105,7 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 				CcpJsonRepresentation ccpJsonRepresentation5 = new CcpJsonRepresentation(sessionValues);
 
 				CcpJsonRepresentation json = ccpJsonRepresentation5
-				.put(JsonFieldNames.resumeId, resumeId)
+				.put(VisJsonCommonsFields.resumeId, resumeId)
 				;
 		Map<String, Object> execute = VisServiceRecruiter.SaveOpinionAboutThisResume.execute(json.content);
 		return execute;

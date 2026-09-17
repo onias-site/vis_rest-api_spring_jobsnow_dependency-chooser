@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.ccp.decorators.CcpJsonRepresentation;
-import com.ccp.decorators.CcpJsonFieldName;
 import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 import com.vis.json.fields.validation.VisJsonCommonsFields;
+
 
 /**
  * REST controller for job position management in the VIS module at path
@@ -26,9 +26,6 @@ import com.vis.json.fields.validation.VisJsonCommonsFields;
 @RestController
 @RequestMapping("recruiters/{email}/positions/{title}")
 public class VisRestApiPosition implements VisOpenApiPosition{
-	enum JsonFieldNames implements CcpJsonFieldName{
-		viewMode, resumeId
-	}
 
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	public Map<String, Object> save(@RequestBody String sessionValues){
