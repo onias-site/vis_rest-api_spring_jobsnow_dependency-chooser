@@ -89,7 +89,7 @@ public class VisRestApiSpringStarter {
 				ccpElasticSearchCrud,ccpApacheMimeHttp 
 		);
 
-		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = CcpEntityOperationType.save.getOperationCallback(JnEntityJobsnowError.ENTITY);
+		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = JnEntityJobsnowError.ENTITY.getEntityMetaData().getOperationCallback(CcpEntityOperationType.save);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	
