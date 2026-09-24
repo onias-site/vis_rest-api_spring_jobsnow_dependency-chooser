@@ -16,7 +16,7 @@ import com.vis.services.VisServiceCompany;
  * REST controller for company operations in the VIS module at path {@code /companies}.
  * Exposes an autocomplete search for companies by name prefix (first three initials).
  */
-//FIXME SCHEDULE PARA SALVAR EMPRESAS INDESEJADAS
+//TODO SCHEDULE PARA SALVAR EMPRESAS INDESEJADAS
 //
 @CrossOrigin
 @RestController
