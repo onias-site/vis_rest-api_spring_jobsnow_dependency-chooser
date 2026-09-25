@@ -16,11 +16,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * OpenAPI contract for skill operations at path {@code /skills}.
- * Covers extracting skills from free text, suggesting hierarchy corrections,
- * and requesting creation of new skills.
+ * Covers extracting skills from free text and requesting creation of new skills.
+ * Hierarchy corrections are documented in {@link VisOpenApiSkillFixHierarchy}.
  */
 @RequestMapping("skills")
-@Tag(name = "Skills", description = "Operations for managing professional skills: extraction from text, hierarchy adjustments, and creation requests.")
+@Tag(name = "Skills", description = "Operations for managing professional skills: extraction from text and creation requests.")
 public interface VisOpenApiSkill {
 
 	@Operation(
@@ -48,18 +48,6 @@ public interface VisOpenApiSkill {
 	})
 	@PostMapping("/fromText")
 	Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues);
-
-	@Operation(
-		summary = "Suggest skill hierarchy correction",
-		description = "When does it occur? When a user identifies that a skill is incorrectly classified in the hierarchy. "
-			+ "What does it do? Records the hierarchy correction suggestion for review."
-			+ "<br/><br/>No specific field validation is enforced. The request body should contain the skill and hierarchy context."
-	)
-	@ApiResponses({
-		@ApiResponse(responseCode = "200", description = "Hierarchy correction suggestion saved successfully."),
-	})
-	@PostMapping("/hierarchy/readjustment")
-	Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues);
 
 	@Operation(
 		summary = "Request creation of a new skill",

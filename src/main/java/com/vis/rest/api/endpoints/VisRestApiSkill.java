@@ -17,8 +17,8 @@ import com.vis.services.VisServiceSkills;
 
 /**
  * REST controller for skill operations at path {@code /skills}.
- * Allows extracting skills from free text, suggesting hierarchy corrections,
- * and requesting creation of new skills.
+ * Allows extracting skills from free text and requesting creation of new skills.
+ * Hierarchy corrections live in {@link VisRestApiSkillFixHierarchy}.
  */
 @CrossOrigin
 @RestController
@@ -31,12 +31,6 @@ public class VisRestApiSkill implements VisOpenApiSkill {
 		CcpCachedService ccd = new CcpCachedService(CcpJsonCommonsFields.text, VisServiceSkills.GetSkillsFromText, 3_600_000);
 		
 		Map<String, Object> result = ccd.execute(sessionValues);
-		return result;
-	}
-
-	@PostMapping("/hierarchy/readjustment")
-	public Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues){
-		Map<String, Object> result = VisServiceSkills.FixSkillHierarchy.execute(sessionValues);
 		return result;
 	}
 
