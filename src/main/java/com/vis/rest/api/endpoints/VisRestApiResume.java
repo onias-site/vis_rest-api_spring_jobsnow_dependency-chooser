@@ -61,7 +61,7 @@ public class VisRestApiResume implements VisOpenApiResume{
 	}
 
 	@GetMapping("/oi")
-	public String oi() {
+	public String hi() {
 		return "oi";
 	}
 	
