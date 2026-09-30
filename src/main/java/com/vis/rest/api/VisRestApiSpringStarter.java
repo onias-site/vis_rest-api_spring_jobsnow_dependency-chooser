@@ -27,6 +27,7 @@ import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
 import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
 import com.ccp.implementations.http.apache.mime.CcpApacheMimeHttp;
+import com.ccp.implementations.instant.messenger.telegram.CcpTelegramInstantMessenger;
 import com.ccp.implementations.json.gson.CcpGsonJsonHandler;
 import com.ccp.implementations.main.authentication.gcp.oauth.CcpGcpMainAuthentication;
 import com.ccp.implementations.mensageria.sender.gcp.pubsub.CcpGcpPubSubMensageriaSender;
@@ -68,6 +69,7 @@ public class VisRestApiSpringStarter {
 		CcpDependencyInjection.loadAllDependencies(ccpGsonJsonHandler);
 		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
+		CcpTelegramInstantMessenger ccpTelegramInstantMessenger = new CcpTelegramInstantMessenger();
 		CcpApacheTikaTextExtractor ccpApacheTikaTextExtractor = new CcpApacheTikaTextExtractor();
 		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = new CcpElasticSearchDbRequest();
 		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = new CcpMindrotPasswordHandler();
@@ -80,6 +82,7 @@ public class VisRestApiSpringStarter {
 				localEnvironment ? CcpLocalInstances.syncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
 				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
+			    ccpTelegramInstantMessenger,
 				ccpApacheTikaTextExtractor,
 				ccpElasticSearchDbRequest,
 				ccpMindrotPasswordHandler

@@ -51,6 +51,9 @@ public interface VisOpenApiSkillFixHierarchy {
 				+ "}")) },
 			responseCode = "200",
 			description = "Suggestion saved as pending review."),
+		@ApiResponse(responseCode = "403",
+			description = "userNotAllowed — support chose to ignore this candidate's skill hierarchy fix suggestions. "
+				+ "The suggestion is not saved and nobody is notified."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
