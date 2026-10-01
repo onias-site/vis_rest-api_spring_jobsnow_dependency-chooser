@@ -24,7 +24,9 @@ import com.ccp.especifications.db.utils.entity.CcpEntityOperationType;
 import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
+import com.ccp.implementations.db.query.elasticsearch.CcpElasticSearchQueryExecutor;
 import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
+import com.ccp.implementations.email.sendgrid.CcpSendGridEmailSender;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
 import com.ccp.implementations.http.apache.mime.CcpApacheMimeHttp;
 import com.ccp.implementations.instant.messenger.telegram.CcpTelegramInstantMessenger;
@@ -77,11 +79,15 @@ public class VisRestApiSpringStarter {
 		CcpElasticSerchDbBulk ccpElasticSerchDbBulk = new CcpElasticSerchDbBulk();
 		CcpElasticSearchCrud ccpElasticSearchCrud = new CcpElasticSearchCrud();
 		CcpApacheMimeHttp ccpApacheMimeHttp = new CcpApacheMimeHttp();
+		// the queries (e.g. the purge of a versionable record's history, the orphan items of a withdrawn
+		// skill hierarchy fix request) need it
+		CcpElasticSearchQueryExecutor ccpElasticSearchQueryExecutor = new CcpElasticSearchQueryExecutor();
 		CcpDependencyInjection.loadAllDependencies
 		(
 				localEnvironment ? CcpLocalInstances.syncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
 				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
+				localEnvironment ? CcpLocalInstances.email : new CcpSendGridEmailSender(),
 			    ccpTelegramInstantMessenger,
 				ccpApacheTikaTextExtractor,
 				ccpElasticSearchDbRequest,
@@ -89,7 +95,7 @@ public class VisRestApiSpringStarter {
 				,
 				ccpGcpMainAuthentication,
 				ccpElasticSerchDbBulk,
-				ccpElasticSearchCrud,ccpApacheMimeHttp 
+				ccpElasticSearchCrud,ccpElasticSearchQueryExecutor,ccpApacheMimeHttp
 		);
 
 		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = CcpEntityOperationType.save.getOperationCallback(JnEntityJobsnowError.ENTITY);
