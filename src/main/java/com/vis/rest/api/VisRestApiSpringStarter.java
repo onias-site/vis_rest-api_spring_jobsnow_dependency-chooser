@@ -34,7 +34,6 @@ import com.ccp.implementations.json.gson.CcpGsonJsonHandler;
 import com.ccp.implementations.main.authentication.gcp.oauth.CcpGcpMainAuthentication;
 import com.ccp.implementations.mensageria.sender.gcp.pubsub.CcpGcpPubSubMensageriaSender;
 import com.ccp.implementations.password.mindrot.CcpMindrotPasswordHandler;
-import com.ccp.implementations.text.extractor.apache.tika.CcpApacheTikaTextExtractor;
 import com.ccp.local.testings.implementations.CcpLocalInstances;
 import com.ccp.local.testings.implementations.cache.CcpLocalCacheInstances;
 import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpring;
@@ -53,7 +52,7 @@ import io.swagger.v3.oas.models.parameters.PathParameter;
 
 /**
  * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
- * (incluindo {@code CcpApacheTikaTextExtractor}, exclusivo deste módulo), configura filtros de
+ * e configura filtros de
  * validação de e-mail e sessão para os paths {@code /resume/*} e {@code /position/*}.
  */
 
@@ -72,7 +71,6 @@ public class VisRestApiSpringStarter {
 		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
 		CcpTelegramInstantMessenger ccpTelegramInstantMessenger = new CcpTelegramInstantMessenger();
-		CcpApacheTikaTextExtractor ccpApacheTikaTextExtractor = new CcpApacheTikaTextExtractor();
 		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = new CcpElasticSearchDbRequest();
 		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = new CcpMindrotPasswordHandler();
 		CcpGcpMainAuthentication ccpGcpMainAuthentication = new CcpGcpMainAuthentication();
@@ -89,7 +87,6 @@ public class VisRestApiSpringStarter {
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
 				localEnvironment ? CcpLocalInstances.email : new CcpSendGridEmailSender(),
 			    ccpTelegramInstantMessenger,
-				ccpApacheTikaTextExtractor,
 				ccpElasticSearchDbRequest,
 				ccpMindrotPasswordHandler
 				,
