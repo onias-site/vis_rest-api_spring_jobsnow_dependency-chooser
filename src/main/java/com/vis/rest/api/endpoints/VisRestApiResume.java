@@ -25,6 +25,11 @@ import com.vis.services.VisServiceResume;
 @RequestMapping("/resume/{email}")
 public class VisRestApiResume implements VisOpenApiResume{
 	
+	/**
+	 * Save (create or update) a resume. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@PostMapping("/language/{language}")
 	public Map<String, Object> save(@RequestBody Map<String, Object> sessionValues) {
 
@@ -33,6 +38,11 @@ public class VisRestApiResume implements VisOpenApiResume{
 		return result;
 	}
 	
+	/**
+	 * Delete a resume. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@DeleteMapping("/language/{language}")
 	public Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues){
 		
@@ -41,6 +51,11 @@ public class VisRestApiResume implements VisOpenApiResume{
 		return result;
 	}
 
+	/**
+	 * Change resume status (deactivate). Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@DeleteMapping("/language/{language}/status")
 	public Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues){
 		
@@ -50,6 +65,11 @@ public class VisRestApiResume implements VisOpenApiResume{
 	}
 	
 
+	/**
+	 * Get resume data. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@GetMapping
 	public Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues){
 		
@@ -60,6 +80,10 @@ public class VisRestApiResume implements VisOpenApiResume{
 		return result;
 	}
 
+	/**
+	 * Smoke test: answers {@code oi}.
+	 * @return the response body
+	 */
 	@GetMapping("/oi")
 	public String hi() {
 		return "oi";

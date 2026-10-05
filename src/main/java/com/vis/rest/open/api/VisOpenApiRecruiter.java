@@ -26,6 +26,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Recruiter", description = "Operations for recruiters: managing resume interactions and job positions.")
 public interface VisOpenApiRecruiter {
 
+	/**
+	 * Send resumes to email addresses.
+	 * @param sessionValues the request body
+	 * @param emails the {@code emails} request parameter
+	 * @param resumeIds the {@code resumeIds} request parameter
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Send resumes to email addresses",
 		description = "When does it occur? When the recruiter wants to share selected resumes via email. "
@@ -49,6 +56,12 @@ public interface VisOpenApiRecruiter {
 			@RequestParam("emails") List<String> emails,
 			@RequestParam("resumeIds") List<String> resumeIds);
 
+	/**
+	 * Get already seen resumes by opinion type.
+	 * @param sessionValues the request body
+	 * @param opinionType the {@code opinionType} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Get already seen resumes by opinion type",
 		description = "When does it occur? When the recruiter wants to view resumes they have already evaluated. "
@@ -68,6 +81,12 @@ public interface VisOpenApiRecruiter {
 	Map<String, Object> getAlreadySeenResumes(@RequestBody String sessionValues,
 			@PathVariable("opinionType") String opinionType);
 
+	/**
+	 * Get positions from this recruiter.
+	 * @param sessionValues the request body
+	 * @param positionStatus the {@code positionStatus} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Get positions from this recruiter",
 		description = "When does it occur? When the recruiter accesses their positions dashboard. "
@@ -87,6 +106,12 @@ public interface VisOpenApiRecruiter {
 	Map<String, Object> getPositionsFromThisRecruiter(@RequestBody String sessionValues,
 			@PathVariable("positionStatus") String positionStatus);
 
+	/**
+	 * Change opinion about a resume.
+	 * @param sessionValues the request body
+	 * @param resumeId the {@code resumeId} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Change opinion about a resume",
 		description = "When does it occur? When the recruiter wants to update a previously saved opinion about a resume. "
@@ -106,6 +131,12 @@ public interface VisOpenApiRecruiter {
 	Map<String, Object> changeOpinionAboutThisResume(@RequestBody String sessionValues,
 			@PathVariable("resumeId") String resumeId);
 
+	/**
+	 * Save opinion about a resume.
+	 * @param sessionValues the request body
+	 * @param resumeId the {@code resumeId} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Save opinion about a resume",
 		description = "When does it occur? When the recruiter evaluates a resume for the first time. "

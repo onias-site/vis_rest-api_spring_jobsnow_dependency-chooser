@@ -25,6 +25,11 @@ import com.vis.services.VisServiceSkills;
 @RequestMapping("skills")
 public class VisRestApiSkill implements VisOpenApiSkill {
 	
+	/**
+	 * Extract skills from free text. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@PostMapping("/fromText")
 	public Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues){
 		
@@ -34,6 +39,12 @@ public class VisRestApiSkill implements VisOpenApiSkill {
 		return result;
 	}
 
+	/**
+	 * Request creation of a new skill. Delegates to the matching service.
+	 * @param skill the {@code skill} path variable
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@PostMapping("/{skill}")
 	public Map<String, Object> requestToCreateNewSkill(@PathVariable("skill") String skill, @RequestBody Map<String, Object> sessionValues){
 		sessionValues.put(VisJsonCommonsFields.skill.name(), skill);

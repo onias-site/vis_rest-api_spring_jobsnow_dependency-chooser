@@ -12,18 +12,22 @@ import com.ccp.constants.CcpOtherConstants;
 import com.vis.rest.open.api.VisOpenApiCompany;
 import com.vis.services.VisServiceCompany;
 
+//TODO SCHEDULE TO SAVE UNWANTED COMPANIES
 /**
  * REST controller for company operations in the VIS module at path {@code /companies}.
  * Exposes an autocomplete search for companies by name prefix (first three initials).
  */
-//TODO SCHEDULE PARA SALVAR EMPRESAS INDESEJADAS
-//
 @CrossOrigin
 @RestController
 @RequestMapping("companies")
 public class VisRestApiCompany implements VisOpenApiCompany {
 
 	
+	/**
+	 * Search companies by name prefix (autocomplete). Delegates to the matching service.
+	 * @param search the {@code search} path variable
+	 * @return the response body
+	 */
 	@GetMapping("/search/autocomplete/{search}")
 	public Map<String, Object> searchCompaniesByTheirFirstThreeInitials(@PathVariable("search") String search){
 		String toUpperCase = search.toUpperCase();

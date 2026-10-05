@@ -55,7 +55,11 @@ import io.swagger.v3.oas.models.parameters.PathParameter;
  * e configura filtros de
  * validação de e-mail e sessão para os paths {@code /resume/*} e {@code /position/*}.
  */
-
+/**
+ * Entry point of the REST API of the vis cost center. Wires the dependencies (local implementations when
+ * {@code localEnvironment} is set, GCP and Elasticsearch otherwise), records unhandled errors and protects
+ * {@code /resume/*} and {@code /position/*} with the e-mail syntax filter and the session validation.
+ */
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
 @ComponentScan(basePackageClasses = {
@@ -65,6 +69,10 @@ import io.swagger.v3.oas.models.parameters.PathParameter;
 @SpringBootApplication
 public class VisRestApiSpringStarter {
 	
+	/**
+	 * Wires the dependencies and starts Spring.
+	 * @param args the command line arguments
+	 */
 	public static void main(String[] args) {
 		CcpGsonJsonHandler ccpGsonJsonHandler = new CcpGsonJsonHandler();
 		CcpDependencyInjection.loadAllDependencies(ccpGsonJsonHandler);
@@ -99,12 +107,16 @@ public class VisRestApiSpringStarter {
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	
+	/**
+	 * Adds to the OpenAPI document the path variables that an operation uses in its path but does not declare.
+	 * @return the customizer
+	 */
 	@Bean
 	public GlobalOpenApiCustomizer missingPathParamsCustomizer() {
 		return openApi -> {
 			Paths paths = openApi.getPaths();
-			boolean pathsIgual = paths == null;
-			if (pathsIgual) return;
+			boolean pathsMissing = paths == null;
+			if (pathsMissing) return;
 			Pattern p = Pattern.compile("\\{(\\w+)\\}");
 			Paths paths2 = openApi.getPaths();
 			paths2.forEach((pathTemplate, pathItem) -> {
@@ -120,8 +132,8 @@ public class VisRestApiSpringStarter {
 					readOperations.forEach(op -> {
 					Set<String> declared = new HashSet<>();
 					var parameters = op.getParameters();
-					boolean parametersDiferente = parameters != null;
-					if (parametersDiferente) {
+					boolean hasParameters = parameters != null;
+					if (hasParameters) {
 						var parameters2 = op.getParameters();
 						var stream = parameters2.stream();
 						var filter2 = stream
@@ -141,6 +153,10 @@ public class VisRestApiSpringStarter {
 		};
 	}
 
+	/**
+	 * Describes the API in the OpenAPI document.
+	 * @return the description
+	 */
 	@Bean
 	public OpenAPI visOpenAPI() {
 		OpenAPI openAPI = new OpenAPI();
@@ -156,6 +172,10 @@ public class VisRestApiSpringStarter {
 						return info;
 	}
 
+	/**
+	 * Serves the static resources of the Swagger UI.
+	 * @return the configurer
+	 */
 	@Bean
 	public WebMvcConfigurer swaggerResourceHandler() {
 		var webMvcConfigurer = new WebMvcConfigurer() {
@@ -172,22 +192,30 @@ public class VisRestApiSpringStarter {
 		return webMvcConfigurer;
 	}
 
+	/**
+	 * Rejects an invalid e-mail in the path of {@code /resume/*} and {@code /position/*}.
+	 * @return the filter registration
+	 */
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
-		FilterRegistrationBean<CcpValidEmailFilter> filtro = new FilterRegistrationBean<>();
+		FilterRegistrationBean<CcpValidEmailFilter> filterRegistration = new FilterRegistrationBean<>();
 		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/");
-		filtro.setFilter(emailSyntaxFilter);
-		filtro.addUrlPatterns("/resume/*", "/position/*");
+		filterRegistration.setFilter(emailSyntaxFilter);
+		filterRegistration.addUrlPatterns("/resume/*", "/position/*");
 		
-		return filtro;
+		return filterRegistration;
 	}
 	
+	/**
+	 * Validates the session ({@code JnServiceLogin.ValidateLogin}) on {@code /resume/*} and {@code /position/*}.
+	 * @return the filter registration
+	 */
 	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> validateSessionFilter() {
-		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filtro = new FilterRegistrationBean<>();
+		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filterRegistration = new FilterRegistrationBean<>();
 		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnServiceLogin.ValidateLogin);
-		filtro.setFilter(filter);
-		filtro.addUrlPatterns("/resume/*", "/position/*");
-		return filtro;
+		filterRegistration.setFilter(filter);
+		filterRegistration.addUrlPatterns("/resume/*", "/position/*");
+		return filterRegistration;
 	}
 }

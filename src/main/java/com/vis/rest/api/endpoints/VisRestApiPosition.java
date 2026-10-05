@@ -27,6 +27,11 @@ import com.vis.json.fields.validation.VisJsonCommonsFields;
 @RequestMapping("recruiters/{email}/positions/{title}")
 public class VisRestApiPosition implements VisOpenApiPosition{
 
+	/**
+	 * Save (create or update) a resume. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	public Map<String, Object> save(@RequestBody String sessionValues){
 		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
@@ -34,6 +39,11 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 		return result;
 	}
 	
+	/**
+	 * Change resume status (deactivate). Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@DeleteMapping("/status")
 	public Map<String, Object> changeStatus(@RequestBody String sessionValues){
 		
@@ -44,6 +54,11 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 		return result;
 	}
 
+	/**
+	 * Get resume data. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@GetMapping
 	public Map<String, Object> getData(@RequestBody String sessionValues){
 		
@@ -53,6 +68,14 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 	
 		return result;
 	}
+	/**
+	 * List resumes matching this position (paginated). Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param fromIndex the {@code fromIndex} path variable
+	 * @param listSize the {@code listSize} path variable
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@GetMapping("/resumes/fromIndex/{fromIndex}/listSize/{listSize}")
 	public Map<String, Object> getResumeList(
 			@RequestBody String sessionValues,
@@ -75,6 +98,12 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 		return result;
 	}
 	
+	/**
+	 * Extract important skills from position text. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@PostMapping("/words")
 	public Map<String, Object> getImportantSkillsFromText(
 			@RequestBody String sessionValues,
@@ -90,6 +119,12 @@ public class VisRestApiPosition implements VisOpenApiPosition{
 	
 		return result;
 	}
+	/**
+	 * Suggest new skills for this position. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@PatchMapping("/words")
 	public Map<String, Object> suggestNewSkills(
 			@RequestBody String sessionValues,

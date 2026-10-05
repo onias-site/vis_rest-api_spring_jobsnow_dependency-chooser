@@ -22,13 +22,18 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Skill Hierarchy Fix", description = "Suggestions from candidates to add or remove skills from the implicit knowledge they depend on.")
 public interface VisOpenApiSkillFixHierarchy {
 
+	/**
+	 * Suggest a skill hierarchy fix.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Suggest a skill hierarchy fix",
 		description = "When does it occur? When the candidate, reviewing the implicit knowledge inferred from their resume, "
 			+ "believes a skill should be added to an implicit knowledge (it depends on it but is not listed) "
 			+ "or removed from it (it is listed but does not depend on it). "
 			+ "What does it do? Records the suggestion as pending review. Support and the candidate are notified, "
-			+ "and the suggestion is later moved to approved or rejected. "
+			+ "and, once support reviews it (approving, rejecting or deciding each skill), the suggestion is moved to fulfiled. "
 			+ "The suggestion is identified by the candidate's email, the parent and the type: "
 			+ "a new suggestion from the same candidate for the same parent and type replaces the previous one."
 			+ "<br/><br/><b>Path variables:</b><ul>"
@@ -60,11 +65,16 @@ public interface VisOpenApiSkillFixHierarchy {
 	@PostMapping
 	Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Withdraw a pending skill hierarchy fix suggestion.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Withdraw a pending skill hierarchy fix suggestion",
 		description = "When does it occur? When the candidate gives up a suggestion that is still pending review. "
 			+ "What does it do? Deletes the candidate's pending suggestion for that parent and type. "
-			+ "Approved and rejected suggestions are the review history and are not affected."
+			+ "Fulfiled suggestions are the review history and are not affected."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. Candidate's email address. Valid email address (format: user@domain.ext), min 7, max 100 characters.</li>"
 			+ "</ul>"
@@ -82,12 +92,17 @@ public interface VisOpenApiSkillFixHierarchy {
 	@DeleteMapping
 	Map<String, Object> deleteHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Get the candidate's skill hierarchy fix suggestion.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Get the candidate's skill hierarchy fix suggestion",
 		description = "When does it occur? When the candidate opens the add or remove modal of an implicit knowledge. "
 			+ "What does it do? Returns the candidate's suggestion for that parent and type, looking first in pending, "
-			+ "then in approved, then in rejected, and adds a <b>status</b> field telling where it was found. "
-			+ "Approved and rejected suggestions also carry the reviewer's <b>explanation</b>. "
+			+ "then in fulfiled, and adds a <b>status</b> field telling where it was found. "
+			+ "Fulfiled suggestions also carry the reviewer's <b>explanation</b>. "
 			+ "Returns an empty object when the candidate has no suggestion for that parent and type. "
 			+ "It is a POST, not a GET, because the session filter only validates the login when the request has a body."
 			+ "<br/><br/><b>Path variables:</b><ul>"
@@ -107,10 +122,10 @@ public interface VisOpenApiSkillFixHierarchy {
 				+ "\"type\": \"add\","
 				+ "\"description\": \"Oracle and MySQL are relational databases queried with SQL.\","
 				+ "\"explanation\": \"Both depend on SQL.\","
-				+ "\"status\": \"approved\""
+				+ "\"status\": \"fulfiled\""
 				+ "}")) },
 			responseCode = "200",
-			description = "The suggestion with its status ('pending', 'approved' or 'rejected'), or an empty object when there is none."),
+			description = "The suggestion with its status ('pending' or 'fulfiled'), or an empty object when there is none."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})

@@ -27,6 +27,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Positions", description = "Operations for managing job positions: CRUD, resume listing, and skill extraction.")
 public interface VisOpenApiPosition {
 
+	/**
+	 * Create or update a job position.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation( 
 		summary = "Create or update a job position",
 		description = "When does it occur? When the recruiter creates a new job position or updates an existing one. "
@@ -46,6 +51,11 @@ public interface VisOpenApiPosition {
 	@RequestMapping(method = {RequestMethod.POST, RequestMethod.PATCH})
 	Map<String, Object> save(@RequestBody String sessionValues);
 
+	/**
+	 * Deactivate (change status of) a job position.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Deactivate (change status of) a job position",
 		description = "When does it occur? When the recruiter wants to close or deactivate a position. "
@@ -64,6 +74,11 @@ public interface VisOpenApiPosition {
 	@DeleteMapping("/status")
 	Map<String, Object> changeStatus(@RequestBody String sessionValues);
 
+	/**
+	 * Get job position data.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Get job position data",
 		description = "When does it occur? When the recruiter or the system needs to retrieve the full data of a position. "
@@ -82,6 +97,14 @@ public interface VisOpenApiPosition {
 	@GetMapping
 	Map<String, Object> getData(@RequestBody String sessionValues);
 
+	/**
+	 * List resumes matching this position (paginated).
+	 * @param sessionValues the request body
+	 * @param fromIndex the {@code fromIndex} path variable
+	 * @param listSize the {@code listSize} path variable
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "List resumes matching this position (paginated)",
 		description = "When does it occur? When the recruiter opens the list of candidate resumes for a position. "
@@ -105,6 +128,12 @@ public interface VisOpenApiPosition {
 			@PathVariable("listSize") String listSize,
 			@PathVariable("title") String title);
 
+	/**
+	 * Extract important skills from position text.
+	 * @param sessionValues the request body
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Extract important skills from position text",
 		description = "When does it occur? When the recruiter provides a job description text and wants to identify the key skills. "
@@ -124,6 +153,12 @@ public interface VisOpenApiPosition {
 	Map<String, Object> getImportantSkillsFromText(@RequestBody String sessionValues,
 			@PathVariable("title") String title);
 
+	/**
+	 * Suggest new skills for this position.
+	 * @param sessionValues the request body
+	 * @param title the {@code title} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Suggest new skills for this position",
 		description = "When does it occur? When the recruiter wants to propose additional skills for a position. "

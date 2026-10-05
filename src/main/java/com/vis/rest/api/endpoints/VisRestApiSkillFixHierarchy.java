@@ -22,18 +22,33 @@ import com.vis.services.VisServiceSkillFixHierarchy;
 @RequestMapping("/resume/{email}/skills/hierarchy")
 public class VisRestApiSkillFixHierarchy implements VisOpenApiSkillFixHierarchy {
 
+	/**
+	 * Suggest a skill hierarchy fix. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@PostMapping
 	public Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues){
 		Map<String, Object> result = VisServiceSkillFixHierarchy.FixSkillHierarchy.execute(sessionValues);
 		return result;
 	}
 
+	/**
+	 * Withdraw a pending skill hierarchy fix suggestion. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@DeleteMapping
 	public Map<String, Object> deleteHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues){
 		Map<String, Object> result = VisServiceSkillFixHierarchy.DeleteSkillFixHierarchy.execute(sessionValues);
 		return result;
 	}
 
+	/**
+	 * Get the candidate's skill hierarchy fix suggestion. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@PostMapping("/search")
 	public Map<String, Object> getHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues){
 		Map<String, Object> result = VisServiceSkillFixHierarchy.GetSkillFixHierarchy.execute(sessionValues);

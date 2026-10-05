@@ -21,6 +21,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Companies", description = "Operations for searching and managing companies in the VIS module.")
 public interface VisOpenApiCompany {
 
+	/**
+	 * Search companies by name prefix (autocomplete).
+	 * @param search the {@code search} path variable
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Search companies by name prefix (autocomplete)",
 		description = "When does it occur? When the user starts typing a company name and the frontend needs autocomplete suggestions. "

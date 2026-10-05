@@ -24,6 +24,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Resume", description = "Operations for managing candidate resumes: save, delete, status change, and data retrieval.")
 public interface VisOpenApiResume {
 
+	/**
+	 * Save (create or update) a resume.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Save (create or update) a resume",
 		description = "When does it occur? When the candidate creates or updates their resume in the system. "
@@ -75,6 +80,11 @@ public interface VisOpenApiResume {
 	@PostMapping("/language/{language}")
 	Map<String, Object> save(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Delete a resume.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Delete a resume",
 		description = "When does it occur? When the candidate wants to permanently remove their resume. "
@@ -93,6 +103,11 @@ public interface VisOpenApiResume {
 	@DeleteMapping("/language/{language}")
 	Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Change resume status (deactivate).
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Change resume status (deactivate)",
 		description = "When does it occur? When the candidate wants to temporarily deactivate their resume. "
@@ -111,6 +126,11 @@ public interface VisOpenApiResume {
 	@DeleteMapping("/language/{language}/status")
 	Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Get resume data.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Get resume data",
 		description = "When does it occur? When the candidate or the system needs to retrieve the candidate's resume. "

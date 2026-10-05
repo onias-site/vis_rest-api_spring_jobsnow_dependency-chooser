@@ -23,6 +23,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Skills", description = "Operations for managing professional skills: extraction from text and creation requests.")
 public interface VisOpenApiSkill {
 
+	/**
+	 * Extract skills from free text.
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Extract skills from free text",
 		description = "When does it occur? When the frontend needs to identify relevant skills from a block of text "
@@ -49,6 +54,12 @@ public interface VisOpenApiSkill {
 	@PostMapping("/fromText")
 	Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues);
 
+	/**
+	 * Request creation of a new skill.
+	 * @param skill the {@code skill} path variable
+	 * @param sessionValues the request body
+	 * @return the response body
+	 */
 	@Operation(
 		summary = "Request creation of a new skill",
 		description = "When does it occur? When the user identifies a skill that does not yet exist in the system. "

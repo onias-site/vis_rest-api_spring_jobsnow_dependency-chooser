@@ -31,10 +31,23 @@ import com.vis.json.fields.validation.VisJsonCommonsFields;
 @RequestMapping("recruiter/{email}")
 public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 	
+	/** Fields of the recruiter requests. */
 	enum JsonFieldNames implements CcpJsonFieldName{
-		resumeIds, opinionType, positionStatus
+		/** The ids of the resumes. */
+		resumeIds,
+		/** The kind of opinion. */
+		opinionType,
+		/** The status of the position. */
+		positionStatus
 	}
 	
+	/**
+	 * Send resumes to email addresses. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param emails the {@code emails} request parameter
+	 * @param resumeIds the {@code resumeIds} request parameter
+	 * @return the response body
+	 */
 	@PostMapping("/resumes/sending/email")
 	public Map<String, Object> sendResumesToEmail(
 			@RequestBody String sessionValues,
@@ -53,6 +66,12 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 
+	/**
+	 * Get already seen resumes by opinion type. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param opinionType the {@code opinionType} path variable
+	 * @return the response body
+	 */
 	@GetMapping("/resumes/seen/{opinionType}")
 	public Map<String, Object> getAlreadySeenResumes(
 			@RequestBody String sessionValues,
@@ -68,6 +87,12 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 
+	/**
+	 * Get positions from this recruiter. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param positionStatus the {@code positionStatus} path variable
+	 * @return the response body
+	 */
 	@GetMapping("/positions/{positionStatus}")
 	public Map<String, Object> getPositionsFromThisRecruiter(
 			@RequestBody String sessionValues,
@@ -83,6 +108,12 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 	
+	/**
+	 * Change opinion about a resume. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param resumeId the {@code resumeId} path variable
+	 * @return the response body
+	 */
 	@PostMapping("/resumes/{resumeId}")
 	public Map<String, Object> changeOpinionAboutThisResume(
 			@RequestBody String sessionValues,
@@ -97,6 +128,12 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		Map<String, Object> execute = VisServiceRecruiter.ChangeOpinionAboutThisResume.execute(json.content);
 		return execute;
 	}
+	/**
+	 * Save opinion about a resume. Delegates to the matching service.
+	 * @param sessionValues the request body
+	 * @param resumeId the {@code resumeId} path variable
+	 * @return the response body
+	 */
 	@PostMapping("/resumes/{resumeId}/opinion")
 	public Map<String, Object> saveOpinionAboutThisResume(
 			@RequestBody String sessionValues,
