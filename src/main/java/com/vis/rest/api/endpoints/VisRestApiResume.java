@@ -79,14 +79,4 @@ public class VisRestApiResume implements VisOpenApiResume{
 
 		return result;
 	}
-
-	/**
-	 * Smoke test: answers {@code oi}.
-	 * @return the response body
-	 */
-	@GetMapping("/oi")
-	public String hi() {
-		return "oi";
-	}
-	
 }
