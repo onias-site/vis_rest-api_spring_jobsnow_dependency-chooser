@@ -2,7 +2,6 @@ package com.vis.rest.open.api;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +15,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * OpenAPI contract for skill operations at path {@code /skills}.
- * Covers extracting skills from free text and requesting creation of new skills.
- * Hierarchy corrections are documented in {@link VisOpenApiSkillFixHierarchy}.
+ * Covers extracting skills from free text.
+ * Hierarchy corrections are documented in {@link VisOpenApiSkillFixHierarchy} and skill suggestions in
+ * {@link VisOpenApiSkillSuggestion}.
  */
 @RequestMapping("skills")
 @Tag(name = "Skills", description = "Operations for managing professional skills: extraction from text and creation requests.")
@@ -53,31 +53,4 @@ public interface VisOpenApiSkill {
 	})
 	@PostMapping("/fromText")
 	Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues);
-
-	/**
-	 * Request creation of a new skill.
-	 * @param skill the {@code skill} path variable
-	 * @param sessionValues the request body
-	 * @return the response body
-	 */
-	@Operation(
-		summary = "Request creation of a new skill",
-		description = "When does it occur? When the user identifies a skill that does not yet exist in the system. "
-			+ "What does it do? Registers the skill creation request for analysis. "
-			+ "The skill name is provided as a path variable."
-			+ "<br/><br/><b>Path variables:</b><ul>"
-			+ "<li><b>skill</b> – Required. The name of the skill to be created.</li>"
-			+ "</ul>"
-	)
-	@ApiResponses({
-		@ApiResponse(responseCode = "202",
-			description = "Request submitted for analysis. The skill will be reviewed before being added."),
-		@ApiResponse(responseCode = "409",
-			description = "Skill already exists, is pending approval, or has already been approved."),
-		@ApiResponse(responseCode = "412",
-			description = "Skill was previously rejected and cannot be re-requested."),
-	})
-	@PostMapping("/{skill}")
-	Map<String, Object> requestToCreateNewSkill(@PathVariable("skill") String skill,
-			@RequestBody Map<String, Object> sessionValues);
 }
