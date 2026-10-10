@@ -56,6 +56,9 @@ public interface VisOpenApiSkillFixHierarchy {
 				+ "}")) },
 			responseCode = "200",
 			description = "Suggestion saved as pending review."),
+		@ApiResponse(responseCode = "208",
+			description = "alreadyReviewed — every skill of the suggestion was already reviewed for this parent and type. "
+				+ "Nothing stays pending: the request is complete and the candidate is told by e-mail."),
 		@ApiResponse(responseCode = "403",
 			description = "userNotAllowed — support chose to ignore this candidate's skill hierarchy fix suggestions. "
 				+ "The suggestion is not saved and nobody is notified."),

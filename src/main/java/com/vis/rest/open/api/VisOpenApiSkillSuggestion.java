@@ -57,7 +57,8 @@ public interface VisOpenApiSkillSuggestion {
 			description = "userNotAllowed — support chose to ignore this candidate's skill suggestions. "
 				+ "The suggestion is not saved and nobody is notified."),
 		@ApiResponse(responseCode = "409", description = "The candidate already has a pending suggestion of this skill."),
-		@ApiResponse(responseCode = "410", description = "alreadyRejected — support already rejected this skill suggested by this candidate; the rejection is final."),
+		@ApiResponse(responseCode = "410", description = "alreadyRejected — support already rejected this skill suggested by this candidate; the rejection is final. "
+			+ "alreadyReviewed — support already approved or rejected this skill suggested by another candidate; the decision holds for everyone and is returned by the search."),
 		@ApiResponse(responseCode = "412", description = "skillAlreadyExists — the system already knows this skill, by its name or as a synonym of another skill."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
@@ -102,7 +103,8 @@ public interface VisOpenApiSkillSuggestion {
 			+ "What does it do? Returns the candidate's suggestion of that skill, looking first in pending, "
 			+ "then in approved and in rejected, and adds a <b>status</b> field telling where it was found. "
 			+ "Reviewed suggestions also carry support's <b>explanation</b>. "
-			+ "Returns an empty object when the candidate has no suggestion of that skill. "
+			+ "When the candidate has no suggestion of that skill, returns the decision support took on the same skill suggested by another candidate (skill, synonym, status and explanation only). "
+			+ "Returns an empty object when nobody suggested that skill. "
 			+ "It is a POST, not a GET, because the session filter only validates the login when the request has a body."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. Candidate's email address. Valid email address (format: user@domain.ext), min 7, max 100 characters.</li>"
