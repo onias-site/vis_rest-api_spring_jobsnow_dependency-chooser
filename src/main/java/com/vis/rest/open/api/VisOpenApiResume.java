@@ -43,24 +43,29 @@ public interface VisOpenApiResume {
 			+ "Accepted values: 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 24, 27, 28, 31–35, 37, 38, 41–49, "
 			+ "51, 53–55, 61–69, 71, 73–75, 77, 79, 81–89, 91–99.</li>"
 			+ "<li><b>desiredJob</b> – Required. String, min 2, max 50 characters.</li>"
-			+ "<li><b>experience</b> – Required. Year the candidate started working professionally (max 70 years ago).</li>"
+			+ "<li><b>experience</b> – Required. Years of professional experience, non-negative integer, max 70 (0 for a first job); "
+			+ "it is stored as the year the experience started (current year minus these years).</li>"
 			+ "<li><b>linkedinAddress</b> – Required. Must be a valid LinkedIn profile URL "
 			+ "(format: https://www.linkedin.com/in/username).</li>"
 			+ "<li><b>resumeType</b> – Required. Non-negative integer. Accepted values: 1, 2, 3, 4.</li>"
 			+ "<li><b>temporallyJobTime</b> – Required. Non-negative integer, max 12 (months available for temporary work).</li>"
-			+ "<li><b>pj</b> or <b>clt</b> – At least one is required. Contract type salary expectations.</li>"
+			+ "<li><b>pj</b> or <b>clt</b> – At least one is required. Contract type salary expectations, between 1,000 and 100,000; "
+			+ "a contract type the candidate does not accept is left out.</li>"
 			+ "<li><b>btc</b> – Optional. BTC contract value, between 1,000 and 100,000.</li>"
 			+ "<li><b>skill</b> – Optional array of skill objects. Each skill must contain:<ul>"
 			+ "  <li><b>skill</b> – Required. Skill identifier. Min 2, max 50 characters.</li>"
 			+ "  <li><b>word</b> – Required. Skill keyword as found in the text. Min 2, max 50 characters.</li>"
-			+ "  <li><b>category</b> – Required. Skill category. Min 2, max 20 characters.</li>"
-			+ "  <li><b>type</b> – Required. Skill type. Min 2, max 20 characters.</li>"
+			+ "  <li><b>category</b> – Required. The list the skill belongs to: skillsFromText, excludedSkills, parent or discardedSkills.</li>"
+			+ "  <li><b>type</b> – Required. skillsFromResume for the category skillsFromText, the same as the category for "
+			+ "excludedSkills and parent, or, for discardedSkills, the reason of the discard: "
+			+ "isPieceOfOtherWord, isPieceOfOtherSkill or skillAlreadyAdded.</li>"
 			+ "  <li><b>parent</b> – Optional array. Parent skill identifiers. Min 2, max 50 characters each.</li>"
 			+ "  <li><b>associated</b> – Optional. Associated skill name. Min 2, max 50 characters.</li>"
 			+ "</ul></li>"
-			+ "<li><b>language</b> – Optional array of language objects. Each must contain:<ul>"
+			+ "<li><b>spokenLanguage</b> – Optional array of language objects. Each must contain:<ul>"
 			+ "  <li><b>name</b> – String, min 3, max 20 characters.</li>"
-			+ "  <li><b>level</b> – Non-negative integer. Accepted values: 1 (basic), 2 (advanced).</li>"
+			+ "  <li><b>level</b> – Non-negative integer. Accepted values: 1 (intermediate), 2 (fluent).</li>"
+			+ "  <li><b>id</b> – Ignored: it is dropped before the resume is stored.</li>"
 			+ "</ul></li>"
 			+ "<li><b>lastJob</b> – Optional. Last job title. Min 2, max 50 characters.</li>"
 			+ "<li><b>notAllowedCompany</b> – Optional array. Company names to exclude. Min 2, max 20 characters each.</li>"
@@ -88,7 +93,8 @@ public interface VisOpenApiResume {
 	@Operation(
 		summary = "Delete a resume",
 		description = "When does it occur? When the candidate wants to permanently remove their resume. "
-			+ "What does it do? Deletes the resume record from the active entity."
+			+ "What does it do? Deletes every data of the resume for good, whether it is active or inactive, takes it out of "
+			+ "the searches and e-mails the candidate."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. Candidate's email address.</li>"
 			+ "<li><b>language</b> – Required. Language of the resume to delete.</li>"
@@ -104,24 +110,28 @@ public interface VisOpenApiResume {
 	Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues);
 
 	/**
-	 * Change resume status (deactivate).
+	 * Change resume status (deactivate or reactivate).
 	 * @param sessionValues the request body
 	 * @return the response body
 	 */
 	@Operation(
-		summary = "Change resume status (deactivate)",
-		description = "When does it occur? When the candidate wants to temporarily deactivate their resume. "
-			+ "What does it do? Moves the resume to the inactive (twin) entity."
+		summary = "Change resume status (deactivate or reactivate)",
+		description = "When does it occur? When the candidate wants to hide their resume for a while, or show it again. "
+			+ "What does it do? Toggles the status: an active resume is deactivated (moved to the inactive entity and taken "
+			+ "out of the searches) and an inactive one is reactivated (moved back and put in the searches again). The "
+			+ "candidate is e-mailed either way."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. Candidate's email address.</li>"
-			+ "<li><b>language</b> – Required. Language of the resume to deactivate.</li>"
+			+ "<li><b>language</b> – Required. Language of the resume.</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
 			@Content(schema = @Schema(example = "{}")) },
 			responseCode = "200",
-			description = "Resume status changed (deactivated) successfully."),
+			description = "Resume deactivated or reactivated successfully."),
+		@ApiResponse(responseCode = "404",
+			description = "The candidate has no resume, active or inactive."),
 	})
 	@DeleteMapping("/language/{language}/status")
 	Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues);

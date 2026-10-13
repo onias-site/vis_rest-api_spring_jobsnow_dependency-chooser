@@ -39,7 +39,7 @@ public class VisRestApiResume implements VisOpenApiResume{
 	}
 	
 	/**
-	 * Delete a resume. Delegates to the matching service.
+	 * Delete a resume for good, wherever it is. Delegates to the matching service.
 	 * @param sessionValues the request body
 	 * @return the response body
 	 */
@@ -52,7 +52,7 @@ public class VisRestApiResume implements VisOpenApiResume{
 	}
 
 	/**
-	 * Change resume status (deactivate). Delegates to the matching service.
+	 * Change resume status (deactivate or reactivate). Delegates to the matching service.
 	 * @param sessionValues the request body
 	 * @return the response body
 	 */

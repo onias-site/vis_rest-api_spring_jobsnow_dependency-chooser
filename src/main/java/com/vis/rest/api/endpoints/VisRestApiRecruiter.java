@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,10 +34,6 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 	enum JsonFieldNames implements CcpJsonFieldName{
 		/** The ids of the resumes. */
 		resumeIds,
-		/** The kind of opinion. */
-		opinionType,
-		/** The status of the position. */
-		positionStatus
 	}
 	
 	/**
@@ -66,48 +61,6 @@ public class VisRestApiRecruiter implements VisOpenApiRecruiter {
 		return execute;
 	}
 
-	/**
-	 * Get already seen resumes by opinion type. Delegates to the matching service.
-	 * @param sessionValues the request body
-	 * @param opinionType the {@code opinionType} path variable
-	 * @return the response body
-	 */
-	@GetMapping("/resumes/seen/{opinionType}")
-	public Map<String, Object> getAlreadySeenResumes(
-			@RequestBody String sessionValues,
-			@PathVariable("opinionType") String opinionType
-			){
-				CcpJsonRepresentation ccpJsonRepresentation2 = new CcpJsonRepresentation(sessionValues);
-
-				CcpJsonRepresentation json = ccpJsonRepresentation2
-				.put(JsonFieldNames.opinionType, opinionType)
-				;
-		
-		Map<String, Object> execute = VisServiceRecruiter.GetAlreadySeenResumes.execute(json.content);
-		return execute;
-	}
-
-	/**
-	 * Get positions from this recruiter. Delegates to the matching service.
-	 * @param sessionValues the request body
-	 * @param positionStatus the {@code positionStatus} path variable
-	 * @return the response body
-	 */
-	@GetMapping("/positions/{positionStatus}")
-	public Map<String, Object> getPositionsFromThisRecruiter(
-			@RequestBody String sessionValues,
-			@PathVariable("positionStatus") String positionStatus
-			){
-				CcpJsonRepresentation ccpJsonRepresentation3 = new CcpJsonRepresentation(sessionValues);
-
-				CcpJsonRepresentation json = ccpJsonRepresentation3
-				.put(JsonFieldNames.positionStatus, positionStatus)
-				;
-		
-		Map<String, Object> execute = VisServiceRecruiter.GetPositionsFromThisRecruiter.execute(json.content);
-		return execute;
-	}
-	
 	/**
 	 * Change opinion about a resume. Delegates to the matching service.
 	 * @param sessionValues the request body

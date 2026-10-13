@@ -3,7 +3,6 @@ package com.vis.rest.open.api;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,56 +54,6 @@ public interface VisOpenApiRecruiter {
 	Map<String, Object> sendResumesToEmail(@RequestBody String sessionValues,
 			@RequestParam("emails") List<String> emails,
 			@RequestParam("resumeIds") List<String> resumeIds);
-
-	/**
-	 * Get already seen resumes by opinion type.
-	 * @param sessionValues the request body
-	 * @param opinionType the {@code opinionType} path variable
-	 * @return the response body
-	 */
-	@Operation(
-		summary = "Get already seen resumes by opinion type",
-		description = "When does it occur? When the recruiter wants to view resumes they have already evaluated. "
-			+ "What does it do? Returns a grouped list of resumes the recruiter has seen, filtered by opinion type."
-			+ "<br/><br/><b>Path variables:</b><ul>"
-			+ "<li><b>email</b> – Required. Recruiter's email address.</li>"
-			+ "<li><b>opinionType</b> – Required. The type of opinion used to filter resumes (e.g., 'liked', 'disliked').</li>"
-			+ "</ul>"
-	)
-	@ApiResponses({
-		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{}")) },
-			responseCode = "200",
-			description = "List of already-seen resumes returned grouped by opinion type."),
-	})
-	@GetMapping("/resumes/seen/{opinionType}")
-	Map<String, Object> getAlreadySeenResumes(@RequestBody String sessionValues,
-			@PathVariable("opinionType") String opinionType);
-
-	/**
-	 * Get positions from this recruiter.
-	 * @param sessionValues the request body
-	 * @param positionStatus the {@code positionStatus} path variable
-	 * @return the response body
-	 */
-	@Operation(
-		summary = "Get positions from this recruiter",
-		description = "When does it occur? When the recruiter accesses their positions dashboard. "
-			+ "What does it do? Returns a grouped list of positions belonging to this recruiter, filtered by status."
-			+ "<br/><br/><b>Path variables:</b><ul>"
-			+ "<li><b>email</b> – Required. Recruiter's email address.</li>"
-			+ "<li><b>positionStatus</b> – Required. Status filter for positions (e.g., 'active', 'inactive').</li>"
-			+ "</ul>"
-	)
-	@ApiResponses({
-		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{}")) },
-			responseCode = "200",
-			description = "List of positions returned grouped by status."),
-	})
-	@GetMapping("/positions/{positionStatus}")
-	Map<String, Object> getPositionsFromThisRecruiter(@RequestBody String sessionValues,
-			@PathVariable("positionStatus") String positionStatus);
 
 	/**
 	 * Change opinion about a resume.
