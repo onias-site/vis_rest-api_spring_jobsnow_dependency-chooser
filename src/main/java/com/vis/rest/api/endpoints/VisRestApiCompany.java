@@ -30,10 +30,10 @@ public class VisRestApiCompany implements VisOpenApiCompany {
 	 */
 	@GetMapping("/search/autocomplete/{search}")
 	public Map<String, Object> searchCompaniesByTheirFirstThreeInitials(@PathVariable("search") String search){
-		String toUpperCase = search.toUpperCase();
-	
+		// the text goes as typed: a company out of the base is suggested with the spelling of the user (until 2026-10-14 it was
+		// upper cased here, and the suggestion came back in capitals)
 		var json = CcpOtherConstants.EMPTY_JSON
-					.put(VisServiceCompany.FieldsToSearchCompaniesByTheirFirstThreeInitials.search, toUpperCase)
+					.put(VisServiceCompany.FieldsToSearchCompaniesByTheirFirstThreeInitials.search, search)
 				;
 		
 		var execute = VisServiceCompany.SearchCompaniesByTheirFirstThreeInitials.execute(json.content);

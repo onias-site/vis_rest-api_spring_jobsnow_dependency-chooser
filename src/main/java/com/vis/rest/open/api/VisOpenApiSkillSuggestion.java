@@ -62,6 +62,8 @@ public interface VisOpenApiSkillSuggestion {
 		@ApiResponse(responseCode = "412", description = "skillAlreadyExists — the system already knows this skill, by its name or as a synonym of another skill."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
+		@ApiResponse(responseCode = "429",
+			description = "dailyLimitReached — the candidate already suggested a skill today. One suggestion per day: each one e-mails the candidate and opens a ticket to the support operator."),
 	})
 	@PostMapping
 	Map<String, Object> saveSkillSuggestion(@RequestBody Map<String, Object> sessionValues);

@@ -62,8 +62,11 @@ public interface VisOpenApiSkillFixHierarchy {
 		@ApiResponse(responseCode = "403",
 			description = "userNotAllowed — support chose to ignore this candidate's skill hierarchy fix suggestions. "
 				+ "The suggestion is not saved and nobody is notified."),
+		@ApiResponse(responseCode = "409", description = "The candidate already has a pending suggestion for this parent and type."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
+		@ApiResponse(responseCode = "429",
+			description = "dailyLimitReached — the candidate already sent a skill hierarchy fix suggestion today. One per day: each one e-mails the candidate and opens a ticket to the support operator."),
 	})
 	@PostMapping
 	Map<String, Object> saveHierarchyFixSuggestion(@RequestBody Map<String, Object> sessionValues);
@@ -89,8 +92,6 @@ public interface VisOpenApiSkillFixHierarchy {
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "Pending suggestion withdrawn."),
 		@ApiResponse(responseCode = "404", description = "The candidate has no pending suggestion for this parent and type (it may have been reviewed meanwhile)."),
-		@ApiResponse(responseCode = "429",
-			description = "The candidate already withdrew a suggestion of this parent and type within the hour: sending it again is allowed, withdrawing it again is not, and it stays pending."),
 		@ApiResponse(responseCode = "422",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})

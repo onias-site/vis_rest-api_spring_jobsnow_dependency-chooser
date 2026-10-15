@@ -68,7 +68,7 @@ public interface VisOpenApiResume {
 			+ "  <li><b>id</b> – Ignored: it is dropped before the resume is stored.</li>"
 			+ "</ul></li>"
 			+ "<li><b>lastJob</b> – Optional. Last job title. Min 2, max 50 characters.</li>"
-			+ "<li><b>notAllowedCompany</b> – Optional array. Company names to exclude. Min 2, max 20 characters each.</li>"
+			+ "<li><b>notAllowedCompany</b> – Optional array. Company names to exclude. Min 2, max 50 characters each.</li>"
 			+ "<li><b>pcd</b> – Optional. Boolean. True if the candidate has a disability.</li>"
 			+ "<li><b>negotiableClaim</b> – Optional. Boolean. True if salary is negotiable.</li>"
 			+ "<li><b>travel</b> – Optional. Boolean. True if the candidate is available to travel.</li>"
