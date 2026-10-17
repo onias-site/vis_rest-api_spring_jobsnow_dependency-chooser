@@ -41,7 +41,7 @@ import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTask
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
 import com.jn.entities.JnEntityJobsnowError;
-import com.jn.services.JnServiceLogin;
+import com.jn.business.login.JnBusinessValidateLogin;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -207,13 +207,13 @@ public class VisRestApiSpringStarter {
 	}
 	
 	/**
-	 * Validates the session ({@code JnServiceLogin.ValidateLogin}) on {@code /resume/*} and {@code /position/*}.
+	 * Validates the session ({@code JnBusinessValidateLogin}) on {@code /resume/*} and {@code /position/*}.
 	 * @return the filter registration
 	 */
 	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> validateSessionFilter() {
 		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filterRegistration = new FilterRegistrationBean<>();
-		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnServiceLogin.ValidateLogin);
+		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessValidateLogin.INSTANCE);
 		filterRegistration.setFilter(filter);
 		filterRegistration.addUrlPatterns("/resume/*", "/position/*");
 		return filterRegistration;
