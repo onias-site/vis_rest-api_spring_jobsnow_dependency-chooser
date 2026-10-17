@@ -90,7 +90,7 @@ public class VisRestApiSpringStarter {
 		CcpElasticSearchQueryExecutor ccpElasticSearchQueryExecutor = new CcpElasticSearchQueryExecutor();
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnvironment ? CcpLocalInstances.syncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
+				localEnvironment ? CcpLocalInstances.asyncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
 				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
 				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
 				localEnvironment ? CcpLocalInstances.email : new CcpSendGridEmailSender(),
