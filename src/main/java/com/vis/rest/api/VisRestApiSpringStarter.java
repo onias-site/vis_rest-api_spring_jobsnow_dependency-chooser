@@ -199,9 +199,9 @@ public class VisRestApiSpringStarter {
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
 		FilterRegistrationBean<CcpValidEmailFilter> filterRegistration = new FilterRegistrationBean<>();
-		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/");
+		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/", "recruiter/");
 		filterRegistration.setFilter(emailSyntaxFilter);
-		filterRegistration.addUrlPatterns("/resume/*", "/position/*");
+		filterRegistration.addUrlPatterns("/resume/*", "/position/*", "/recruiter/*");
 		
 		return filterRegistration;
 	}
@@ -215,7 +215,7 @@ public class VisRestApiSpringStarter {
 		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filterRegistration = new FilterRegistrationBean<>();
 		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessValidateLogin.INSTANCE);
 		filterRegistration.setFilter(filter);
-		filterRegistration.addUrlPatterns("/resume/*", "/position/*");
+		filterRegistration.addUrlPatterns("/resume/*", "/position/*", "/recruiter/*");
 		return filterRegistration;
 	}
 }
