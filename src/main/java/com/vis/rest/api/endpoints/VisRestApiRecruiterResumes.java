@@ -4,10 +4,14 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccp.decorators.CcpJsonRepresentation;
+import com.vis.business.recruiter.resumes.VisBusinessViewedResumeDetails;
+import com.vis.business.recruiter.resumes.VisBusinessViewedResumesOfTheMonth;
 import com.vis.rest.open.api.VisOpenApiRecruiterResumes;
 import com.vis.services.VisServiceRecruiterResumes;
 
@@ -36,6 +40,22 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 	@GetMapping("/recruiter/{email}/resumes-of-the-week")
 	public Map<String, Object> getResumesOfTheWeek(@RequestBody Map<String, Object> sessionValues) {
 		Map<String, Object> result = VisServiceRecruiterResumes.GetResumesOfTheWeek.execute(sessionValues);
+		return result;
+	}
+
+	@GetMapping("/recruiter/{email}/viewed-resumes/{month}")
+	public Map<String, Object> getViewedResumesOfTheMonth(@RequestBody String sessionValues, @PathVariable("month") String month) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisBusinessViewedResumesOfTheMonth.Fields.month, month);
+		Map<String, Object> result = VisServiceRecruiterResumes.GetViewedResumesOfTheMonth.execute(json.content);
+		return result;
+	}
+
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/details")
+	public Map<String, Object> getViewedResumeDetails(@RequestBody String sessionValues, @PathVariable("month") String month) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisBusinessViewedResumeDetails.Fields.month, month);
+		Map<String, Object> result = VisServiceRecruiterResumes.GetViewedResumeDetails.execute(json.content);
 		return result;
 	}
 }

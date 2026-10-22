@@ -20,11 +20,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * OpenAPI contract for job position operations at path {@code /recruiters/{email}/positions/{title}}.
- * Covers creating/updating positions, status changes, data retrieval, resume listing,
+ * Covers creating/updating positions, status changes, data retrieval
  * and skill extraction or suggestion from position text.
  */
 @RequestMapping("recruiters/{email}/positions/{title}")
-@Tag(name = "Positions", description = "Operations for managing job positions: CRUD, resume listing, and skill extraction.")
+@Tag(name = "Positions", description = "Operations for managing job positions: CRUD and skill extraction.")
 public interface VisOpenApiPosition {
 
 	/**
@@ -96,37 +96,6 @@ public interface VisOpenApiPosition {
 	})
 	@GetMapping
 	Map<String, Object> getData(@RequestBody String sessionValues);
-
-	/**
-	 * List resumes matching this position (paginated).
-	 * @param sessionValues the request body
-	 * @param fromIndex the {@code fromIndex} path variable
-	 * @param listSize the {@code listSize} path variable
-	 * @param title the {@code title} path variable
-	 * @return the response body
-	 */
-	@Operation(
-		summary = "List resumes matching this position (paginated)",
-		description = "When does it occur? When the recruiter opens the list of candidate resumes for a position. "
-			+ "What does it do? Returns a paginated list of resumes that match this position."
-			+ "<br/><br/><b>Path variables:</b><ul>"
-			+ "<li><b>email</b> – Required. Recruiter's email address.</li>"
-			+ "<li><b>title</b> – Required. Position title.</li>"
-			+ "<li><b>fromIndex</b> – Required. Pagination start index.</li>"
-			+ "<li><b>listSize</b> – Required. Number of items to return.</li>"
-			+ "</ul>"
-	)
-	@ApiResponses({
-		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{}")) },
-			responseCode = "200",
-			description = "Resume list returned successfully."),
-	})
-	@GetMapping("/resumes/fromIndex/{fromIndex}/listSize/{listSize}")
-	Map<String, Object> getResumeList(@RequestBody String sessionValues,
-			@PathVariable("fromIndex") String fromIndex,
-			@PathVariable("listSize") String listSize,
-			@PathVariable("title") String title);
 
 	/**
 	 * Extract important skills from position text.

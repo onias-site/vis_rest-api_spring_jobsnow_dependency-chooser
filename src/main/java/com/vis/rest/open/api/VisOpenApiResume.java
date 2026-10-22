@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 /**
  * OpenAPI contract for resume operations at path {@code /resume/{email}}.
- * Covers saving, deleting, status changes, and data retrieval for a candidate's resume.
+ * Covers saving, deleting, status changes, and data retrieval for a candidate's resume, and the domains of the
+ * recruiters who viewed it in a month ({@code /resume/{email}/viewers/{month}}).
  * All endpoints include a path variable <b>language</b> for operations that are language-specific.
  */
 @RequestMapping("/resume/{email}")
@@ -159,4 +161,35 @@ public interface VisOpenApiResume {
 	})
 	@GetMapping
 	Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues);
+
+	/**
+	 * The domains of the recruiters who viewed the resume in a month.
+	 * @param sessionValues the request body with the values of the session
+	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "The domains that viewed the resume in a month",
+		description = "When does it occur? When the logged-in candidate opens the screen \"Quem me viu\" and chooses a month (the current one by default). "
+			+ "What does it do? Answers, read by id with no query, the domain of the e-mail of each recruiter who viewed the resume for the "
+			+ "first time in that month, with how many recruiters of the domain did it, from the most viewed to the least. Each recruiter "
+			+ "counts once per resume, in the month of the first view. A month with no view answers an empty list."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in candidate's e-mail.</li>"
+			+ "<li><b>month</b> – Required. The month, as yyyyMM (for example, 202610).</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{"
+				+ "\"month\": \"202610\","
+				+ "\"viewers\": [{\"domain\": \"empresa.com.br\", \"views\": 2}, {\"domain\": \"consultoria.com\", \"views\": 1}]"
+				+ "}")) },
+			responseCode = "200",
+			description = "The domains that viewed the resume in the month."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM."),
+	})
+	@GetMapping("/viewers/{month}")
+	Map<String, Object> getViewersOfTheMonth(@RequestBody String sessionValues, @PathVariable("month") String month);
 }
