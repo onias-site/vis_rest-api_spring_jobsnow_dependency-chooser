@@ -1,10 +1,5 @@
 package com.vis.rest.api;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.boot.SpringApplication;
@@ -37,28 +32,22 @@ import com.ccp.implementations.password.mindrot.CcpMindrotPasswordHandler;
 import com.ccp.local.testings.implementations.CcpLocalInstances;
 import com.ccp.local.testings.implementations.cache.CcpLocalCacheInstances;
 import com.ccp.rest.api.spring.exceptions.handler.CcpRestApiExceptionHandlerSpring;
+import com.ccp.rest.api.spring.openapi.CcpMissingPathParamsCustomizer;
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
 import com.jn.entities.JnEntityJobsnowError;
-import com.jn.business.login.JnBusinessValidateLogin;
+import com.jn.business.session.JnBusinessValidateSession;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
 import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.Paths;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.media.StringSchema;
-import io.swagger.v3.oas.models.parameters.PathParameter;
 
-/**
- * Ponto de entrada da API REST do módulo VIS (Visualização). Inicializa as dependências do framework
- * e configura filtros de
- * validação de e-mail e sessão para os paths {@code /resume/*} e {@code /position/*}.
- */
 /**
  * Entry point of the REST API of the vis cost center. Wires the dependencies (local implementations when
  * {@code localEnvironment} is set, GCP and Elasticsearch otherwise), records unhandled errors and protects
- * {@code /resume/*} and {@code /position/*} with the e-mail syntax filter and the session validation.
+ * {@code /resume/*}, {@code /recruiter/*} and {@code /recruiters/*} with the e-mail syntax filter and the
+ * session validation.
  */
 @EnableWebMvc
 @EnableAutoConfiguration(exclude={MongoAutoConfiguration.class})
@@ -74,26 +63,26 @@ public class VisRestApiSpringStarter {
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
-		CcpGsonJsonHandler ccpGsonJsonHandler = new CcpGsonJsonHandler();
+		CcpGsonJsonHandler ccpGsonJsonHandler = CcpGsonJsonHandler.INSTANCE;
 		CcpDependencyInjection.loadAllDependencies(ccpGsonJsonHandler);
 		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
-		CcpTelegramInstantMessenger ccpTelegramInstantMessenger = new CcpTelegramInstantMessenger();
-		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = new CcpElasticSearchDbRequest();
-		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = new CcpMindrotPasswordHandler();
-		CcpGcpMainAuthentication ccpGcpMainAuthentication = new CcpGcpMainAuthentication();
-		CcpElasticSerchDbBulk ccpElasticSerchDbBulk = new CcpElasticSerchDbBulk();
-		CcpElasticSearchCrud ccpElasticSearchCrud = new CcpElasticSearchCrud();
-		CcpApacheMimeHttp ccpApacheMimeHttp = new CcpApacheMimeHttp();
+		CcpTelegramInstantMessenger ccpTelegramInstantMessenger = CcpTelegramInstantMessenger.INSTANCE;
+		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = CcpElasticSearchDbRequest.INSTANCE;
+		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = CcpMindrotPasswordHandler.INSTANCE;
+		CcpGcpMainAuthentication ccpGcpMainAuthentication = CcpGcpMainAuthentication.INSTANCE;
+		CcpElasticSerchDbBulk ccpElasticSerchDbBulk = CcpElasticSerchDbBulk.INSTANCE;
+		CcpElasticSearchCrud ccpElasticSearchCrud = CcpElasticSearchCrud.INSTANCE;
+		CcpApacheMimeHttp ccpApacheMimeHttp = CcpApacheMimeHttp.INSTANCE;
 		// the queries (e.g. the purge of a versionable record's history, the orphan items of a withdrawn
 		// skill hierarchy fix request) need it
-		CcpElasticSearchQueryExecutor ccpElasticSearchQueryExecutor = new CcpElasticSearchQueryExecutor();
+		CcpElasticSearchQueryExecutor ccpElasticSearchQueryExecutor = CcpElasticSearchQueryExecutor.INSTANCE;
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnvironment ? CcpLocalInstances.asyncMensageriaListener : new CcpGcpPubSubMensageriaSender(),
-				localEnvironment ? CcpLocalCacheInstances.map : new CcpGcpMemCache(),
-				localEnvironment ? CcpLocalInstances.bucket : new CcpGcpFileBucket(),
-				localEnvironment ? CcpLocalInstances.email : new CcpSendGridEmailSender(),
+				localEnvironment ? CcpLocalInstances.asyncMensageriaListener : CcpGcpPubSubMensageriaSender.INSTANCE,
+				localEnvironment ? CcpLocalCacheInstances.map : CcpGcpMemCache.INSTANCE,
+				localEnvironment ? CcpLocalInstances.bucket : CcpGcpFileBucket.INSTANCE,
+				localEnvironment ? CcpLocalInstances.email : CcpSendGridEmailSender.INSTANCE,
 			    ccpTelegramInstantMessenger,
 				ccpElasticSearchDbRequest,
 				ccpMindrotPasswordHandler
@@ -113,44 +102,7 @@ public class VisRestApiSpringStarter {
 	 */
 	@Bean
 	public GlobalOpenApiCustomizer missingPathParamsCustomizer() {
-		return openApi -> {
-			Paths paths = openApi.getPaths();
-			boolean pathsMissing = paths == null;
-			if (pathsMissing) return;
-			Pattern p = Pattern.compile("\\{(\\w+)\\}");
-			Paths paths2 = openApi.getPaths();
-			paths2.forEach((pathTemplate, pathItem) -> {
-				Set<String> templateVars = new HashSet<>();
-				Matcher m = p.matcher(pathTemplate);
-				while (m.find()) {
-					String group = m.group(1);
-					templateVars.add(group);
-					}
-					boolean templateVarsEmpty = templateVars.isEmpty();
-					if (templateVarsEmpty) return;
-					var readOperations = pathItem.readOperations();
-					readOperations.forEach(op -> {
-					Set<String> declared = new HashSet<>();
-					var parameters = op.getParameters();
-					boolean hasParameters = parameters != null;
-					if (hasParameters) {
-						var parameters2 = op.getParameters();
-						var stream = parameters2.stream();
-						var filter2 = stream
-							.filter(param -> "path".equals(param.getIn()));
-							filter2
-							.forEach(param -> declared.add(param.getName()));
-					}
-					Stream<String> stream2 = templateVars.stream();
-					var filter3 = stream2
-						.filter(v -> !declared.contains(v));
-						filter3
-						.forEach(v -> op.addParametersItem(
-							new PathParameter().name(v).required(true).schema(new StringSchema())
-						));
-				});
-			});
-		};
+		return CcpMissingPathParamsCustomizer.INSTANCE;
 	}
 
 	/**
@@ -193,29 +145,29 @@ public class VisRestApiSpringStarter {
 	}
 
 	/**
-	 * Rejects an invalid e-mail in the path of {@code /resume/*} and {@code /position/*}.
+	 * Rejects an invalid e-mail in the path of {@code /resume/*}, {@code /recruiter/*} and {@code /recruiters/*}.
 	 * @return the filter registration
 	 */
 	@Bean
 	public FilterRegistrationBean<CcpValidEmailFilter> emailFilter() {
 		FilterRegistrationBean<CcpValidEmailFilter> filterRegistration = new FilterRegistrationBean<>();
-		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/", "recruiter/");
+		CcpValidEmailFilter emailSyntaxFilter = CcpValidEmailFilter.getEmailSyntaxFilter("resume/", "recruiter/", "recruiters/");
 		filterRegistration.setFilter(emailSyntaxFilter);
-		filterRegistration.addUrlPatterns("/resume/*", "/position/*", "/recruiter/*");
+		filterRegistration.addUrlPatterns("/resume/*", "/recruiter/*", "/recruiters/*");
 		
 		return filterRegistration;
 	}
 	
 	/**
-	 * Validates the session ({@code JnBusinessValidateLogin}) on {@code /resume/*} and {@code /position/*}.
+	 * Validates the session ({@code JnBusinessValidateSession}, which runs the validator seeded by the login) on {@code /resume/*}, {@code /recruiter/*} and {@code /recruiters/*}.
 	 * @return the filter registration
 	 */
 	@Bean
 	public FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> validateSessionFilter() {
 		FilterRegistrationBean<CcpPutSessionValuesAndExecuteTaskFilter> filterRegistration = new FilterRegistrationBean<>();
-		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessValidateLogin.INSTANCE);
+		CcpPutSessionValuesAndExecuteTaskFilter filter = new CcpPutSessionValuesAndExecuteTaskFilter(JnBusinessValidateSession.INSTANCE);
 		filterRegistration.setFilter(filter);
-		filterRegistration.addUrlPatterns("/resume/*", "/position/*", "/recruiter/*");
+		filterRegistration.addUrlPatterns("/resume/*", "/recruiter/*", "/recruiters/*");
 		return filterRegistration;
 	}
 }
