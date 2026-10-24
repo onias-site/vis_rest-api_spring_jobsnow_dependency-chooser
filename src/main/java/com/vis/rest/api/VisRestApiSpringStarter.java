@@ -116,7 +116,7 @@ public class VisRestApiSpringStarter {
 		Info title = info2
 						.title("JobsNow VIS API");
 						Info description = title
-						.description("REST API for the VIS module: resume management, positions, recruiters, companies and skills.");
+						.description("REST API for the VIS module: resume management, recruiters, companies and skills.");
 						Info version = description
 						.version("1.0");
 						OpenAPI info = openAPI
