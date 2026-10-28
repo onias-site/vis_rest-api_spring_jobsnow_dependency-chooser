@@ -29,16 +29,16 @@ public interface VisOpenApiCompany {
 	@Operation(
 		summary = "Search companies by name prefix (autocomplete)",
 		description = "When does it occur? When the user starts typing a company name and the frontend needs autocomplete suggestions. "
-			+ "What does it do? Returns a list of companies whose names start with the given prefix (case-insensitive). "
-			+ "If only 3 characters are typed, all companies with that exact prefix are returned without further filtering."
+			+ "What does it do? Returns, in alphabetical order, the companies whose names start with the given prefix (case-insensitive). "
+			+ "A company is the first part of the e-mail domain of a recruiter with a professional domain (a public webmail provider is no company), capitalized."
 			+ "<br/><br/><b>Path variables:</b><ul>"
-			+ "<li><b>search</b> – Required. Company name prefix. Min 3, max 20 characters. "
-			+ "The value is automatically converted to uppercase before the search.</li>"
+			+ "<li><b>search</b> – Required. Company name prefix. Min 3, max 50 characters. "
+			+ "The comparison ignores case; a search with no match comes back as typed.</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{\"companies\": [\"GOOGLE\", \"GLOBO\"]}")) },
+			@Content(schema = @Schema(example = "{\"companies\": [\"Globo\", \"Google\"]}")) },
 			responseCode = "200",
 			description = "List of companies matching the given prefix. "
 				+ "If no matches are found, the list contains the search term itself."),
