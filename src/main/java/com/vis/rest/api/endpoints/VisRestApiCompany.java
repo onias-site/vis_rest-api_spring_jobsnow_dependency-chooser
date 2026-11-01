@@ -12,7 +12,6 @@ import com.ccp.constants.CcpOtherConstants;
 import com.vis.rest.open.api.VisOpenApiCompany;
 import com.vis.services.VisServiceCompany;
 
-//TODO SCHEDULE TO SAVE UNWANTED COMPANIES
 /**
  * REST controller for company operations in the VIS module at path {@code /companies}.
  * Exposes an autocomplete search for companies by name prefix (first three initials).
