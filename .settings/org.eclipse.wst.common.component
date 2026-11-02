@@ -46,7 +46,7 @@
         
         
         </dependent-module>
-        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_cache_gcp-memcache/ccp_cache_gcp-memcache">
+        <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_cache_gcp-memory-store/ccp_cache_gcp-memory-store">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module deploy-path="/WEB-INF/lib" handle="module:/resource/ccp_db-crud_elasticsearch/ccp_db-crud_elasticsearch">

@@ -7,11 +7,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccp.constants.CcpOtherConstants;
 import com.ccp.decorators.CcpJsonRepresentation;
+import com.jn.json.fields.validation.JnJsonCommonsFields;
 import com.vis.business.recruiter.resumes.VisBusinessViewedResumeDetails;
 import com.vis.business.recruiter.resumes.VisBusinessViewedResumesOfTheMonth;
+import com.vis.business.recruiter.resumes.VisRecruiterResumesFields;
 import com.vis.rest.open.api.VisOpenApiRecruiterResumes;
 import com.vis.services.VisServiceRecruiterResumes;
 
@@ -34,6 +38,15 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 	@PostMapping("/recruiter-email-link/unsubscribe")
 	public Map<String, Object> unsubscribe(@RequestBody Map<String, Object> body) {
 		Map<String, Object> result = VisServiceRecruiterResumes.UnsubscribeFromResumesEmail.execute(body);
+		return result;
+	}
+
+	@PostMapping("/recruiter-email-link/one-click-unsubscribe")
+	public Map<String, Object> oneClickUnsubscribe(@RequestParam("email") String email, @RequestParam("token") String token) {
+		CcpJsonRepresentation body = CcpOtherConstants.EMPTY_JSON
+				.put(JnJsonCommonsFields.email, email)
+				.put(VisRecruiterResumesFields.token, token);
+		Map<String, Object> result = VisServiceRecruiterResumes.UnsubscribeFromResumesEmail.execute(body.content);
 		return result;
 	}
 

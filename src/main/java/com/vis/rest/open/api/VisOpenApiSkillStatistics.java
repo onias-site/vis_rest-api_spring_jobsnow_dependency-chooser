@@ -76,4 +76,22 @@ public interface VisOpenApiSkillStatistics {
 	})
 	@GetMapping("/{seniority}/{ddd}/months")
 	Map<String, Object> getMonthsOfTheSkill(@PathVariable("seniority") String seniority, @PathVariable("ddd") Integer ddd, @RequestParam("skill") String skill);
+
+	/**
+	 * The links of the Telegram groups read by the load.
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "The links of the Telegram groups",
+		description = "When does it occur? When the user opens the list of searched groups in the screen of statistics of the skills. "
+			+ "What does it do? Returns the links of the Telegram groups whose positions feed the statistics. It takes no parameter and no login is needed."
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"groups\": [\"https://t.me/empregossp\"]}")) },
+			responseCode = "200",
+			description = "The links of the groups."),
+	})
+	@GetMapping("/telegramGroups")
+	Map<String, Object> getTelegramGroups();
 }

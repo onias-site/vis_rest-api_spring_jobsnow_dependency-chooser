@@ -56,4 +56,14 @@ public class VisRestApiSkillStatistics implements VisOpenApiSkillStatistics {
 		var execute = VisServiceSkillStatistics.GetMonthsOfTheSkill.execute(json.content);
 		return execute;
 	}
+
+	/**
+	 * The links of the Telegram groups read by the load. Delegates to the matching service.
+	 * @return the response body
+	 */
+	@GetMapping("/telegramGroups")
+	public Map<String, Object> getTelegramGroups() {
+		var execute = VisServiceSkillStatistics.GetTelegramGroups.execute(CcpOtherConstants.EMPTY_JSON.content);
+		return execute;
+	}
 }

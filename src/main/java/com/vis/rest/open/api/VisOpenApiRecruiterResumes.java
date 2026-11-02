@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -103,6 +104,31 @@ public interface VisOpenApiRecruiterResumes {
 	})
 	@PostMapping("/recruiter-email-link/unsubscribe")
 	Map<String, Object> unsubscribe(@RequestBody Map<String, Object> body);
+
+	/**
+	 * Stop receiving the e-mail of resumes with one click in the mailbox.
+	 * @param email the recruiter
+	 * @param token the signature of the link
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Stop receiving the e-mail of resumes with one click in the mailbox",
+		description = "When does it occur? When the recruiter clicks the unsubscribe button of the mailbox provider: the provider reads the "
+			+ "List-Unsubscribe header of the e-mail and posts to this address (RFC 8058), with the form field List-Unsubscribe=One-Click, which is ignored. "
+			+ "What does it do? Moves the recruiter to the inactive recruiters; a recruiter already inactive gets the same answer."
+			+ "<br/><br/><b>Query parameters:</b><ul>"
+			+ "<li><b>email</b> – Required. The recruiter's e-mail.</li>"
+			+ "<li><b>token</b> – Required. The signature of the link.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "The recruiter no longer receives the e-mail."),
+		@ApiResponse(responseCode = "400", description = "The e-mail or the token is missing."),
+		@ApiResponse(responseCode = "401", description = "The link was not signed for this recruiter."),
+		@ApiResponse(responseCode = "422", description = "Validation error — one or more fields contain invalid values."),
+	})
+	@PostMapping("/recruiter-email-link/one-click-unsubscribe")
+	Map<String, Object> oneClickUnsubscribe(@RequestParam("email") String email, @RequestParam("token") String token);
 
 	/**
 	 * Every resume of the last e-mail.

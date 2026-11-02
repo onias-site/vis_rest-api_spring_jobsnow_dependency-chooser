@@ -16,12 +16,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.especifications.db.utils.entity.CcpEntityOperationType;
-import com.ccp.implementations.cache.gcp.memcache.CcpGcpMemCache;
+import com.ccp.implementations.cache.gcp.memorystore.CcpGcpMemoryStore;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
 import com.ccp.implementations.db.query.elasticsearch.CcpElasticSearchQueryExecutor;
 import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
-import com.ccp.implementations.email.sendgrid.CcpSendGridEmailSender;
+import com.ccp.implementations.email.sendgrid.CcpSendGridEmailProvider;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
 import com.ccp.implementations.http.apache.mime.CcpApacheMimeHttp;
 import com.ccp.implementations.instant.messenger.telegram.CcpTelegramInstantMessenger;
@@ -82,9 +82,9 @@ public class VisRestApiSpringStarter {
 		CcpDependencyInjection.loadAllDependencies
 		(
 				localEnvironment ? CcpLocalInstances.asyncMensageriaListener : CcpGcpPubSubMensageriaSender.INSTANCE,
-				localEnvironment ? CcpLocalCacheInstances.map : CcpGcpMemCache.INSTANCE,
+				localEnvironment ? CcpLocalCacheInstances.map : CcpGcpMemoryStore.INSTANCE,
 				localEnvironment ? CcpLocalInstances.bucket : CcpGcpFileBucket.INSTANCE,
-				localEnvironment ? CcpLocalInstances.email : CcpSendGridEmailSender.INSTANCE,
+				localEnvironment ? CcpLocalInstances.email : CcpSendGridEmailProvider.INSTANCE,
 			    ccpTelegramInstantMessenger,
 				ccpElasticSearchDbRequest,
 				ccpMindrotPasswordHandler
