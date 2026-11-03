@@ -15,7 +15,6 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ccp.dependency.injection.CcpDependencyInjection;
-import com.ccp.especifications.db.utils.entity.CcpEntityOperationType;
 import com.ccp.implementations.cache.gcp.memorystore.CcpGcpMemoryStore;
 import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
@@ -37,7 +36,8 @@ import com.ccp.rest.api.spring.openapi.CcpMissingPathParamsCustomizer;
 import com.ccp.rest.api.spring.servlet.filters.CcpPutSessionValuesAndExecuteTaskFilter;
 import com.ccp.rest.api.spring.servlet.filters.CcpValidEmailFilter;
 import com.ccp.rest.api.utils.CcpRestApiUtils;
-import com.jn.entities.JnEntityJobsnowError;
+import com.jn.business.errors.JnBusinessSaveApiError;
+import com.jn.json.fields.validation.JnApiOrigins;
 import com.jn.business.session.JnBusinessValidateSession;
 import com.vis.rest.api.endpoints.VisRestApiResume;
 
@@ -85,7 +85,8 @@ public class VisRestApiSpringStarter {
 				localEnvironment ? CcpLocalCacheInstances.map : CcpGcpMemoryStore.INSTANCE,
 				localEnvironment ? CcpLocalInstances.bucket : CcpGcpFileBucket.INSTANCE,
 				localEnvironment ? CcpLocalInstances.email : CcpSendGridEmailProvider.INSTANCE,
-			    ccpTelegramInstantMessenger,
+				// local: writes to c:\logs\telegram instead of sending a real message to the support group
+				localEnvironment ? CcpLocalInstances.instantMessenger : ccpTelegramInstantMessenger,
 				ccpElasticSearchDbRequest,
 				ccpMindrotPasswordHandler
 				,
@@ -94,7 +95,7 @@ public class VisRestApiSpringStarter {
 				ccpElasticSearchCrud,ccpElasticSearchQueryExecutor,ccpApacheMimeHttp
 		);
 
-		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = CcpEntityOperationType.save.getOperationCallback(JnEntityJobsnowError.ENTITY);
+		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnBusinessSaveApiError(JnApiOrigins.vis);
 		SpringApplication.run(VisRestApiSpringStarter.class, args);
 	}
 	
