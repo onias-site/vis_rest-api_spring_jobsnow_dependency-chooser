@@ -44,7 +44,8 @@ public interface VisOpenApiSkillStatistics {
 			@Content(schema = @Schema(example = "{\"total\": 12, \"skills\": [\"{\\\"skill\\\":\\\"JAVA\\\",\\\"total\\\":5}\"]}")) },
 			responseCode = "200",
 			description = "The total and the skills. With no position, the total is 0 and the list is empty."),
-		@ApiResponse(responseCode = "400", description = "A path variable is not valid."),
+		@ApiResponse(responseCode = "400", description = "The ddd is not a number."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the yearMonth is not a month in the format yyyyMM from 2015 to the current year, the seniority is not one of the known ones or the ddd is above 99."),
 	})
 	@GetMapping("/{yearMonth}/{seniority}/{ddd}")
 	Map<String, Object> getSkillsOfTheMonth(@PathVariable("yearMonth") String yearMonth, @PathVariable("seniority") String seniority, @PathVariable("ddd") Integer ddd);
@@ -72,7 +73,8 @@ public interface VisOpenApiSkillStatistics {
 			@Content(schema = @Schema(example = "{\"months\": [\"{\\\"total\\\":5,\\\"yearMonth\\\":\\\"202201\\\"}\"]}")) },
 			responseCode = "200",
 			description = "The months of the skill. With no position, the list is empty."),
-		@ApiResponse(responseCode = "400", description = "A parameter is not valid."),
+		@ApiResponse(responseCode = "400", description = "The skill is missing or the ddd is not a number."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the skill is empty or longer than 50 characters, the seniority is not one of the known ones or the ddd is above 99."),
 	})
 	@GetMapping("/{seniority}/{ddd}/months")
 	Map<String, Object> getMonthsOfTheSkill(@PathVariable("seniority") String seniority, @PathVariable("ddd") Integer ddd, @RequestParam("skill") String skill);

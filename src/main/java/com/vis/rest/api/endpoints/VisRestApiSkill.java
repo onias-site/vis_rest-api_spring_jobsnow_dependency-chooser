@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccp.json.fields.validation.CcpJsonCommonsFields;
-import com.ccp.service.CcpCachedService;
 import com.vis.rest.open.api.VisOpenApiSkill;
 import com.vis.services.VisServiceSkills;
 
@@ -31,10 +29,8 @@ public class VisRestApiSkill implements VisOpenApiSkill {
 	 */
 	@PostMapping("/fromText")
 	public Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues){
-		
-		CcpCachedService ccd = new CcpCachedService(CcpJsonCommonsFields.text, VisServiceSkills.GetSkillsFromText, 3_600_000);
-		
-		Map<String, Object> result = ccd.execute(sessionValues);
+		// no cache of the response: the words of the skills are in memory (VisSkillDictionary), renewed by version
+		Map<String, Object> result = VisServiceSkills.GetSkillsFromText.execute(sessionValues);
 		return result;
 	}
 
