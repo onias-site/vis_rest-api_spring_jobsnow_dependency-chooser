@@ -83,6 +83,8 @@ public interface VisOpenApiResume {
 			description = "Resume saved successfully."),
 		@ApiResponse(responseCode = "400",
 			description = "Validation error — one or more required fields are missing or contain invalid values."),
+		@ApiResponse(responseCode = "429",
+			description = "The candidate already updated the resume in the last 24 hours: one update a day (inserting a resume has no limit)."),
 	})
 	@PostMapping("/language/{language}")
 	Map<String, Object> save(@RequestBody Map<String, Object> sessionValues);
@@ -107,6 +109,8 @@ public interface VisOpenApiResume {
 			@Content(schema = @Schema(example = "{}")) },
 			responseCode = "200",
 			description = "Resume deleted successfully."),
+		@ApiResponse(responseCode = "429",
+			description = "The candidate already deleted a resume in the last 24 hours: one deletion a day."),
 	})
 	@DeleteMapping("/language/{language}")
 	Map<String, Object> delete(@RequestBody Map<String, Object> sessionValues);
@@ -134,6 +138,8 @@ public interface VisOpenApiResume {
 			description = "Resume deactivated or reactivated successfully."),
 		@ApiResponse(responseCode = "404",
 			description = "The candidate has no resume, active or inactive."),
+		@ApiResponse(responseCode = "429",
+			description = "The candidate already ran this change (deactivation or reactivation) in the last 24 hours: one of each a day."),
 	})
 	@DeleteMapping("/language/{language}/status")
 	Map<String, Object> changeStatus(@RequestBody Map<String, Object> sessionValues);
