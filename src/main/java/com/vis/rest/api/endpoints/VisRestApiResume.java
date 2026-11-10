@@ -2,7 +2,6 @@ package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +21,6 @@ import com.vis.services.VisServiceResume;
  * REST controller for resume operations in the VIS module at path {@code /resume/{email}}.
  * Allows saving, deleting, changing status, and retrieving the candidate's resume data by language.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("/resume/{email}")
 public class VisRestApiResume implements VisOpenApiResume{

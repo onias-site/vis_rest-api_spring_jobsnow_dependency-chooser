@@ -2,7 +2,6 @@ package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +16,6 @@ import com.vis.services.VisServiceSkills;
  * Hierarchy corrections live in {@link VisRestApiSkillFixHierarchy} and skill suggestions in
  * {@link VisRestApiSkillSuggestion}.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("skills")
 public class VisRestApiSkill implements VisOpenApiSkill {

@@ -2,7 +2,6 @@ package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +18,6 @@ import com.vis.business.recruiter.resumes.VisRecruiterResumesFields;
 import com.vis.rest.open.api.VisOpenApiRecruiterResumes;
 import com.vis.services.VisServiceRecruiterResumes;
 
-@CrossOrigin
 @RestController
 public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 

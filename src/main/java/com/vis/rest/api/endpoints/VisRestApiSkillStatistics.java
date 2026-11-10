@@ -2,7 +2,6 @@ package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +17,6 @@ import com.vis.services.VisServiceSkillStatistics;
 /**
  * REST controller for the statistics of the skills at path {@code /statistics/skills}: public, with no session.
  */
-@CrossOrigin
 @RestController
 @RequestMapping("statistics/skills")
 public class VisRestApiSkillStatistics implements VisOpenApiSkillStatistics {

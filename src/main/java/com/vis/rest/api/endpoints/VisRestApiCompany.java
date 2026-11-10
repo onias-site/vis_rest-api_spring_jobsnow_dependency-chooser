@@ -2,7 +2,6 @@ package com.vis.rest.api.endpoints;
 
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +15,6 @@ import com.vis.services.VisServiceCompany;
  * REST controller for company operations in the VIS module at path {@code /companies}.
  * Exposes an autocomplete search for companies by name prefix (first three initials).
  */
-@CrossOrigin
 @RestController
 @RequestMapping("companies")
 public class VisRestApiCompany implements VisOpenApiCompany {
