@@ -51,10 +51,41 @@ public interface VisOpenApiRecruiterResumes {
 			description = "View saved."),
 		@ApiResponse(responseCode = "401", description = "The link was not signed for this recruiter and resume."),
 		@ApiResponse(responseCode = "404", description = "The resume is no longer active."),
+		@ApiResponse(responseCode = "410", description = "The support confirmed that the LinkedIn address of the resume is unreachable: it is not opened and no view is saved."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
 	@PostMapping("/recruiter-email-link/view-resume")
 	Map<String, Object> viewResume(@RequestBody Map<String, Object> body);
+
+	/**
+	 * Report that the LinkedIn address of a resume of the e-mail does not open.
+	 * @param body the request body
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Report that the LinkedIn of a resume of the e-mail does not open",
+		description = "When does it occur? When the recruiter, on the page of a resume of the e-mail, clicks \"Reportar Linkedin Inválido\" and confirms. "
+			+ "What does it do? Opens the ticket /verifyLinkedinAddress of the support operator (in /pendingTickets), who tells whether the recruiter is right: "
+			+ "if so, the resume is marked as having an invalid LinkedIn address, stops going to the recruiters and its owner is told; if not, the recruiter "
+			+ "gets an e-mail saying that the profile exists, and the resume no longer goes to them."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>email</b> – Required. The recruiter's e-mail, as in the link.</li>"
+			+ "<li><b>resumeId</b> – Required. The id of the resume, as in the link.</li>"
+			+ "<li><b>token</b> – Required. The signature of the link.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"linkedinAddress\": \"https://www.linkedin.com/in/someone\"}")) },
+			responseCode = "200",
+			description = "Ticket opened."),
+		@ApiResponse(responseCode = "401", description = "The link was not signed for this recruiter and resume."),
+		@ApiResponse(responseCode = "404", description = "The resume is no longer active."),
+		@ApiResponse(responseCode = "410", description = "The support already confirmed that the LinkedIn address of the resume is unreachable."),
+		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
+	})
+	@PostMapping("/recruiter-email-link/report-invalid-linkedin")
+	Map<String, Object> reportInvalidLinkedin(@RequestBody Map<String, Object> body);
 
 	/**
 	 * Save the alias of a resume of the e-mail.
@@ -137,7 +168,7 @@ public interface VisOpenApiRecruiterResumes {
 	 */
 	@Operation(
 		summary = "Every resume of the last e-mail",
-		description = "When does it occur? When the logged-in recruiter opens the screen \"see all\" of the e-mail of resumes, which shows only the first 40. "
+		description = "When does it occur? When the logged-in recruiter opens the screen \"see all\" of the e-mail of resumes, which shows only the first 30. "
 			+ "What does it do? Answers every resume of the last e-mail of the recruiter, in the order and with the texts of the e-mail. The list "
 			+ "is written before the e-mail goes out and kept for a day."
 			+ "<br/><br/><b>Path variables:</b><ul>"
@@ -162,8 +193,9 @@ public interface VisOpenApiRecruiterResumes {
 		summary = "The resumes viewed in a month",
 		description = "When does it occur? When the logged-in recruiter wants to see which resumes they opened in a month. "
 			+ "What does it do? Answers, read by id with no query, the list kept by every opening of a resume and every alias given to it: "
-			+ "one item per resume, a JSON text (to be parsed by the front end) with the LinkedIn of the resume, the alias and the date and time "
-			+ "(dd/MM/yyyy HH:mm:ss) of the last view in that month. A month with no view answers an empty list."
+			+ "one item per resume, a JSON text (to be parsed by the front end) with the hash of the LinkedIn of the resume (the key of its details; "
+			+ "the LinkedIn itself never comes in this list), the alias and the date and time (dd/MM/yyyy HH:mm:ss) of the last view in that month. "
+			+ "A month with no view answers an empty list."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
 			+ "<li><b>month</b> – Required. The month, as yyyyMM (for example, 202610).</li>"
@@ -173,7 +205,7 @@ public interface VisOpenApiRecruiterResumes {
 		@ApiResponse(content = {
 			@Content(schema = @Schema(example = "{"
 				+ "\"month\": \"202610\","
-				+ "\"viewedResume\": [\"{\\\"alias\\\":\\\"Dev Java sênior\\\",\\\"date\\\":\\\"21/10/2026 14:05:31\\\",\\\"linkedin\\\":\\\"https://www.linkedin.com/in/someone\\\"}\"]"
+				+ "\"viewedResume\": [\"{\\\"alias\\\":\\\"Dev Java sênior\\\",\\\"date\\\":\\\"21/10/2026 14:05:31\\\",\\\"linkedinHash\\\":\\\"5f2b3c...\\\"}\"]"
 				+ "}")) },
 			responseCode = "200",
 			description = "The resumes viewed in the month."),
@@ -194,27 +226,30 @@ public interface VisOpenApiRecruiterResumes {
 		description = "When does it occur? When the logged-in recruiter clicks \"ver detalhes\" in a line of the screen of the resumes viewed in a month. "
 			+ "What does it do? Finds, read by id with no query, the e-mails whose resumes use the LinkedIn and answers each active resume as a row "
 			+ "of the e-mail of resumes (what matters and regions, languages and skills, role and other information), without the dates of insertion "
-			+ "and of last change, which only the history of the resume has. Only resumes the recruiter viewed in that month are answered."
+			+ "and of last change, which only the history of the resume has. Only resumes the recruiter viewed in that month are answered. "
+			+ "A resume whose candidate now forbids the company of the recruiter has no row, as if it were no longer active, and the LinkedIn "
+			+ "is answered only when there is a row to show."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
 			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
 			+ "</ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
-			+ "<li><b>linkedin</b> – Required. The LinkedIn of the viewed resume, as the list of the views shows it.</li>"
+			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
 			@Content(schema = @Schema(example = "{"
+				+ "\"linkedinHash\": \"5f2b3c...\","
 				+ "\"linkedin\": \"https://www.linkedin.com/in/someone\","
 				+ "\"resumes\": [{\"resumeId\": \"...\", \"whatMatters\": [\"CLT: R$ 9.000,00\"], \"regions\": [\"São Paulo – SP\"], "
 				+ "\"languagesAndSkills\": [\"JAVA\"], \"job\": [\"Desenvolvedor\"], \"otherInformation\": [\"PCD: não\"], \"defaultAlias\": \"JAVA_...\"}]"
 				+ "}")) },
 			responseCode = "200",
-			description = "The rows of the active resumes that use the LinkedIn (empty when none is active anymore)."),
+			description = "The rows of the active resumes that use the LinkedIn and the LinkedIn itself (no row and no LinkedIn when none is active anymore or every one forbids the company of the recruiter)."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
-		@ApiResponse(responseCode = "404", description = "The LinkedIn is not among the views of the recruiter in the month."),
-		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the LinkedIn is not a LinkedIn profile address."),
+		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
 	})
 	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/details")
 	Map<String, Object> getViewedResumeDetails(@RequestBody String sessionValues, @PathVariable("month") String month);

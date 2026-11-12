@@ -8,9 +8,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ccp.decorators.CcpJsonRepresentation;
+import com.jn.json.fields.validation.JnJsonCommonsFields;
 import com.vis.business.resume.VisBusinessResumeViewersOfTheMonth;
 import com.vis.rest.open.api.VisOpenApiResume;
 import com.vis.services.VisServiceResume;
@@ -71,9 +73,11 @@ public class VisRestApiResume implements VisOpenApiResume{
 	 * @return the response body
 	 */
 	@GetMapping
-	public Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues){
-		
-		CcpJsonRepresentation json = new CcpJsonRepresentation(sessionValues);
+	public Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues, @RequestParam(value = "language", defaultValue = "portuguese") String language){
+
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		// the language of the screen, for the warning of the LinkedIn address confirmed as invalid; Portuguese when absent
+		CcpJsonRepresentation json = session.put(JnJsonCommonsFields.language, language);
 		
 		Map<String, Object> result = VisServiceResume.GetData.execute(json.content);
 

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -70,7 +71,7 @@ public interface VisOpenApiResume {
 			+ "  <li><b>id</b> – Ignored: it is dropped before the resume is stored.</li>"
 			+ "</ul></li>"
 			+ "<li><b>lastJob</b> – Optional. Last job title. Min 2, max 50 characters.</li>"
-			+ "<li><b>notAllowedCompany</b> – Optional array. Company names to exclude. Min 2, max 50 characters each.</li>"
+			+ "<li><b>notAllowedCompany</b> – Optional array. Domains of the companies to exclude (e.g. consultancy.com.br): letters, digits and hyphens separated by dots, ending in a top level domain of letters. Min 4, max 50 characters each; any other text refuses the resume.</li>"
 			+ "<li><b>pcd</b> – Optional. Boolean. True if the candidate has a disability.</li>"
 			+ "<li><b>negotiableClaim</b> – Optional. Boolean. True if salary is negotiable.</li>"
 			+ "<li><b>travel</b> – Optional. Boolean. True if the candidate is available to travel.</li>"
@@ -156,6 +157,10 @@ public interface VisOpenApiResume {
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. Candidate's email address.</li>"
 			+ "</ul>"
+			+ "<b>Query parameters:</b><ul>"
+			+ "<li><b>language</b> – Optional. portuguese (default) or english: the language of <b>invalidLinkedinAddressMessage</b>, the warning put in the "
+			+ "record when the support confirmed that its LinkedIn address is invalid (since 2026-11-12).</li>"
+			+ "</ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
@@ -166,7 +171,7 @@ public interface VisOpenApiResume {
 			description = "No resume found for the given email."),
 	})
 	@GetMapping
-	Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues);
+	Map<String, Object> getData(@RequestBody Map<String, Object> sessionValues, @RequestParam(value = "language", defaultValue = "portuguese") String language);
 
 	/**
 	 * The domains of the recruiters who viewed the resume in a month.

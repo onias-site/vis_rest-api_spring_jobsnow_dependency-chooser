@@ -33,6 +33,12 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 		return result;
 	}
 
+	@PostMapping("/recruiter-email-link/report-invalid-linkedin")
+	public Map<String, Object> reportInvalidLinkedin(@RequestBody Map<String, Object> body) {
+		Map<String, Object> result = VisServiceRecruiterResumes.ReportInvalidLinkedinFromEmail.execute(body);
+		return result;
+	}
+
 	@PostMapping("/recruiter-email-link/unsubscribe")
 	public Map<String, Object> unsubscribe(@RequestBody Map<String, Object> body) {
 		Map<String, Object> result = VisServiceRecruiterResumes.UnsubscribeFromResumesEmail.execute(body);
