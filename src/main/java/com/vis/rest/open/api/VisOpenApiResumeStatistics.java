@@ -29,7 +29,7 @@ public interface VisOpenApiResumeStatistics {
 		summary = "The statistics of the resumes of a region",
 		description = "When does it occur? When the user opens a region in the screen Supply X Demand. "
 			+ "What does it do? Returns how many active resumes the region has, the averages of the CLT and PJ salary expectations "
-			+ "by seniority and of all of them (counting only the resumes that informed them), and the slices of the pie charts: "
+			+ "and of the years of experience (one decimal place) by seniority and of all of them (counting only the resumes that informed them), and the slices of the pie charts: "
 			+ "resumeType, spokenLanguage (name|level, 2 fluent and 1 intermediate), skill, pcd, travel, seniority, "
 			+ "disponibility (immediate or notImmediate), temporallyJob (accepts or doesNotAccept), clt and pj (the start of each range of 1000, "
 			+ "or notInformed). No login is needed."
@@ -39,7 +39,7 @@ public interface VisOpenApiResumeStatistics {
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{\"ddd\": 11, \"total\": 2, \"averages\": {\"pleno\": {\"resumes\": 1, \"clt\": 9000, \"pj\": 0}, \"all\": {\"resumes\": 2, \"clt\": 8500, \"pj\": 12000}}, "
+			@Content(schema = @Schema(example = "{\"ddd\": 11, \"total\": 2, \"averages\": {\"pleno\": {\"resumes\": 1, \"clt\": 9000, \"pj\": 0, \"experience\": 4.0}, \"all\": {\"resumes\": 2, \"clt\": 8500, \"pj\": 12000, \"experience\": 6.5}}, "
 					+ "\"charts\": {\"resumeType\": {\"1\": 2}, \"spokenLanguage\": {\"Inglês|2\": 1, \"Inglês|1\": 1}, \"clt\": {\"8000\": 1, \"9000\": 1}}}")) },
 			responseCode = "200",
 			description = "The statistics. A region with no resume has total 0, averages at 0 and empty charts."),
