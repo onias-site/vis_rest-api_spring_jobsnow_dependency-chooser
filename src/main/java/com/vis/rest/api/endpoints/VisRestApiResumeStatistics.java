@@ -30,4 +30,15 @@ public class VisRestApiResumeStatistics implements VisOpenApiResumeStatistics {
 		var execute = VisServiceResumeStatistics.GetResumeStatisticsOfTheRegion.execute(json.content);
 		return execute;
 	}
+
+	/**
+	 * The totals of every region. Delegates to the matching service.
+	 * @return the response body
+	 */
+	@GetMapping("/totals")
+	public Map<String, Object> getResumeTotalsByRegion() {
+		var noInput = CcpOtherConstants.EMPTY_JSON.content;
+		var execute = VisServiceResumeStatistics.GetResumeTotalsByRegion.execute(noInput);
+		return execute;
+	}
 }

@@ -50,4 +50,24 @@ public interface VisOpenApiResumeStatistics {
 	})
 	@GetMapping("/{ddd}")
 	Map<String, Object> getResumeStatisticsOfTheRegion(@PathVariable("ddd") Integer ddd);
+
+	/**
+	 * The totals of every region.
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "The totals of every region",
+		description = "When does it occur? When the user opens the screen Supply X Demand, before opening any folder. "
+			+ "What does it do? Reads, in a single round trip, the counters by ddd of the active resumes (resumes) and of the views of the resumes "
+			+ "by the recruiters (viewedResumes) and returns, for each one, how many records each ddd has (a record with several ddds counts once in each; "
+			+ "a ddd with none is left out). The screen sums the ddds of each state. No login is needed."
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"resumes\": {\"10\": 33, \"11\": 15}, \"viewedResumes\": {\"10\": 57, \"11\": 22}}")) },
+			responseCode = "200",
+			description = "The totals by ddd of each source; a source with no record has an empty json."),
+	})
+	@GetMapping("/totals")
+	Map<String, Object> getResumeTotalsByRegion();
 }
