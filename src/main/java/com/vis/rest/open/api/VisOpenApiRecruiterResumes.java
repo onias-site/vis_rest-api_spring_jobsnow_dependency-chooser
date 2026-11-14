@@ -45,10 +45,12 @@ public interface VisOpenApiRecruiterResumes {
 		@ApiResponse(content = {
 			@Content(schema = @Schema(example = "{"
 				+ "\"linkedinAddress\": \"https://www.linkedin.com/in/someone\","
-				+ "\"alias\": \"JAVA_SPRING_SQL_R$ 9.000,00_São Paulo – SP_12 Anos\""
+				+ "\"alias\": \"JAVA_SPRING_SQL_R$ 9.000,00_São Paulo – SP_12 Anos\","
+				+ "\"inactiveView\": false"
 				+ "}")) },
 			responseCode = "200",
-			description = "View saved."),
+			description = "View saved. When the view of the recruiter is in the inactive views (the recruiter reported the LinkedIn of the resume), "
+				+ "it is not saved again: inactiveView comes true, with the alias kept there, and the page does not let the view be saved."),
 		@ApiResponse(responseCode = "401", description = "The link was not signed for this recruiter and resume."),
 		@ApiResponse(responseCode = "404", description = "The resume is no longer active."),
 		@ApiResponse(responseCode = "410", description = "The support confirmed that the LinkedIn address of the resume is unreachable: it is not opened and no view is saved."),
@@ -65,7 +67,8 @@ public interface VisOpenApiRecruiterResumes {
 	@Operation(
 		summary = "Report that the LinkedIn of a resume of the e-mail does not open",
 		description = "When does it occur? When the recruiter, on the page of a resume of the e-mail, clicks \"Reportar Linkedin Inválido\" and confirms. "
-			+ "What does it do? Opens the ticket /verifyLinkedinAddress of the support operator (in /pendingTickets), who tells whether the recruiter is right: "
+			+ "What does it do? Moves the view of the recruiter to the inactive views at once, so the resume no longer goes to them, and "
+			+ "opens the ticket /verifyLinkedinAddress of the support operator (in /pendingTickets), who tells whether the recruiter is right: "
 			+ "if so, the resume is marked as having an invalid LinkedIn address, stops going to the recruiters and its owner is told; if not, the recruiter "
 			+ "gets an e-mail saying that the profile exists, and the resume no longer goes to them."
 			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
@@ -108,6 +111,7 @@ public interface VisOpenApiRecruiterResumes {
 		@ApiResponse(responseCode = "200", description = "Alias saved."),
 		@ApiResponse(responseCode = "401", description = "The link was not signed for this recruiter and resume."),
 		@ApiResponse(responseCode = "404", description = "The resume is no longer active."),
+		@ApiResponse(responseCode = "409", description = "The view of the recruiter is in the inactive views (the recruiter reported the LinkedIn of the resume): it is not saved."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
 	@PostMapping("/recruiter-email-link/alias")
