@@ -32,13 +32,13 @@ public class VisRestApiResumeStatistics implements VisOpenApiResumeStatistics {
 	}
 
 	/**
-	 * The totals of every region. Delegates to the matching service.
+	 * The counters by ddd, by day and by month of insertion. Delegates to the matching service.
 	 * @return the response body
 	 */
 	@GetMapping("/totals")
-	public Map<String, Object> getResumeTotalsByRegion() {
+	public Map<String, Object> getResumeTotals() {
 		var noInput = CcpOtherConstants.EMPTY_JSON.content;
-		var execute = VisServiceResumeStatistics.GetResumeTotalsByRegion.execute(noInput);
+		var execute = VisServiceResumeStatistics.GetResumeTotals.execute(noInput);
 		return execute;
 	}
 }

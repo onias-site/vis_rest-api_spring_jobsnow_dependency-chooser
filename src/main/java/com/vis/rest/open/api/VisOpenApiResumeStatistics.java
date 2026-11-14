@@ -52,22 +52,25 @@ public interface VisOpenApiResumeStatistics {
 	Map<String, Object> getResumeStatisticsOfTheRegion(@PathVariable("ddd") Integer ddd);
 
 	/**
-	 * The totals of every region.
+	 * The counters by ddd, by day and by month of insertion.
 	 * @return the response body
 	 */
 	@Operation(
-		summary = "The totals of every region",
+		summary = "The totals by region and the insertions by day and by month",
 		description = "When does it occur? When the user opens the screen Supply X Demand, before opening any folder. "
-			+ "What does it do? Reads, in a single round trip, the counters by ddd of the active resumes (resumes) and of the views of the resumes "
-			+ "by the recruiters (viewedResumes) and returns, for each one, how many records each ddd has (a record with several ddds counts once in each; "
-			+ "a ddd with none is left out). The screen sums the ddds of each state. No login is needed."
+			+ "What does it do? Reads, in a single round trip, three counters of the active resumes (resumes) and of the views of the resumes "
+			+ "by the recruiters (viewedResumes): byRegion, how many records each ddd has (a record with several ddds counts once in each; the screen "
+			+ "sums the ddds of each state for the titles of the folders); byDay (yyyyMMdd) and byMonth (yyyyMM), how many records were inserted in "
+			+ "each day and month and are still active (the line chart). A key with no record is left out. No login is needed."
 	)
 	@ApiResponses({
 		@ApiResponse(content = {
-			@Content(schema = @Schema(example = "{\"resumes\": {\"10\": 33, \"11\": 15}, \"viewedResumes\": {\"10\": 57, \"11\": 22}}")) },
+			@Content(schema = @Schema(example = "{\"byRegion\": {\"resumes\": {\"10\": 33, \"11\": 15}, \"viewedResumes\": {\"10\": 57, \"11\": 22}}, "
+					+ "\"byDay\": {\"resumes\": {\"20261114\": 2}, \"viewedResumes\": {\"20261113\": 5}}, "
+					+ "\"byMonth\": {\"resumes\": {\"202610\": 40, \"202611\": 11}, \"viewedResumes\": {\"202611\": 84}}}")) },
 			responseCode = "200",
-			description = "The totals by ddd of each source; a source with no record has an empty json."),
+			description = "The counters of each source; a source with no record has an empty json."),
 	})
 	@GetMapping("/totals")
-	Map<String, Object> getResumeTotalsByRegion();
+	Map<String, Object> getResumeTotals();
 }
