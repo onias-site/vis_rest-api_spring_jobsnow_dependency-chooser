@@ -190,7 +190,7 @@ public interface VisOpenApiRecruiterResumes {
 	/**
 	 * The resumes viewed by the recruiter in a month.
 	 * @param sessionValues the values of the session
-	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)
 	 * @return the response body
 	 */
 	@Operation(
@@ -204,7 +204,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "A month with no view answers empty lists."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
-			+ "<li><b>month</b> – Required. The month, as yyyyMM (for example, 202610).</li>"
+			+ "<li><b>month</b> – Required. The month, as yyyyMM (for example, 202610), or all for every view of the recruiter, whatever the month (the option \"Listar todos\" of the screen).</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
@@ -217,7 +217,7 @@ public interface VisOpenApiRecruiterResumes {
 			responseCode = "200",
 			description = "The resumes viewed in the month, the wanted ones and the unwanted ones."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
-		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is neither in the format yyyyMM nor all."),
 	})
 	@GetMapping("/recruiter/{email}/viewed-resumes/{month}")
 	Map<String, Object> getViewedResumesOfTheMonth(@RequestBody String sessionValues, @PathVariable("month") String month);
@@ -225,7 +225,7 @@ public interface VisOpenApiRecruiterResumes {
 	/**
 	 * The details of a resume viewed by the recruiter in a month.
 	 * @param sessionValues the request body with the values of the session
-	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)
 	 * @return the response body
 	 */
 	@Operation(
@@ -238,7 +238,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "is answered only when there is a row to show."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
-			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610), or all for every view of the recruiter, whatever the month (the option \"Listar todos\" of the screen).</li>"
 			+ "</ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
@@ -257,7 +257,7 @@ public interface VisOpenApiRecruiterResumes {
 			description = "The rows of the active resumes that use the LinkedIn (each with the fields of the preview of the resume in preview: no e-mail, no forbidden companies, experience as the year it started) and the LinkedIn itself (no row and no LinkedIn when none is active anymore or every one forbids the company of the recruiter)."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
-		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is neither in the format yyyyMM nor all or the hash of the LinkedIn is missing."),
 	})
 	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/details")
 	Map<String, Object> getViewedResumeDetails(@RequestBody String sessionValues, @PathVariable("month") String month);
@@ -265,7 +265,7 @@ public interface VisOpenApiRecruiterResumes {
 	/**
 	 * Edits the alias and the comment of a resume viewed by the recruiter in a month.
 	 * @param sessionValues the request body with the values of the session
-	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)
 	 * @return the response body
 	 */
 	@Operation(
@@ -275,7 +275,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "The date of the last view is kept (an edit is not a view). The writing is asynchronous: the answer comes before the list shows the change."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
-			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610), or all for every view of the recruiter, whatever the month (the option \"Listar todos\" of the screen).</li>"
 			+ "</ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
@@ -298,7 +298,7 @@ public interface VisOpenApiRecruiterResumes {
 	/**
 	 * Mark a viewed resume as unwanted.
 	 * @param sessionValues the request body with the values of the session
-	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)
 	 * @return the response body
 	 */
 	@Operation(
@@ -307,7 +307,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "What does it do? Moves the view to the unwanted views (tab \"Indesejados\"), with its alias, comment and date: the resume is no longer sent to the recruiter in the e-mail of resumes. A view already unwanted is left as it is. The writing is asynchronous: the answer comes before the list shows the change."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
-			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610), or all for every view of the recruiter, whatever the month (the option \"Listar todos\" of the screen).</li>"
 			+ "</ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
@@ -320,7 +320,7 @@ public interface VisOpenApiRecruiterResumes {
 			description = "The move requested."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
-		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is neither in the format yyyyMM nor all or the hash of the LinkedIn is missing."),
 	})
 	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/unwanted")
 	Map<String, Object> markViewedResumeAsUnwanted(@RequestBody String sessionValues, @PathVariable("month") String month);
@@ -328,7 +328,7 @@ public interface VisOpenApiRecruiterResumes {
 	/**
 	 * Mark a viewed resume as wanted again.
 	 * @param sessionValues the request body with the values of the session
-	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)
 	 * @return the response body
 	 */
 	@Operation(
@@ -337,7 +337,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "What does it do? Brings the view back to the wanted views (tab \"Visualizados\"), with its alias, comment and date: the resume can be sent to the recruiter again in the e-mail of resumes. A view already wanted is left as it is. The writing is asynchronous: the answer comes before the list shows the change."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
-			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610), or all for every view of the recruiter, whatever the month (the option \"Listar todos\" of the screen).</li>"
 			+ "</ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
@@ -350,7 +350,7 @@ public interface VisOpenApiRecruiterResumes {
 			description = "The move requested."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
-		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is neither in the format yyyyMM nor all or the hash of the LinkedIn is missing."),
 	})
 	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/wanted")
 	Map<String, Object> markViewedResumeAsWanted(@RequestBody String sessionValues, @PathVariable("month") String month);
