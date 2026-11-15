@@ -199,7 +199,9 @@ public interface VisOpenApiRecruiterResumes {
 			+ "What does it do? Answers, read by id with no query, the list kept by every opening of a resume and every alias given to it: "
 			+ "one item per resume, a JSON text (to be parsed by the front end) with the hash of the LinkedIn of the resume (the key of its details; "
 			+ "the LinkedIn itself never comes in this list), the alias and the date and time (dd/MM/yyyy HH:mm:ss) of the last view in that month. "
-			+ "A month with no view answers an empty list."
+			+ "viewedResume brings the views that are still wanted (tab \"Visualizados\"); unwantedResume, in the same format, the views the recruiter "
+			+ "no longer wants, as the one of a resume whose LinkedIn was reported as invalid (tab \"Indesejados\"). "
+			+ "A month with no view answers empty lists."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
 			+ "<li><b>month</b> – Required. The month, as yyyyMM (for example, 202610).</li>"
@@ -209,10 +211,11 @@ public interface VisOpenApiRecruiterResumes {
 		@ApiResponse(content = {
 			@Content(schema = @Schema(example = "{"
 				+ "\"month\": \"202610\","
-				+ "\"viewedResume\": [\"{\\\"alias\\\":\\\"Dev Java sênior\\\",\\\"date\\\":\\\"21/10/2026 14:05:31\\\",\\\"linkedinHash\\\":\\\"5f2b3c...\\\"}\"]"
+				+ "\"viewedResume\": [\"{\\\"alias\\\":\\\"Dev Java sênior\\\",\\\"date\\\":\\\"21/10/2026 14:05:31\\\",\\\"linkedinHash\\\":\\\"5f2b3c...\\\"}\"],"
+				+ "\"unwantedResume\": [\"{\\\"alias\\\":\\\"Dev Python\\\",\\\"date\\\":\\\"22/10/2026 09:12:04\\\",\\\"linkedinHash\\\":\\\"9a1d7e...\\\"}\"]"
 				+ "}")) },
 			responseCode = "200",
-			description = "The resumes viewed in the month."),
+			description = "The resumes viewed in the month, the wanted ones and the unwanted ones."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM."),
 	})
@@ -227,7 +230,7 @@ public interface VisOpenApiRecruiterResumes {
 	 */
 	@Operation(
 		summary = "The details of a viewed resume",
-		description = "When does it occur? When the logged-in recruiter clicks \"ver detalhes\" in a line of the screen of the resumes viewed in a month. "
+		description = "When does it occur? When the logged-in recruiter clicks \"ver detalhes\" in a line of the screen of the resumes viewed in a month (either tab). "
 			+ "What does it do? Finds, read by id with no query, the e-mails whose resumes use the LinkedIn and answers each active resume as a row "
 			+ "of the e-mail of resumes (what matters and regions, languages and skills, role and other information), without the dates of insertion "
 			+ "and of last change, which only the history of the resume has. Only resumes the recruiter viewed in that month are answered. "
