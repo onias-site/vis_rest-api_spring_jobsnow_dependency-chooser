@@ -75,4 +75,28 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 		Map<String, Object> result = VisServiceRecruiterResumes.GetViewedResumeDetails.execute(json.content);
 		return result;
 	}
+
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/edit")
+	public Map<String, Object> editViewedResume(@RequestBody String sessionValues, @PathVariable("month") String month) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisBusinessViewedResumesOfTheMonth.Fields.month, month);
+		Map<String, Object> result = VisServiceRecruiterResumes.EditViewedResume.execute(json.content);
+		return result;
+	}
+
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/unwanted")
+	public Map<String, Object> markViewedResumeAsUnwanted(@RequestBody String sessionValues, @PathVariable("month") String month) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisBusinessViewedResumesOfTheMonth.Fields.month, month);
+		Map<String, Object> result = VisServiceRecruiterResumes.MarkViewedResumeAsUnwanted.execute(json.content);
+		return result;
+	}
+
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/wanted")
+	public Map<String, Object> markViewedResumeAsWanted(@RequestBody String sessionValues, @PathVariable("month") String month) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisBusinessViewedResumesOfTheMonth.Fields.month, month);
+		Map<String, Object> result = VisServiceRecruiterResumes.MarkViewedResumeAsWanted.execute(json.content);
+		return result;
+	}
 }

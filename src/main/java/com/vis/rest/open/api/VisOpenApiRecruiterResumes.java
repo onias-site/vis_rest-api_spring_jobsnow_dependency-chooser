@@ -261,4 +261,97 @@ public interface VisOpenApiRecruiterResumes {
 	})
 	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/details")
 	Map<String, Object> getViewedResumeDetails(@RequestBody String sessionValues, @PathVariable("month") String month);
+
+	/**
+	 * Edits the alias and the comment of a resume viewed by the recruiter in a month.
+	 * @param sessionValues the request body with the values of the session
+	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Edit the details of a viewed resume",
+		description = "When does it occur? When the logged-in recruiter saves the dialog \"Editar detalhes\" of a line of the screen of the resumes viewed in a month (either tab). "
+			+ "What does it do? Saves the alias and the comment of the view on the side where it is: a view of the tab \"Indesejados\" stays there. "
+			+ "The date of the last view is kept (an edit is not a view). The writing is asynchronous: the answer comes before the list shows the change."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "</ul>"
+			+ "<b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
+			+ "<li><b>alias</b> – Required. 5 to 200 characters.</li>"
+			+ "<li><b>comment</b> – Optional. 10 to 500 characters; when absent, a comment already saved is kept.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"linkedinHash\": \"5f2b3c...\", \"alias\": \"Dev Java sênior\", \"comment\": \"Bom perfil, salário acima\"}")) },
+			responseCode = "200",
+			description = "The details saved, as they came."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month, the hash, the alias or the comment are not valid."),
+	})
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/edit")
+	Map<String, Object> editViewedResume(@RequestBody String sessionValues, @PathVariable("month") String month);
+
+	/**
+	 * Mark a viewed resume as unwanted.
+	 * @param sessionValues the request body with the values of the session
+	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Mark a viewed resume as unwanted",
+		description = "When does it occur? When the logged-in recruiter confirms \"Negativar CV\" in a line of the tab \"Visualizados\". "
+			+ "What does it do? Moves the view to the unwanted views (tab \"Indesejados\"), with its alias, comment and date: the resume is no longer sent to the recruiter in the e-mail of resumes. A view already unwanted is left as it is. The writing is asynchronous: the answer comes before the list shows the change."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "</ul>"
+			+ "<b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"linkedinHash\": \"5f2b3c...\"}")) },
+			responseCode = "200",
+			description = "The move requested."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
+	})
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/unwanted")
+	Map<String, Object> markViewedResumeAsUnwanted(@RequestBody String sessionValues, @PathVariable("month") String month);
+
+	/**
+	 * Mark a viewed resume as wanted again.
+	 * @param sessionValues the request body with the values of the session
+	 * @param month the {@code month} path variable ({@code yyyyMM})
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Mark a viewed resume as wanted again",
+		description = "When does it occur? When the logged-in recruiter confirms \"Positivar CV\" in a line of the tab \"Indesejados\". "
+			+ "What does it do? Brings the view back to the wanted views (tab \"Visualizados\"), with its alias, comment and date: the resume can be sent to the recruiter again in the e-mail of resumes. A view already wanted is left as it is. The writing is asynchronous: the answer comes before the list shows the change."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
+			+ "<li><b>month</b> – Required. The month of the view, as yyyyMM (for example, 202610).</li>"
+			+ "</ul>"
+			+ "<b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>linkedinHash</b> – Required. The hash of the LinkedIn of the viewed resume, as the list of the views shows it.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{\"linkedinHash\": \"5f2b3c...\"}")) },
+			responseCode = "200",
+			description = "The move requested."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
+	})
+	@PostMapping("/recruiter/{email}/viewed-resumes/{month}/wanted")
+	Map<String, Object> markViewedResumeAsWanted(@RequestBody String sessionValues, @PathVariable("month") String month);
 }
