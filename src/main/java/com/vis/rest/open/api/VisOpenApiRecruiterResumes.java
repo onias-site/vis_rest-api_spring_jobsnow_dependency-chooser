@@ -247,10 +247,11 @@ public interface VisOpenApiRecruiterResumes {
 				+ "\"linkedinHash\": \"5f2b3c...\","
 				+ "\"linkedin\": \"https://www.linkedin.com/in/someone\","
 				+ "\"resumes\": [{\"resumeId\": \"...\", \"whatMatters\": [\"CLT: R$ 9.000,00\"], \"regions\": [\"São Paulo – SP\"], "
-				+ "\"languagesAndSkills\": [\"JAVA\"], \"job\": [\"Desenvolvedor\"], \"otherInformation\": [\"PCD: não\"], \"defaultAlias\": \"JAVA_...\"}]"
+				+ "\"languagesAndSkills\": [\"JAVA\"], \"job\": [\"Desenvolvedor\"], \"otherInformation\": [\"PCD: não\"], \"defaultAlias\": \"JAVA_...\", "
+				+ "\"preview\": {\"desiredJob\": \"Desenvolvedor\", \"resumeType\": 1, \"ddd\": [11], \"experience\": 2020, \"clt\": 9000, \"skill\": [\"JAVA\"]}}]"
 				+ "}")) },
 			responseCode = "200",
-			description = "The rows of the active resumes that use the LinkedIn and the LinkedIn itself (no row and no LinkedIn when none is active anymore or every one forbids the company of the recruiter)."),
+			description = "The rows of the active resumes that use the LinkedIn (each with the fields of the preview of the resume in preview: no e-mail, no forbidden companies, experience as the year it started) and the LinkedIn itself (no row and no LinkedIn when none is active anymore or every one forbids the company of the recruiter)."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "No view of the recruiter in the month has a LinkedIn of this hash."),
 		@ApiResponse(responseCode = "422", description = "Validation error — the month is not in the format yyyyMM or the hash of the LinkedIn is missing."),
