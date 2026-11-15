@@ -17,14 +17,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import com.ccp.dependency.injection.CcpDependencyInjection;
 import com.ccp.implementations.cache.gcp.memorystore.CcpGcpMemoryStore;
-import com.ccp.implementations.db.bulk.elasticsearch.CcpElasticSerchDbBulk;
 import com.ccp.implementations.db.crud.elasticsearch.CcpElasticSearchCrud;
-import com.ccp.implementations.db.query.elasticsearch.CcpElasticSearchQueryExecutor;
 import com.ccp.implementations.db.utils.elasticsearch.CcpElasticSearchDbRequest;
-import com.ccp.implementations.email.sendgrid.CcpSendGridEmailProvider;
 import com.ccp.implementations.file.bucket.gcp.CcpGcpFileBucket;
 import com.ccp.implementations.http.apache.mime.CcpApacheMimeHttp;
-import com.ccp.implementations.instant.messenger.telegram.CcpTelegramInstantMessenger;
 import com.ccp.implementations.json.gson.CcpGsonJsonHandler;
 import com.ccp.implementations.main.authentication.gcp.oauth.CcpGcpMainAuthentication;
 import com.ccp.implementations.mensageria.sender.gcp.pubsub.CcpGcpPubSubMensageriaSender;
@@ -73,30 +69,21 @@ public class VisRestApiSpringStarter {
 		CcpDependencyInjection.loadAllDependencies(ccpGsonJsonHandler);
 		
 		boolean localEnvironment = CcpRestApiUtils.isLocalEnvironment();	
-		CcpTelegramInstantMessenger ccpTelegramInstantMessenger = CcpTelegramInstantMessenger.INSTANCE;
 		CcpElasticSearchDbRequest ccpElasticSearchDbRequest = CcpElasticSearchDbRequest.INSTANCE;
 		CcpMindrotPasswordHandler ccpMindrotPasswordHandler = CcpMindrotPasswordHandler.INSTANCE;
 		CcpGcpMainAuthentication ccpGcpMainAuthentication = CcpGcpMainAuthentication.INSTANCE;
-		CcpElasticSerchDbBulk ccpElasticSerchDbBulk = CcpElasticSerchDbBulk.INSTANCE;
 		CcpElasticSearchCrud ccpElasticSearchCrud = CcpElasticSearchCrud.INSTANCE;
 		CcpApacheMimeHttp ccpApacheMimeHttp = CcpApacheMimeHttp.INSTANCE;
-		// the queries (e.g. the purge of a versionable record's history, the orphan items of a withdrawn
-		// skill hierarchy fix request) need it
-		CcpElasticSearchQueryExecutor ccpElasticSearchQueryExecutor = CcpElasticSearchQueryExecutor.INSTANCE;
 		CcpDependencyInjection.loadAllDependencies
 		(
-				localEnvironment ? CcpLocalInstances.asyncMensageriaListener : CcpGcpPubSubMensageriaSender.INSTANCE,
+				localEnvironment ? CcpLocalInstances.pubSubPushEmulator : CcpGcpPubSubMensageriaSender.INSTANCE,
 				localEnvironment ? CcpLocalCacheInstances.map : CcpGcpMemoryStore.INSTANCE,
 				localEnvironment ? CcpLocalInstances.bucket : CcpGcpFileBucket.INSTANCE,
-				localEnvironment ? CcpLocalInstances.email : CcpSendGridEmailProvider.INSTANCE,
-				// local: writes to c:\logs\telegram instead of sending a real message to the support group
-				localEnvironment ? CcpLocalInstances.instantMessenger : ccpTelegramInstantMessenger,
 				ccpElasticSearchDbRequest,
-				ccpMindrotPasswordHandler
-				,
+				ccpMindrotPasswordHandler,
 				ccpGcpMainAuthentication,
-				ccpElasticSerchDbBulk,
-				ccpElasticSearchCrud,ccpElasticSearchQueryExecutor,ccpApacheMimeHttp
+				ccpElasticSearchCrud,
+				ccpApacheMimeHttp
 		);
 
 		CcpRestApiExceptionHandlerSpring.genericExceptionHandler = new JnBusinessSaveApiError(JnApiOrigins.vis);
