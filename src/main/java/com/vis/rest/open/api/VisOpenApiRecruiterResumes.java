@@ -34,7 +34,8 @@ public interface VisOpenApiRecruiterResumes {
 		description = "When does it occur? When the recruiter confirms, in the front end, that they want to open a resume of the e-mail of resumes "
 			+ "(the confirmation keeps the robots of the e-mail providers, which click every link, from counting as a view). "
 			+ "What does it do? Saves the view of the resume by the recruiter (the date of the last view comes from its history) with the alias "
-			+ "the recruiter already gave to it, or a suggested one, and answers the LinkedIn of the resume, opened by the front end in a new tab, and the alias."
+			+ "the recruiter already gave to it, or a suggested one, and answers the LinkedIn of the resume, the alias and, in preview, the fields of the "
+			+ "preview of the resume, shown by the front end in a modal before the form that saves the view."
 			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>email</b> – Required. The recruiter's e-mail, as in the link.</li>"
 			+ "<li><b>resumeId</b> – Required. The id of the resume, as in the link.</li>"
@@ -46,7 +47,8 @@ public interface VisOpenApiRecruiterResumes {
 			@Content(schema = @Schema(example = "{"
 				+ "\"linkedinAddress\": \"https://www.linkedin.com/in/someone\","
 				+ "\"alias\": \"JAVA_SPRING_SQL_R$ 9.000,00_São Paulo – SP_12 Anos\","
-				+ "\"inactiveView\": false"
+				+ "\"inactiveView\": false,"
+				+ "\"preview\": {\"desiredJob\": \"Java developer\", \"linkedinAddress\": \"https://www.linkedin.com/in/someone\", \"ddd\": [11], \"skill\": [\"JAVA\", \"SPRING\"]}"
 				+ "}")) },
 			responseCode = "200",
 			description = "View saved. When the view of the recruiter is in the inactive views (the recruiter reported the LinkedIn of the resume), "
