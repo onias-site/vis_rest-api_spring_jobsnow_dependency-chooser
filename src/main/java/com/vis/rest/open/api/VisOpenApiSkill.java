@@ -46,10 +46,13 @@ public interface VisOpenApiSkill {
 			@Content(schema = @Schema(example = "{"
 				+ "\"skill\": [{\"skill\": \"Java\", \"word\": \"Java\", \"label\": \"Java\", \"parent\": []}],"
 				+ "\"discardedSkills\": {},"
-				+ "\"excludedSkill\": []"
+				+ "\"excludedSkill\": [],"
+				+ "\"broadSkill\": [{\"skill\": \"BACKEND\", \"children\": [\"DJANGO\", \"LARAVEL\", \"SPRING BOOT\"]}]"
 				+ "}")) },
 			responseCode = "200",
-			description = "Skills extracted successfully. Returns matched skills, discarded matches, and the excluded list."),
+			description = "Skills extracted successfully. Returns matched skills, discarded matches, the excluded list and the broad skills: "
+					+ "the skills of the text with skills below them in the hierarchy, none of those found in the text (a backend "
+					+ "position that names no backend technology), each one with every skill below it."),
 	})
 	@PostMapping("/fromText")
 	Map<String, Object> getSkillsFromText(@RequestBody Map<String, Object> sessionValues);
