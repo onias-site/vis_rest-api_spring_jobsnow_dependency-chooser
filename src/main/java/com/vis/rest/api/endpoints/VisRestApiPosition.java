@@ -54,4 +54,11 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(json.content);
 		return result;
 	}
+
+	@GetMapping("/positions/resumes-of-the-ddds")
+	public Map<String, Object> getResumesOfAllTheDdds() {
+		Map<String, Object> noDdd = CcpOtherConstants.EMPTY_JSON.content;
+		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(noDdd);
+		return result;
+	}
 }

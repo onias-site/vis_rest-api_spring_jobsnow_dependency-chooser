@@ -157,4 +157,20 @@ public interface VisOpenApiPosition {
 	})
 	@GetMapping("/positions/resumes-of-the-ddds/{ddds}")
 	Map<String, Object> getResumesOfTheDdds(@PathVariable("ddds") List<Integer> ddds);
+
+	/**
+	 * The active resumes of every region, for a home office position.
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Active resumes of every region (home office position)",
+		description = "When does it occur? When the user, logged in or not, enters the tab \"Opções\" of the position form with \"Vaga somente home office\" checked (the default of a new position), or checks it. "
+			+ "What does it do? A home office position takes resumes from anywhere: with no ddd, the active resumes of every ddd, by ddd, in one read by id of the groups. "
+			+ "The screen keeps each ddd in the browser for one hour. Public, with no session."
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumes\": {\"10\": [{\"id\": \"a1b2\", \"clt\": 8000}], \"11\": [{\"id\": \"a1b2\", \"clt\": 8000}], \"21\": []}}")) }, responseCode = "200", description = "The resumes of every ddd, by ddd."),
+	})
+	@GetMapping("/positions/resumes-of-the-ddds")
+	Map<String, Object> getResumesOfAllTheDdds();
 }
