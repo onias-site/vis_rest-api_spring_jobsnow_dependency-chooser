@@ -1,11 +1,17 @@
 package com.vis.rest.api.endpoints;
 
+import java.util.List;
 import java.util.Map;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ccp.constants.CcpOtherConstants;
+import com.ccp.decorators.CcpJsonRepresentation;
+import com.vis.business.position.VisBusinessResumesOfTheDdds;
 import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 
@@ -42,9 +48,10 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		return result;
 	}
 
-	@PostMapping("/recruiter/{email}/positions/resumes-of-the-ddds")
-	public Map<String, Object> getResumesOfTheDdds(@RequestBody Map<String, Object> sessionValues) {
-		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(sessionValues);
+	@GetMapping("/positions/resumes-of-the-ddds/{ddds}")
+	public Map<String, Object> getResumesOfTheDdds(@PathVariable("ddds") List<Integer> ddds) {
+		CcpJsonRepresentation json = CcpOtherConstants.EMPTY_JSON.put(VisBusinessResumesOfTheDdds.Fields.ddd, ddds);
+		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(json.content);
 		return result;
 	}
 }
