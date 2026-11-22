@@ -48,17 +48,19 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		return result;
 	}
 
-	@GetMapping("/positions/resumes-of-the-ddds/{ddds}")
-	public Map<String, Object> getResumesOfTheDdds(@PathVariable("ddds") List<Integer> ddds) {
-		CcpJsonRepresentation json = CcpOtherConstants.EMPTY_JSON.put(VisBusinessResumesOfTheDdds.Fields.ddd, ddds);
+	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}/{ddds}")
+	public Map<String, Object> getResumesOfTheDdds(@PathVariable("resumeType") Integer resumeType, @PathVariable("ddds") List<Integer> ddds) {
+		CcpJsonRepresentation json = CcpOtherConstants.EMPTY_JSON
+				.put(VisBusinessResumesOfTheDdds.Fields.resumeType, resumeType)
+				.put(VisBusinessResumesOfTheDdds.Fields.ddd, ddds);
 		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(json.content);
 		return result;
 	}
 
-	@GetMapping("/positions/resumes-of-the-ddds")
-	public Map<String, Object> getResumesOfAllTheDdds() {
-		Map<String, Object> noDdd = CcpOtherConstants.EMPTY_JSON.content;
-		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(noDdd);
+	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}")
+	public Map<String, Object> getResumesOfAllTheDdds(@PathVariable("resumeType") Integer resumeType) {
+		CcpJsonRepresentation noDdd = CcpOtherConstants.EMPTY_JSON.put(VisBusinessResumesOfTheDdds.Fields.resumeType, resumeType);
+		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(noDdd.content);
 		return result;
 	}
 }

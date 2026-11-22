@@ -138,39 +138,43 @@ public interface VisOpenApiPosition {
 	Map<String, Object> reactivatePosition(@RequestBody Map<String, Object> sessionValues);
 
 	/**
-	 * The active resumes of the regions of a position.
+	 * The active resumes of the regions and of the area of a position.
+	 * @param resumeType the area of the resumes
 	 * @param ddds the ddds, separated by commas in the path
 	 * @return the response body
 	 */
 	@Operation(
-		summary = "Active resumes of the regions of a position",
+		summary = "Active resumes of the regions and of the area of a position",
 		description = "When does it occur? When the user, logged in or not (the login is asked only to save the position), enters the tab \"Opções\" of the position form (home office checked by default) and on every region added. Public, with no session. "
-			+ "What does it do? For each ddd asked, the active resumes of its group (part of the resume: salaries, experience, languages, flags and skills, plus the id; never a contact). "
+			+ "What does it do? For each ddd asked, the active resumes of the ddd and of the area of the position (resumeType) (part of the resume: salaries, experience, languages, flags and skills, plus the id; never a contact). "
 			+ "One read by id of the groups. The screen keeps each ddd in the browser for one hour and asks only for the ddds it does not have; "
 			+ "a resume listed by several ddds is counted once by its id."
-			+ "<br/><br/><b>Path:</b> <code>ddds</code> – 1 to 67 ddds of the resume separated by commas, home office (10) included (e.g. <code>10,11,21</code>)."
+			+ "<br/><br/><b>Path:</b> <code>resumeType</code> – the area of the position (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions); <code>ddds</code> – 1 to 67 ddds of the resume separated by commas, home office (10) included (e.g. <code>10,11,21</code>)."
 	)
 	@ApiResponses({
 		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumes\": {\"10\": [{\"id\": \"a1b2\", \"clt\": 8000, \"experience\": 2018}], \"11\": []}}")) }, responseCode = "200", description = "The resumes of each ddd asked, by ddd."),
 		@ApiResponse(responseCode = "400", description = "A ddd that is not a number."),
-		@ApiResponse(responseCode = "422", description = "Validation error — more than 67 ddds, a repeated ddd or an unknown ddd."),
+		@ApiResponse(responseCode = "422", description = "Validation error — more than 67 ddds, a repeated ddd, an unknown ddd or an unknown area."),
 	})
-	@GetMapping("/positions/resumes-of-the-ddds/{ddds}")
-	Map<String, Object> getResumesOfTheDdds(@PathVariable("ddds") List<Integer> ddds);
+	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}/{ddds}")
+	Map<String, Object> getResumesOfTheDdds(@PathVariable("resumeType") Integer resumeType, @PathVariable("ddds") List<Integer> ddds);
 
 	/**
-	 * The active resumes of every region, for a home office position.
+	 * The active resumes of every region and of the area of a home office position.
+	 * @param resumeType the area of the resumes
 	 * @return the response body
 	 */
 	@Operation(
-		summary = "Active resumes of every region (home office position)",
+		summary = "Active resumes of every region and of the area of a home office position",
 		description = "When does it occur? When the user, logged in or not, enters the tab \"Opções\" of the position form with \"Vaga somente home office\" checked (the default of a new position), or checks it. "
-			+ "What does it do? A home office position takes resumes from anywhere: with no ddd, the active resumes of every ddd, by ddd, in one read by id of the groups. "
+			+ "What does it do? A home office position takes resumes from anywhere: with no ddd, the active resumes of every ddd and of the area of the position (resumeType), by ddd, in one read by id of the groups. "
 			+ "The screen keeps each ddd in the browser for one hour. Public, with no session."
+			+ "<br/><br/><b>Path:</b> <code>resumeType</code> – the area of the position (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions)."
 	)
 	@ApiResponses({
 		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumes\": {\"10\": [{\"id\": \"a1b2\", \"clt\": 8000}], \"11\": [{\"id\": \"a1b2\", \"clt\": 8000}], \"21\": []}}")) }, responseCode = "200", description = "The resumes of every ddd, by ddd."),
+		@ApiResponse(responseCode = "422", description = "Validation error — an unknown area."),
 	})
-	@GetMapping("/positions/resumes-of-the-ddds")
-	Map<String, Object> getResumesOfAllTheDdds();
+	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}")
+	Map<String, Object> getResumesOfAllTheDdds(@PathVariable("resumeType") Integer resumeType);
 }
