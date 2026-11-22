@@ -133,4 +133,27 @@ public interface VisOpenApiPosition {
 	})
 	@PostMapping("/recruiter/{email}/positions/reactivate")
 	Map<String, Object> reactivatePosition(@RequestBody Map<String, Object> sessionValues);
+
+	/**
+	 * The active resumes of the regions of a position.
+	 * @param sessionValues the request body with the values of the session
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Active resumes of the regions of a position",
+		description = "When does it occur? When the logged-in user enters the tab \"Opções\" of the position form (home office checked by default) and on every region added. "
+			+ "What does it do? For each ddd asked, the active resumes of its group (part of the resume: salaries, experience, languages, flags and skills, plus the id; never a contact). "
+			+ "One read by id of the groups. The screen keeps each ddd in the browser for one hour and asks only for the ddds it does not have; "
+			+ "a resume listed by several ddds is counted once by its id."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>ddd</b> – Required. List of 1 to 67 ddds of the resume, home office (10) included.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumes\": {\"10\": [{\"id\": \"a1b2\", \"clt\": 8000, \"experience\": 2018}], \"11\": []}}")) }, responseCode = "200", description = "The resumes of each ddd asked, by ddd."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the list of ddds is missing, empty or has an unknown ddd."),
+	})
+	@PostMapping("/recruiter/{email}/positions/resumes-of-the-ddds")
+	Map<String, Object> getResumesOfTheDdds(@RequestBody Map<String, Object> sessionValues);
 }

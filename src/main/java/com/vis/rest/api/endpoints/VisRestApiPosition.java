@@ -41,4 +41,10 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		Map<String, Object> result = VisServicePosition.ReactivatePosition.execute(sessionValues);
 		return result;
 	}
+
+	@PostMapping("/recruiter/{email}/positions/resumes-of-the-ddds")
+	public Map<String, Object> getResumesOfTheDdds(@RequestBody Map<String, Object> sessionValues) {
+		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(sessionValues);
+		return result;
+	}
 }
