@@ -1,17 +1,11 @@
 package com.vis.rest.api.endpoints;
 
-import java.util.List;
 import java.util.Map;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ccp.constants.CcpOtherConstants;
-import com.ccp.decorators.CcpJsonRepresentation;
-import com.vis.business.position.VisBusinessResumesOfTheDdds;
 import com.vis.rest.open.api.VisOpenApiPosition;
 import com.vis.services.VisServicePosition;
 
@@ -48,19 +42,9 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		return result;
 	}
 
-	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}/{ddds}")
-	public Map<String, Object> getResumesOfTheDdds(@PathVariable("resumeType") Integer resumeType, @PathVariable("ddds") List<Integer> ddds) {
-		CcpJsonRepresentation json = CcpOtherConstants.EMPTY_JSON
-				.put(VisBusinessResumesOfTheDdds.Fields.resumeType, resumeType)
-				.put(VisBusinessResumesOfTheDdds.Fields.ddd, ddds);
-		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(json.content);
-		return result;
-	}
-
-	@GetMapping("/positions/resumes-of-the-ddds/{resumeType}")
-	public Map<String, Object> getResumesOfAllTheDdds(@PathVariable("resumeType") Integer resumeType) {
-		CcpJsonRepresentation noDdd = CcpOtherConstants.EMPTY_JSON.put(VisBusinessResumesOfTheDdds.Fields.resumeType, resumeType);
-		Map<String, Object> result = VisServicePosition.GetResumesOfTheDdds.execute(noDdd.content);
+	@PostMapping("/positions/resumes-of-the-filters")
+	public Map<String, Object> getResumesOfTheFilters(@RequestBody Map<String, Object> filters) {
+		Map<String, Object> result = VisServicePosition.GetResumesOfTheFilters.execute(filters);
 		return result;
 	}
 }
