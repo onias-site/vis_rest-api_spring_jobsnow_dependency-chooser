@@ -190,6 +190,46 @@ public interface VisOpenApiRecruiterResumes {
 	Map<String, Object> getResumesOfTheWeek(@RequestBody Map<String, Object> sessionValues);
 
 	/**
+	 * The resumes that satisfy the filters of a position, listed to the logged-in recruiter.
+	 * @param filtersAndSession the ids the count of the filters returned and the session
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "The resumes that satisfy the filters of a position",
+		description = "When does it occur? When the logged-in recruiter, in the position form, clicks \"Ver quais são estes currículos\" "
+			+ "below the count of the resumes that satisfy the filters of the position. "
+			+ "What does it do? Reads by id (mget) the resumes of the ids returned by POST /positions/resumes-of-the-filters (the e-mails of the "
+			+ "resumes, hashed) and answers them as the rows of the screen of the "
+			+ "resumes of the week: the columns of the resume, the last view of the recruiter, whether they viewed it, the label of the link "
+			+ "(their alias, or \"Ver currículo\") and the signed token of the link that opens the resume (and saves the view). "
+			+ "Left out: resumes no longer active, with a restriction to correct, with a LinkedIn the support confirmed as invalid, or that "
+			+ "forbid the company of the recruiter. resumes brings the ones the recruiter did not mark as unwanted, viewed or not; "
+			+ "unwantedResumes, the ones they marked as unwanted (tab \"Indesejados\")."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
+			+ "</ul>"
+			+ "<b>Body:</b><ul>"
+			+ "<li><b>ids</b> – Required, at least one. The ids returned by POST /positions/resumes-of-the-filters.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = {
+			@Content(schema = @Schema(example = "{"
+				+ "\"resumes\": [{\"resumeId\": \"5f2b3c...\", \"whatMatters\": [\"Pretensão CLT: R$ 9.000,00\"], \"regions\": [\"São Paulo\"], "
+				+ "\"languagesAndSkills\": [\"JAVA\"], \"job\": [\"Área: Tecnologia da Informação\"], \"otherInformation\": [\"Disponibilidade imediata\"], "
+				+ "\"defaultAlias\": \"SP_JAVA\", \"lastView\": \"Você nunca visualizou este currículo\", \"viewed\": false, \"viewLabel\": \"Ver currículo\", "
+				+ "\"token\": \"9a1d7e...\"}],"
+				+ "\"unwantedResumes\": []"
+				+ "}")) },
+			responseCode = "200",
+			description = "The rows of the resumes found, the unwanted ones apart."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "422", description = "Validation error — no ids, or an id out of its rules."),
+	})
+	@PostMapping("/recruiter/{email}/resumes-of-the-position-filters")
+	Map<String, Object> getResumesOfThePositionFilters(@RequestBody Map<String, Object> filtersAndSession);
+
+	/**
 	 * The resumes viewed by the recruiter in a month.
 	 * @param sessionValues the values of the session
 	 * @param month the {@code month} path variable ({@code yyyyMM}, or {@code all} for every month)

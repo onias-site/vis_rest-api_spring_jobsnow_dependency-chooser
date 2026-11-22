@@ -60,6 +60,12 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 		return result;
 	}
 
+	@PostMapping("/recruiter/{email}/resumes-of-the-position-filters")
+	public Map<String, Object> getResumesOfThePositionFilters(@RequestBody Map<String, Object> filtersAndSession) {
+		Map<String, Object> result = VisServiceRecruiterResumes.GetResumesOfThePositionFilters.execute(filtersAndSession);
+		return result;
+	}
+
 	@GetMapping("/recruiter/{email}/viewed-resumes/{month}")
 	public Map<String, Object> getViewedResumesOfTheMonth(@RequestBody String sessionValues, @PathVariable("month") String month) {
 		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
