@@ -33,7 +33,8 @@ public interface VisOpenApiPosition {
 			+ "<b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>title</b> – Required. 10 to 100 characters.</li>"
 			+ "<li><b>description</b> – Required. 100 to 5,000 characters.</li>"
-			+ "<li><b>resumeType</b>, <b>seniority</b>, <b>ddd</b>, <b>disponibility</b>, <b>temporallyJobTime</b> – Required.</li>"
+			+ "<li><b>resumeType</b>, <b>ddd</b>, <b>disponibility</b>, <b>temporallyJobTime</b> – Required.</li>"
+			+ "<li><b>seniority</b> – Required. List of 1 to 6 of estag, junior, pleno, senior, especialista or unknown.</li>"
 			+ "<li><b>clt</b>, <b>pj</b> – Salary ranges {min, max} from 1,000 to 100,000; at least one of them.</li>"
 			+ "<li><b>expiration</b> – Required. {min, max}, timestamps in milliseconds (as text), from the current date on, max not before min.</li>"
 			+ "<li><b>sort</b> – Required. List of {type: asc|desc, field: [pj|clt|experience|shouldSkillsTotal]}.</li>"
@@ -43,7 +44,7 @@ public interface VisOpenApiPosition {
 			+ "</ul>"
 	)
 	@ApiResponses({
-		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": \"pleno\"}")) }, responseCode = "200", description = "The position, as it will be saved."),
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": [\"pleno\", \"senior\"]}")) }, responseCode = "200", description = "The position, as it will be saved."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "409", description = "The user already has a position with this title."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
@@ -63,7 +64,7 @@ public interface VisOpenApiPosition {
 			+ "the expiration only needs the max not before the min. The writing is asynchronous."
 	)
 	@ApiResponses({
-		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": \"pleno\"}")) }, responseCode = "200", description = "The position, as it will be saved."),
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": [\"pleno\", \"senior\"]}")) }, responseCode = "200", description = "The position, as it will be saved."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "The user has no position with this title."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
@@ -148,7 +149,7 @@ public interface VisOpenApiPosition {
 			+ "<li><b>resumeType</b> – Required. The area (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions).</li>"
 			+ "<li><b>ddd</b> – 1 to 67 ddds; absent, every ddd (home office position).</li>"
 			+ "<li><b>disponibility</b>, <b>temporallyJobTime</b> – The resumes that start in up to these days / accept up to these months of temporary job; 0, no filter.</li>"
-			+ "<li><b>seniority</b> – estag, junior, pleno, senior or especialista: the years of experience of its range.</li>"
+			+ "<li><b>seniority</b> – List of estag, junior, pleno, senior or especialista: the years of experience in the range of any of them.</li>"
 			+ "<li><b>skill</b> – The required skills: each one found in the resume or in a skill below it in the hierarchy; a required skill above another required one gives way to it.</li>"
 			+ "<li><b>spokenLanguage</b> – List of {name, level}: each language at least in the level.</li>"
 			+ "<li><b>negotiableClaim</b>, <b>pcd</b>, <b>travel</b> – True, only the resumes that have them.</li>"
