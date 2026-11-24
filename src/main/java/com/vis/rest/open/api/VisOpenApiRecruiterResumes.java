@@ -204,7 +204,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "(their alias, or \"Ver currículo\") and the signed token of the link that opens the resume (and saves the view). "
 			+ "Left out: resumes no longer active, with a restriction to correct, with a LinkedIn the support confirmed as invalid, or that "
 			+ "forbid the company of the recruiter. resumes brings the ones the recruiter did not mark as unwanted, viewed or not; "
-			+ "unwantedResumes, the ones they marked as unwanted (tab \"Indesejados\")."
+			+ "unwantedResumes, the ones they marked as unwanted (tab \"Indesejados\"). Each row also brings sortValues, the raw values by which the screen sorts the list in the order chosen in the position form, with no new request: the claims clt and pj (absent when the resume has none), experience (years), disponibility, temporallyJobTime, spokenLanguage ({name: level}), skill (the skills written in the resume) and parentSkill (the skills above them in the hierarchy)."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail.</li>"
 			+ "</ul>"
@@ -218,7 +218,7 @@ public interface VisOpenApiRecruiterResumes {
 				+ "\"resumes\": [{\"resumeId\": \"5f2b3c...\", \"whatMatters\": [\"Pretensão CLT: R$ 9.000,00\"], \"regions\": [\"São Paulo\"], "
 				+ "\"languagesAndSkills\": [\"JAVA\"], \"job\": [\"Área: Tecnologia da Informação\"], \"otherInformation\": [\"Disponibilidade imediata\"], "
 				+ "\"defaultAlias\": \"SP_JAVA\", \"lastView\": \"Você nunca visualizou este currículo\", \"viewed\": false, \"viewLabel\": \"Ver currículo\", "
-				+ "\"token\": \"9a1d7e...\"}],"
+				+ "\"token\": \"9a1d7e...\", \"sortValues\": {\"clt\": 9000, \"experience\": 7, \"disponibility\": 0, \"temporallyJobTime\": 0, \"spokenLanguage\": {\"Inglês\": 2}, \"skill\": [\"Spring Boot\"], \"parentSkill\": [\"Java\"]}}],"
 				+ "\"unwantedResumes\": []"
 				+ "}")) },
 			responseCode = "200",
