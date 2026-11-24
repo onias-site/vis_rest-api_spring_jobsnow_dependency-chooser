@@ -16,6 +16,7 @@ import com.vis.business.recruiter.resumes.VisBusinessViewedResumeDetails;
 import com.vis.business.recruiter.resumes.VisBusinessViewedResumesOfTheMonth;
 import com.vis.business.recruiter.resumes.VisRecruiterResumesFields;
 import com.vis.rest.open.api.VisOpenApiRecruiterResumes;
+import com.vis.entities.VisEntityPositionResumes;
 import com.vis.services.VisServiceRecruiterResumes;
 
 @RestController
@@ -57,6 +58,14 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 	@GetMapping("/recruiter/{email}/resumes-of-the-week")
 	public Map<String, Object> getResumesOfTheWeek(@RequestBody Map<String, Object> sessionValues) {
 		Map<String, Object> result = VisServiceRecruiterResumes.GetResumesOfTheWeek.execute(sessionValues);
+		return result;
+	}
+
+	@GetMapping("/recruiter/{email}/resumes-of-the-position")
+	public Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title) {
+		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
+		CcpJsonRepresentation json = session.put(VisEntityPositionResumes.Fields.title, title);
+		Map<String, Object> result = VisServiceRecruiterResumes.GetResumesOfThePosition.execute(json.content);
 		return result;
 	}
 

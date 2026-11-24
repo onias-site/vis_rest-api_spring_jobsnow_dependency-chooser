@@ -190,6 +190,33 @@ public interface VisOpenApiRecruiterResumes {
 	Map<String, Object> getResumesOfTheWeek(@RequestBody Map<String, Object> sessionValues);
 
 	/**
+	 * Every resume of the last e-mail of a position.
+	 * @param sessionValues the session values
+	 * @param title the title of the position
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Every resume of the last e-mail of a position",
+		description = "When does it occur? When the logged-in recruiter opens the screen \"see all\" of the e-mail \"{n} Cvs recebidos para a vaga\", "
+			+ "which shows only the first 30. "
+			+ "What does it do? Answers every resume of the last e-mail of the position, in the order chosen in the position form and with the "
+			+ "texts of the e-mail. The list is written before the e-mail goes out and kept for a month."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in recruiter's e-mail, the one that receives the resumes of the position.</li>"
+			+ "</ul>"
+			+ "<b>Query parameters:</b><ul>"
+			+ "<li><b>title</b> – Required. The title of the position.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "The resumes of the last e-mail of the position."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "No e-mail of resumes of this position for this recruiter in the last month."),
+	})
+	@GetMapping("/recruiter/{email}/resumes-of-the-position")
+	Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title);
+
+	/**
 	 * The resumes that satisfy the filters of a position, listed to the logged-in recruiter.
 	 * @param filtersAndSession the ids the count of the filters returned and the session
 	 * @return the response body
