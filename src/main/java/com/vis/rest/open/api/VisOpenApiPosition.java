@@ -37,7 +37,7 @@ public interface VisOpenApiPosition {
 			+ "<li><b>seniority</b> – Required. List of 1 to 6 of estag, junior, pleno, senior, especialista or unknown.</li>"
 			+ "<li><b>clt</b>, <b>pj</b> – Salary ranges {min, max} from 1,000 to 100,000; at least one of them.</li>"
 			+ "<li><b>expiration</b> – Required. {min, max}, timestamps in milliseconds (as text), from the current date on, max not before min.</li>"
-			+ "<li><b>sort</b> – Required. List of {type: asc|desc, field: [pj|clt|experience|shouldSkillsTotal]}.</li>"
+			+ "<li><b>sort</b> – Required. List of {type: asc|desc, field: [one of clt, pj, spokenLanguage, experience, skillsTotal, shouldSkillsTotal, disponibility, temporallyJobTime, skill], value}, the priority of order of the resumes; value is the name of the language of spokenLanguage or of the skill of skill.</li>"
 			+ "<li><b>contact</b> – Required. List of {type: whatsapp|email|link, value}.</li>"
 			+ "<li><b>spokenLanguage</b>, <b>skill</b>, <b>negotiableClaim</b>, <b>pcd</b>, <b>travel</b> – Optional.</li>"
 			+ "<li><b>mustSendInGroups</b> (default true), <b>frequencyType</b> (none|byTheCandidates|instantly|hourly|daily|weekly, default daily; byTheCandidates: the matching candidates see the position and send their resumes themselves) – Optional.</li>"
