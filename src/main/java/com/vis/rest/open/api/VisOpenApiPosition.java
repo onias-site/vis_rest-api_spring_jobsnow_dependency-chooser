@@ -40,7 +40,7 @@ public interface VisOpenApiPosition {
 			+ "<li><b>sort</b> – Required. List of {type: asc|desc, field: [pj|clt|experience|shouldSkillsTotal]}.</li>"
 			+ "<li><b>contact</b> – Required. List of {type: whatsapp|email|link, value}.</li>"
 			+ "<li><b>spokenLanguage</b>, <b>skill</b>, <b>negotiableClaim</b>, <b>pcd</b>, <b>travel</b> – Optional.</li>"
-			+ "<li><b>mustSendInGroups</b>, <b>mustSendToResumes</b> (default true), <b>frequencyType</b> (none|instantly|hourly|daily|weekly, default daily) – Optional.</li>"
+			+ "<li><b>mustSendInGroups</b> (default true), <b>frequencyType</b> (none|byTheCandidates|instantly|hourly|daily|weekly, default daily; byTheCandidates: the matching candidates see the position and send their resumes themselves) – Optional.</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
