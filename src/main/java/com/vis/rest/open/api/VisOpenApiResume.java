@@ -20,7 +20,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 /**
  * OpenAPI contract for resume operations at path {@code /resume/{email}}.
  * Covers saving, deleting, status changes, and data retrieval for a candidate's resume, and the domains of the
- * recruiters who viewed it in a month ({@code /resume/{email}/viewers/{month}}).
+ * recruiters who viewed it in a month ({@code /resume/{email}/viewers/{month}}) and the positions it satisfies
+ * ({@code /resume/{email}/positions}).
  * All endpoints include a path variable <b>language</b> for operations that are language-specific.
  */
 @RequestMapping("/resume/{email}")
@@ -203,4 +204,30 @@ public interface VisOpenApiResume {
 	})
 	@GetMapping("/viewers/{month}")
 	Map<String, Object> getViewersOfTheMonth(@RequestBody String sessionValues, @PathVariable("month") String month);
+
+	/**
+	 * The positions open to the candidates that the resume satisfies.
+	 * @param sessionValues the request body with the values of the session
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "The positions of the resume",
+		description = "When does it occur? When the logged-in candidate opens the screen \"Minhas vagas\" (Meus dados). "
+			+ "What does it do? Answers, read by id with no query, the positions whose recruiter chose that the candidates themselves send "
+			+ "their resumes, still valid, that the resume satisfies: the positions of the groups of hashes of the resume (area, seniority, "
+			+ "flags, languages and skills), then the claims, availability, temporary job time, regions and forbidden companies compared "
+			+ "as in the e-mails of the positions. Each position brings only what the candidate may see: title, description, resumeType, "
+			+ "seniority, ddd (10 = home office), clt and pj ({min, max}), expiration ({min, max} in milliseconds), contact (the ways to "
+			+ "send the resume: whatsapp, email or link), disponibility, temporallyJobTime, spokenLanguage, skill, pcd and travel."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in candidate's e-mail.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "The positions of the resume, possibly none."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "The candidate has no active resume."),
+	})
+	@GetMapping("/positions")
+	Map<String, Object> getPositions(@RequestBody Map<String, Object> sessionValues);
 }

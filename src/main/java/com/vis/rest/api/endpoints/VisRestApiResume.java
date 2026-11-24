@@ -98,4 +98,15 @@ public class VisRestApiResume implements VisOpenApiResume{
 		Map<String, Object> result = VisServiceResume.GetViewersOfTheMonth.execute(json.content);
 		return result;
 	}
+
+	/**
+	 * The positions open to the candidates that the resume satisfies. Delegates to the matching service.
+	 * @param sessionValues the request body with the values of the session
+	 * @return the response body
+	 */
+	@GetMapping("/positions")
+	public Map<String, Object> getPositions(@RequestBody Map<String, Object> sessionValues) {
+		Map<String, Object> result = VisServiceResume.GetPositions.execute(sessionValues);
+		return result;
+	}
 }
