@@ -47,6 +47,7 @@ public interface VisOpenApiPosition {
 		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": [\"pleno\", \"senior\"]}")) }, responseCode = "200", description = "The position, as it will be saved."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "409", description = "The user already has a position with this title."),
+		@ApiResponse(responseCode = "410", description = "The e-mail provider suppresses the resumesEmail (permanent bounce, invalid address or spam report): it would never receive the resumes."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
 	@PostMapping("/recruiter/{email}/positions")
@@ -67,6 +68,7 @@ public interface VisOpenApiPosition {
 		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": [\"pleno\", \"senior\"]}")) }, responseCode = "200", description = "The position, as it will be saved."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "The user has no position with this title."),
+		@ApiResponse(responseCode = "410", description = "The e-mail provider suppresses the resumesEmail (permanent bounce, invalid address or spam report): it would never receive the resumes."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
 	@PostMapping("/recruiter/{email}/positions/edit")
