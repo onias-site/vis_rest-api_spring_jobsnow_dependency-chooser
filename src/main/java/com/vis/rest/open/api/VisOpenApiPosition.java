@@ -149,7 +149,7 @@ public interface VisOpenApiPosition {
 			+ "Answers the ids of the resumes found (SHA-1 of the e-mail, a resume of several ddds once), how many they are and the averages of their CLT and PJ claims and of their years of experience. A filter left out does not filter."
 			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>resumeType</b> – Required. The area (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions).</li>"
-			+ "<li><b>ddd</b> – 1 to 67 ddds; absent, every ddd (home office position).</li>"
+			+ "<li><b>ddd</b> – 1 to 68 ddds (10 is home office); absent, every ddd (home office position).</li>"
 			+ "<li><b>disponibility</b>, <b>temporallyJobTime</b> – The resumes that start in up to these days / accept up to these months of temporary job; 0, no filter.</li>"
 			+ "<li><b>seniority</b> – List of estag, junior, pleno, senior or especialista: the years of experience in the range of any of them.</li>"
 			+ "<li><b>skill</b> – The required skills: each one found in the resume or in a skill below it in the hierarchy; a required skill above another required one gives way to it.</li>"
