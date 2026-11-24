@@ -144,7 +144,7 @@ public interface VisOpenApiPosition {
 		summary = "Resumes that satisfy the filters of a position",
 		description = "When does it occur? When the user, logged in or not (the login is asked only to save the position), changes any filter of the position form: area, regions, seniority, required skills, languages, salaries and the checkboxes. Public, with no session. "
 			+ "What does it do? Reads by id the groups of active resumes of each ddd and of the area and filters them with a Painless script inside Elasticsearch, so the resumes never leave it. "
-			+ "Answers the ids of the resumes found (SHA-1 of the e-mail, a resume of several ddds once), how many they are and the averages of their CLT and PJ claims. A filter left out does not filter."
+			+ "Answers the ids of the resumes found (SHA-1 of the e-mail, a resume of several ddds once), how many they are and the averages of their CLT and PJ claims and of their years of experience. A filter left out does not filter."
 			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
 			+ "<li><b>resumeType</b> – Required. The area (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions).</li>"
 			+ "<li><b>ddd</b> – 1 to 67 ddds; absent, every ddd (home office position).</li>"
@@ -158,7 +158,7 @@ public interface VisOpenApiPosition {
 			+ "</ul>"
 	)
 	@ApiResponses({
-		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"ids\": [\"a1b2\"], \"resumes\": 1, \"cltAverage\": 8000.0, \"pjAverage\": 12000.0}")) }, responseCode = "200", description = "The ids of the resumes found, how many they are and the averages of their claims (each average absent when no resume found informed it)."),
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"ids\": [\"a1b2\"], \"resumes\": 1, \"cltAverage\": 8000.0, \"pjAverage\": 12000.0, \"experienceAverage\": 6.5}")) }, responseCode = "200", description = "The ids of the resumes found, how many they are and the averages of their claims and years of experience (each average absent when no resume found informed it)."),
 		@ApiResponse(responseCode = "422", description = "Validation error — no area, an unknown area, ddd or seniority, a repeated ddd or an invalid range."),
 	})
 	@PostMapping("/positions/resumes-of-the-filters")
