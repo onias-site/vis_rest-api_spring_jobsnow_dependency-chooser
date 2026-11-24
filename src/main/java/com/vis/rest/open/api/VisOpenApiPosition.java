@@ -165,4 +165,27 @@ public interface VisOpenApiPosition {
 	})
 	@PostMapping("/positions/resumes-of-the-filters")
 	Map<String, Object> getResumesOfTheFilters(@RequestBody Map<String, Object> filters);
+
+	/**
+	 * The instant message groups of a position.
+	 * @param position the request body with the seniorities, the area and the ddds of the position
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Instant message groups of a position",
+		description = "When does it occur? When the user, logged in or not, opens the list of groups of the checkbox of the daily publishing of the position (tab Opções of the position form). Public, with no session. "
+			+ "What does it do? Reads by id the groups of each seniority and ddd of the position in its area (vis_position_instant_message_group), then the name and the link of each chat found (vis_instant_message_group). "
+			+ "A group of several combinations comes once; the groups come sorted by name."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>resumeType</b> – Required. The area (1 information technology, 2 recruitment and selection, 3 other higher education professions, 4 operational professions).</li>"
+			+ "<li><b>seniority</b> – Required. List of 1 to 6 of estag, junior, pleno, senior, especialista or unknown.</li>"
+			+ "<li><b>ddd</b> – Required. List of 1 to 68 ddds (10 is home office).</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"groups\": [{\"title\": \"JN Vagas sem escolaridade ou diploma\", \"link\": \"https://t.me/+abc\"}]}")) }, responseCode = "200", description = "The groups, each one with its name and link; empty when no group publishes positions of these combinations."),
+		@ApiResponse(responseCode = "422", description = "Validation error — no area, seniority or ddd, or an unknown one."),
+	})
+	@PostMapping("/positions/instant-message-groups")
+	Map<String, Object> getInstantMessageGroups(@RequestBody Map<String, Object> position);
 }

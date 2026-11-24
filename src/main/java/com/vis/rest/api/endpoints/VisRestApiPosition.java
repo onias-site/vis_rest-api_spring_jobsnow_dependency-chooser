@@ -47,4 +47,10 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		Map<String, Object> result = VisServicePosition.GetResumesOfTheFilters.execute(filters);
 		return result;
 	}
+
+	@PostMapping("/positions/instant-message-groups")
+	public Map<String, Object> getInstantMessageGroups(@RequestBody Map<String, Object> position) {
+		Map<String, Object> result = VisServicePosition.GetInstantMessageGroups.execute(position);
+		return result;
+	}
 }
