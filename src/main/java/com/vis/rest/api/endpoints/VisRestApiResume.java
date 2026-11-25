@@ -109,4 +109,16 @@ public class VisRestApiResume implements VisOpenApiResume{
 		Map<String, Object> result = VisServiceResume.GetPositions.execute(sessionValues);
 		return result;
 	}
+
+	/**
+	 * Registers the interest of the candidate in a position: the resume goes to the recruiter at the next full hour.
+	 * Delegates to the matching service.
+	 * @param sessionValues the request body with the values of the session and the id of the position
+	 * @return the response body
+	 */
+	@PostMapping("/positions/interest")
+	public Map<String, Object> registerInterestInThePosition(@RequestBody Map<String, Object> sessionValues) {
+		Map<String, Object> result = VisServiceResume.RegisterInterestInThePosition.execute(sessionValues);
+		return result;
+	}
 }

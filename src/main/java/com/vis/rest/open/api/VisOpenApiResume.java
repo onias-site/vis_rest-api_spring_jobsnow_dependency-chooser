@@ -218,16 +218,57 @@ public interface VisOpenApiResume {
 			+ "flags, languages and skills), then the claims, availability, temporary job time, regions and forbidden companies compared "
 			+ "as in the e-mails of the positions. Each position brings only what the candidate may see: title, description, resumeType, "
 			+ "seniority, ddd (10 = home office), clt and pj ({min, max}), expiration ({min, max} in milliseconds), contact (the ways to "
-			+ "send the resume: whatsapp, email or link), disponibility, temporallyJobTime, spokenLanguage, skill, pcd and travel."
+			+ "send the resume: whatsapp, email or link), disponibility, temporallyJobTime, spokenLanguage, skill, pcd and travel, plus "
+			+ "id (sent back by \"send my resume\"), resumeSent (the resume already went to the position) and, when the candidate already "
+			+ "asked to send it, sendingHour (yyyyMMddHH, the full hour of the sending). A position of a company the resume forbids "
+			+ "(notAllowedCompany, against the domain of the recruiter who owns it and of the e-mail that receives the resumes) or of a "
+			+ "recruiter who keeps the resume among the unwanted ones is not listed. A resume with the LinkedIn address confirmed invalid "
+			+ "or with a restriction to correct sees no position: resumeWithPendingIssues is true."
 			+ "<br/><br/><b>Path variables:</b><ul>"
 			+ "<li><b>email</b> – Required. The logged-in candidate's e-mail.</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(responseCode = "200", description = "The positions of the resume, possibly none."),
+		@ApiResponse(responseCode = "301", description = "The resume of the candidate is inactive."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
 		@ApiResponse(responseCode = "404", description = "The candidate has no active resume."),
 	})
 	@GetMapping("/positions")
 	Map<String, Object> getPositions(@RequestBody Map<String, Object> sessionValues);
+
+	/**
+	 * Registers the interest of the candidate in a position: their resume goes to the recruiter in the next full hour.
+	 * @param sessionValues the request body with the values of the session and the id of the position
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Send the resume to a position",
+		description = "When does it occur? When the logged-in candidate confirms \"Enviar meu currículo\" on a position of the "
+			+ "screen \"Minhas vagas\" (Meus dados). "
+			+ "What does it do? Registers the interest of the candidate in the position (vis_position_interest): the resume goes to "
+			+ "the e-mail that receives the resumes of the position at the next full hour (an interest at 21:59 goes at 22:00, one at "
+			+ "22:00 or 22:01 at 23:00), in the e-mail of the lists of resumes, with the resumes of the other candidates interested "
+			+ "before that hour. Both sides are checked at the confirmation and again at the sending: the resume must be active, "
+			+ "without a restriction to correct and without the LinkedIn address confirmed invalid; the position must exist in "
+			+ "vis_position, be open to the candidates, not expired, satisfied by the resume, of no company the resume forbids and of no "
+			+ "recruiter who keeps the resume among the unwanted ones. Answers sendingHour (yyyyMMddHH)."
+			+ "<br/><br/><b>Path variables:</b><ul>"
+			+ "<li><b>email</b> – Required. The logged-in candidate's e-mail.</li>"
+			+ "</ul>"
+			+ "<b>Body:</b><ul>"
+			+ "<li><b>position</b> – Required. The id of the position, as GET /resume/{email}/positions answers it.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(responseCode = "200", description = "The interest was registered; sendingHour tells when the resume goes."),
+		@ApiResponse(responseCode = "301", description = "The resume of the candidate is inactive."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "The candidate has no active resume, or the position does not exist or is not open to the resume."),
+		@ApiResponse(responseCode = "409", description = "The resume was already sent to the position, or will be at the next full hour."),
+		@ApiResponse(responseCode = "410", description = "The position is expired."),
+		@ApiResponse(responseCode = "422", description = "The resume has something to correct first: the LinkedIn address confirmed invalid or a restriction."),
+	})
+	@PostMapping("/positions/interest")
+	Map<String, Object> registerInterestInThePosition(@RequestBody Map<String, Object> sessionValues);
 }
