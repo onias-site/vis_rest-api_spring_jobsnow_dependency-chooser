@@ -16,7 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  * OpenAPI contract for the positions of the logged-in user (screen "Meu Recrutamento - Vagas") at
  * {@code /recruiter/{email}/positions}. The list of the screen is read by id through the endpoint of the groups of js.
  */
-@Tag(name = "Positions", description = "The positions the logged-in user registers: create, edit, delete, inactivate and reactivate.")
+@Tag(name = "Positions", description = "The positions the logged-in user registers: create, edit, delete, inactivate, reactivate and restore.")
 public interface VisOpenApiPosition {
 
 	/**
@@ -136,6 +136,27 @@ public interface VisOpenApiPosition {
 	})
 	@PostMapping("/recruiter/{email}/positions/reactivate")
 	Map<String, Object> reactivatePosition(@RequestBody Map<String, Object> sessionValues);
+
+	/**
+	 * Restore a deleted position.
+	 * @param sessionValues the request body with the values of the session
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Restore a deleted position",
+		description = "When does it occur? When the logged-in user clicks \"Restaurar\" in a line of the tab of the deleted positions. "
+			+ "What does it do? The position leaves the twin vis_inactive_position and goes back to vis_position, valid from the beginning of the current day until the end of the day one week later (America/Sao_Paulo). "
+			+ "When the user has a position not deleted with the same title, the restored one gets the title followed by the first free number from 2 on (\"Desenvolvedor Java pleno 2\"). The writing is asynchronous."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul><li><b>title</b> – Required. The title of the deleted position.</li></ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"expiration\": {\"min\": 1763953200000, \"max\": 1764644399999}}")) }, responseCode = "200", description = "The title (the numbered one when the original was taken) and the new expiration of the restored position."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "The user has no deleted position with this title."),
+		@ApiResponse(responseCode = "422", description = "Validation error — the title is missing."),
+	})
+	@PostMapping("/recruiter/{email}/positions/restore")
+	Map<String, Object> restorePosition(@RequestBody Map<String, Object> sessionValues);
 
 	/**
 	 * The resumes that satisfy the filters of a position.

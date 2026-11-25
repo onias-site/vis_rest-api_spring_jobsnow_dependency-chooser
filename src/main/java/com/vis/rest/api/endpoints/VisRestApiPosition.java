@@ -42,6 +42,12 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		return result;
 	}
 
+	@PostMapping("/recruiter/{email}/positions/restore")
+	public Map<String, Object> restorePosition(@RequestBody Map<String, Object> sessionValues) {
+		Map<String, Object> result = VisServicePosition.RestorePosition.execute(sessionValues);
+		return result;
+	}
+
 	@PostMapping("/positions/resumes-of-the-filters")
 	public Map<String, Object> getResumesOfTheFilters(@RequestBody Map<String, Object> filters) {
 		Map<String, Object> result = VisServicePosition.GetResumesOfTheFilters.execute(filters);
