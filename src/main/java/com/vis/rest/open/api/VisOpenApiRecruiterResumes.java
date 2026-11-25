@@ -193,6 +193,7 @@ public interface VisOpenApiRecruiterResumes {
 	 * Every resume of the last e-mail of a position.
 	 * @param sessionValues the session values
 	 * @param title the title of the position
+	 * @param yearMonth the month of the creation of the position, yyyyMM
 	 * @return the response body
 	 */
 	@Operation(
@@ -206,6 +207,7 @@ public interface VisOpenApiRecruiterResumes {
 			+ "</ul>"
 			+ "<b>Query parameters:</b><ul>"
 			+ "<li><b>title</b> – Required. The title of the position.</li>"
+			+ "<li><b>yearMonth</b> – Required. yyyyMM, the month of the creation of the position (the link of the e-mail brings it).</li>"
 			+ "</ul>"
 	)
 	@ApiResponses({
@@ -214,7 +216,7 @@ public interface VisOpenApiRecruiterResumes {
 		@ApiResponse(responseCode = "404", description = "No e-mail of resumes of this position for this recruiter in the last month."),
 	})
 	@GetMapping("/recruiter/{email}/resumes-of-the-position")
-	Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title);
+	Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title, @RequestParam("yearMonth") String yearMonth);
 
 	/**
 	 * The resumes that satisfy the filters of a position, listed to the logged-in recruiter.

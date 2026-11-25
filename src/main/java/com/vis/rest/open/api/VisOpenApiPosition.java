@@ -27,7 +27,7 @@ public interface VisOpenApiPosition {
 	@Operation(
 		summary = "Create a position",
 		description = "When does it occur? When the logged-in user saves the modal of \"Criar vaga\". "
-			+ "What does it do? Saves a new position whose recruiter is the e-mail of the user. The title is part of the key: a title the user already has answers 409. "
+			+ "What does it do? Saves a new position whose recruiter is the e-mail of the user. The key is the title plus the month of the creation (yearMonth, the current one, set by the server): a title the user already has in the current month answers 409. "
 			+ "The expiration of a new position starts and ends from the current date on. The writing is asynchronous: the answer comes before the list shows the position."
 			+ "<br/><br/><b>Path variables:</b><ul><li><b>email</b> – Required. The logged-in user's e-mail.</li></ul>"
 			+ "<b>Request body fields (JSON):</b><ul>"
@@ -54,6 +54,29 @@ public interface VisOpenApiPosition {
 	Map<String, Object> createPosition(@RequestBody Map<String, Object> sessionValues);
 
 	/**
+	 * Check whether a title is in use.
+	 * @param sessionValues the request body with the values of the session
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Check whether a position title is in use",
+		description = "When does it occur? While the logged-in user types the title in the modal of \"Criar vaga\" or of \"Editar\". "
+			+ "What does it do? Reads by id the position of the user with this title in the month informed (the current one when absent, as in a creation). "
+			+ "200 means the title is of another position, and the modal does not let it be saved; 404 means it is free."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>title</b> – Required. 10 to 100 characters.</li>"
+			+ "<li><b>yearMonth</b> – Optional. yyyyMM, the month of the creation of the position being edited.</li></ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"yearMonth\": \"202611\"}")) }, responseCode = "200", description = "The title is in use by a position of the user in this month."),
+		@ApiResponse(responseCode = "401", description = "No valid login."),
+		@ApiResponse(responseCode = "404", description = "The title is free."),
+		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
+	})
+	@PostMapping("/recruiter/{email}/positions/title-in-use")
+	Map<String, Object> positionTitleInUse(@RequestBody Map<String, Object> sessionValues);
+
+	/**
 	 * Edit a position.
 	 * @param sessionValues the request body with the values of the session
 	 * @return the response body
@@ -61,14 +84,21 @@ public interface VisOpenApiPosition {
 	@Operation(
 		summary = "Edit a position",
 		description = "When does it occur? When the logged-in user saves the modal of \"Editar\". "
-			+ "What does it do? Saves again the position of the user with the title informed (the title does not change), with the same fields of the creation; "
+			+ "What does it do? Saves again the position of the user of the title and yearMonth informed, with the same fields of the creation. "
+			+ "With oldTitle different from title, renames it: the position of the old title disappears without a trace and the one of the new title takes its place, keeping yearMonth and the resumes already sent; "
 			+ "the expiration only needs the max not before the min. The writing is asynchronous."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>yearMonth</b> – Required. yyyyMM, the month of the creation of the position, as the list gives it.</li>"
+			+ "<li><b>oldTitle</b> – Optional. The title before the edition, when the user changed it.</li>"
+			+ "<li>The other fields as in the creation.</li></ul>"
 	)
 	@ApiResponses({
 		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"title\": \"Desenvolvedor Java pleno\", \"seniority\": [\"pleno\", \"senior\"]}")) }, responseCode = "200", description = "The position, as it will be saved."),
 		@ApiResponse(responseCode = "401", description = "No valid login."),
-		@ApiResponse(responseCode = "404", description = "The user has no position with this title."),
+		@ApiResponse(responseCode = "404", description = "The user has no position with this title (the old one, when renaming) and month."),
+		@ApiResponse(responseCode = "409", description = "Renaming: the new title is of another position of the user created in the same month."),
 		@ApiResponse(responseCode = "410", description = "The e-mail provider suppresses the resumesEmail (permanent bounce, invalid address or spam report): it would never receive the resumes."),
+		@ApiResponse(responseCode = "423", description = "Renaming: candidates already sent their resumes through this position (byTheCandidates), so its title cannot change."),
 		@ApiResponse(responseCode = "422", description = "Validation error — one or more required fields are missing or contain invalid values."),
 	})
 	@PostMapping("/recruiter/{email}/positions/edit")

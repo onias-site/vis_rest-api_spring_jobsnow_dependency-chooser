@@ -62,9 +62,9 @@ public class VisRestApiRecruiterResumes implements VisOpenApiRecruiterResumes {
 	}
 
 	@GetMapping("/recruiter/{email}/resumes-of-the-position")
-	public Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title) {
+	public Map<String, Object> getResumesOfThePosition(@RequestBody String sessionValues, @RequestParam("title") String title, @RequestParam("yearMonth") String yearMonth) {
 		CcpJsonRepresentation session = new CcpJsonRepresentation(sessionValues);
-		CcpJsonRepresentation json = session.put(VisEntityPositionResumes.Fields.title, title);
+		CcpJsonRepresentation json = session.put(VisEntityPositionResumes.Fields.title, title).put(VisEntityPositionResumes.Fields.yearMonth, yearMonth);
 		Map<String, Object> result = VisServiceRecruiterResumes.GetResumesOfThePosition.execute(json.content);
 		return result;
 	}

@@ -18,6 +18,12 @@ public class VisRestApiPosition implements VisOpenApiPosition {
 		return result;
 	}
 
+	@PostMapping("/recruiter/{email}/positions/title-in-use")
+	public Map<String, Object> positionTitleInUse(@RequestBody Map<String, Object> sessionValues) {
+		Map<String, Object> result = VisServicePosition.PositionTitleInUse.execute(sessionValues);
+		return result;
+	}
+
 	@PostMapping("/recruiter/{email}/positions/edit")
 	public Map<String, Object> editPosition(@RequestBody Map<String, Object> sessionValues) {
 		Map<String, Object> result = VisServicePosition.EditPosition.execute(sessionValues);
