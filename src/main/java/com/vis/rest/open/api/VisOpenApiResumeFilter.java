@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -60,14 +61,39 @@ public interface VisOpenApiResumeFilter {
 	@Operation(
 		summary = "Filters of an id",
 		description = "When does it occur? When the screen \"Currículos - Buscar\" is opened with the id of the filters in its address (the link the screen itself made). Public, with no session. "
-			+ "What does it do? Reads the filters of the id in vis_resume_filter, one read by id, so the screen fills them in."
+			+ "What does it do? Reads the filters of the id in vis_resume_filter, one read by id, so the screen fills them in. "
+			+ "With the e-mail too (the link shared with the text of the position), the filters and the text that e-mail shared with them (vis_resume_filter_description) are read in one union all, and the text goes back in description; the screen fills its field in and shows the skills found in it. "
+			+ "An e-mail that is not valid is ignored, as if the link had none."
 			+ "<br/><br/><b>Path variables:</b><ul><li><b>id</b> – Required. The id the search of the filters answered.</li></ul>"
+			+ "<b>Query parameters:</b><ul><li><b>email</b> – Optional. The e-mail of the user who shared the link with the text of the position.</li></ul>"
 	)
 	@ApiResponses({
-		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumeType\": 1, \"ddd\": [11, 21], \"seniority\": [\"pleno\"]}")) }, responseCode = "200", description = "The filters, as the screen sent them to the search."),
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"resumeType\": 1, \"ddd\": [11, 21], \"seniority\": [\"pleno\"], \"description\": \"Desenvolvedor Java com Spring Boot...\"}")) }, responseCode = "200", description = "The filters, as the screen sent them to the search, plus description when the e-mail of the link shared a text with them."),
 		@ApiResponse(responseCode = "404", description = "No filters of this id: they expired with their hour or never existed. The screen does nothing."),
 		@ApiResponse(responseCode = "422", description = "Validation error — an id that is not hexadecimal or longer than 40 characters."),
 	})
 	@GetMapping("/resume-filter/{id}")
-	Map<String, Object> getResumeFilter(@PathVariable("id") String id);
+	Map<String, Object> getResumeFilter(@PathVariable("id") String id, @RequestParam(value = "email", required = false) String email);
+
+	/**
+	 * The text of the position shared with the link of the search.
+	 * @param sessionValues the request body with the values of the session, the id of the filters and the text
+	 * @return the response body
+	 */
+	@Operation(
+		summary = "Text of the position shared with the link of the search",
+		description = "When does it occur? When the user logged in clicks \"Copiar este link para enviar para alguém\" in the screen \"Currículos - Buscar\" with the text of the position filled in (not logged in, after confirming that the text goes in the link and logging in). "
+			+ "What does it do? Saves the text in vis_resume_filter_description, under the id of the filters and the e-mail of the session (the same filters shared again replace the text). The link copied gets &email=<e-mail>, and GET /resume-filter/{id}?email= gives the text back."
+			+ "<br/><br/><b>Request body fields (JSON):</b><ul>"
+			+ "<li><b>filterId</b> – Required. The id the search of the filters answered.</li>"
+			+ "<li><b>description</b> – Required. The text of the position, from 100 to 5,000 characters.</li>"
+			+ "</ul>"
+	)
+	@ApiResponses({
+		@ApiResponse(content = { @Content(schema = @Schema(example = "{\"filterId\": \"5f2c9e\"}")) }, responseCode = "200", description = "The text was saved."),
+		@ApiResponse(responseCode = "401", description = "No valid session."),
+		@ApiResponse(responseCode = "422", description = "Validation error — no id of the filters, or a text shorter than 100 or longer than 5,000 characters."),
+	})
+	@PostMapping("/recruiter/{email}/resume-filter-description")
+	Map<String, Object> saveResumeFilterDescription(@RequestBody Map<String, Object> sessionValues);
 }
